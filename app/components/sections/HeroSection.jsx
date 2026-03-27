@@ -12,16 +12,17 @@ export default function HeroSection({ isMobile }) {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
-      {!isMobile && <HeroScene />}
+      {/* 3D Background */}
+      <HeroScene />
 
-      {/* Mobile fallback gradient */}
-      {isMobile && (
-        <div className="absolute inset-0"
-          style={{
-            background: 'radial-gradient(ellipse at 30% 30%, rgba(0,240,255,0.08) 0%, transparent 60%), radial-gradient(ellipse at 70% 60%, rgba(139,92,246,0.08) 0%, transparent 60%), #050510'
-          }}
-        />
-      )}
+      {/* Subtle overlay gradient for readability on mobile */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          background: isMobile 
+            ? 'radial-gradient(circle at 50% 50%, transparent 0%, rgba(5,5,16,0.4) 100%)' 
+            : 'none'
+        }}
+      />
 
       {/* Content overlay */}
       <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
@@ -68,7 +69,7 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="text-sm md:text-base text-muted/70 tracking-[0.3em] uppercase mb-8"
+          className="text-[10px] md:text-base text-muted/70 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-8"
         >
           Engineering • Finance • Entrepreneurship
         </motion.p>

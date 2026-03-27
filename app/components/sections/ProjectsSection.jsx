@@ -1,5 +1,5 @@
 'use client';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useState, useRef } from 'react';
 
 const projects = [
@@ -111,11 +111,28 @@ function ProjectCard({ project, index }) {
 }
 
 export default function ProjectsSection() {
-  return (
-    <section id="projects" className="relative py-24 md:py-32 px-4">
-      <div className="absolute top-1/4 right-0 w-80 h-80 rounded-full bg-neon/3 blur-3xl" />
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
 
-      <div className="max-w-5xl mx-auto">
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 150]);
+
+  return (
+    <section id="projects" ref={containerRef} className="relative py-24 md:py-32 px-4 overflow-hidden">
+      {/* Parallax Background Elements */}
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute top-1/4 -right-20 w-96 h-96 rounded-full bg-neon/5 blur-[120px] pointer-events-none" 
+      />
+      <motion.div 
+        style={{ y: y2 }}
+        className="absolute bottom-1/4 -left-20 w-96 h-96 rounded-full bg-violet/5 blur-[120px] pointer-events-none" 
+      />
+
+      <div className="max-w-5xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}

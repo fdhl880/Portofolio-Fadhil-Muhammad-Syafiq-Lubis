@@ -23,11 +23,13 @@ export default function PageWrapper() {
 
   useEffect(() => {
     const checkMobile = () => {
-      const mobile = window.innerWidth < 768 || (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4);
-      setIsMobile(mobile);
+      // Small screen or low performance device
+      const isSmallScreen = window.innerWidth < 768;
+      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      setIsMobile(isSmallScreen || isLowPerf);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
+    window.addEventListener('resize', checkMobile, { passive: true });
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 

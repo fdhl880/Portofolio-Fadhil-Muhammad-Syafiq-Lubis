@@ -1,8 +1,20 @@
 'use client';
 import { useRef } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { Float, PerspectiveCamera } from '@react-three/drei';
 import * as THREE from 'three';
+
+function CameraRig() {
+  const { camera, size } = useThree();
+  const isPortrait = size.height > size.width;
+  
+  useFrame(() => {
+    const targetFov = isPortrait ? 70 : 50;
+    camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.05);
+    camera.updateProjectionMatrix();
+  });
+  return null;
+}
 
 function Medal({ position, color, label, speed = 1 }) {
   const group = useRef();
@@ -82,30 +94,33 @@ function SpotlightBeam({ position, color }) {
 export default function TrophyScene() {
   return (
     <Canvas
-      camera={{ position: [0, 1.5, 5.5], fov: 50 }}
+      camera={{ position: [0, 1.5, 6], fov: 50 }}
       dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       style={{ width: '100%', height: '100%', minHeight: '350px' }}
     >
+      <CameraRig />
       <ambientLight intensity={0.2} />
       <spotLight position={[0, 6, 2]} intensity={2} angle={0.5} penumbra={0.8} color="#ffd700" />
       <pointLight position={[-4, 3, 3]} intensity={0.4} color="#00f0ff" />
       <pointLight position={[4, 3, 3]} intensity={0.4} color="#8b5cf6" />
+      
+      <group scale={[0.85, 0.85, 0.85]}>
+        {/* Three podiums */}
+        <Podium position={[-2, 0, 0]} height={1.2} color="#c0c0c0" />
+        <Podium position={[0, 0, 0]} height={1.8} color="#ffd700" />
+        <Podium position={[2, 0, 0]} height={0.9} color="#cd7f32" />
 
-      {/* Three podiums */}
-      <Podium position={[-2, 0, 0]} height={1.2} color="#c0c0c0" />
-      <Podium position={[0, 0, 0]} height={1.8} color="#ffd700" />
-      <Podium position={[2, 0, 0]} height={0.9} color="#cd7f32" />
+        {/* Rotating medals */}
+        <Medal position={[-2, 1.2, 0]} color="#c0c0c0" speed={0.8} />
+        <Medal position={[0, 1.8, 0]} color="#ffd700" speed={1} />
+        <Medal position={[2, 0.9, 0]} color="#cd7f32" speed={0.6} />
 
-      {/* Rotating medals */}
-      <Medal position={[-2, 1.2, 0]} color="#c0c0c0" speed={0.8} />
-      <Medal position={[0, 1.8, 0]} color="#ffd700" speed={1} />
-      <Medal position={[2, 0.9, 0]} color="#cd7f32" speed={0.6} />
-
-      {/* Spotlight beams */}
-      <SpotlightBeam position={[-2, 0, 0]} color="#c0c0c0" />
-      <SpotlightBeam position={[0, 0, 0]} color="#ffd700" />
-      <SpotlightBeam position={[2, 0, 0]} color="#cd7f32" />
+        {/* Spotlight beams */}
+        <SpotlightBeam position={[-2, 0, 0]} color="#c0c0c0" />
+        <SpotlightBeam position={[0, 0, 0]} color="#ffd700" />
+        <SpotlightBeam position={[2, 0, 0]} color="#cd7f32" />
+      </group>
     </Canvas>
   );
 }

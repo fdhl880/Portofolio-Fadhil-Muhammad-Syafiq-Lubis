@@ -26,11 +26,20 @@ body {
   overflow-x: hidden;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #050510; }
+::-webkit-scrollbar { 
+  width: 8px; 
+}
+::-webkit-scrollbar-track { 
+  background: #050510; 
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #00f0ff, #8b5cf6);
-  border-radius: 3px;
+  background: linear-gradient(to bottom, transparent, #00f0ff, #8b5cf6, transparent);
+  border-radius: 10px;
+  box-shadow: inset 0 0 6px rgba(0, 240, 255, 0.5);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, transparent, #00f0ff, #ffd700, transparent);
 }
 
 .glass {

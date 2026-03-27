@@ -99,8 +99,15 @@ function LightBeams() {
 }
 
 function CameraRig() {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
+  const isPortrait = size.height > size.width;
+  
   useFrame((state) => {
+    // Dynamic FOV based on aspect ratio
+    const targetFov = isPortrait ? 75 : 55;
+    camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.05);
+    camera.updateProjectionMatrix();
+
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, state.pointer.x * 0.4, 0.03);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, state.pointer.y * 0.25 + 0.5, 0.03);
     camera.lookAt(0, 0, 0);

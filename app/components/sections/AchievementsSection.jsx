@@ -1,6 +1,6 @@
 'use client';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useState, useRef } from 'react';
 
 const international = [
   { medal: 'Silver', event: 'IPITEx 2024', loc: 'Thailand', color: '#c0c0c0' },
@@ -95,11 +95,32 @@ function NationalPanel({ item, index }) {
 }
 
 export default function AchievementsSection() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const y2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
+
   return (
-    <section id="achievements" className="relative py-24 md:py-32 px-4">
-      <div className="max-w-6xl mx-auto">
+    <section id="achievements" ref={containerRef} className="relative py-24 md:py-32 px-4 overflow-hidden">
+      {/* Parallax Background Elements */}
+      <motion.div 
+        style={{ y: y1 }}
+        className="absolute top-1/4 -left-20 w-80 h-80 rounded-full bg-neon/5 blur-[100px] pointer-events-none" 
+      />
+      <motion.div 
+        style={{ y: y2 }}
+        className="absolute bottom-1/4 -right-20 w-80 h-80 rounded-full bg-violet/5 blur-[100px] pointer-events-none" 
+      />
+
+      <div className="max-w-6xl mx-auto relative z-10">
         {/* International */}
         <motion.div
+          style={{ opacity }}
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

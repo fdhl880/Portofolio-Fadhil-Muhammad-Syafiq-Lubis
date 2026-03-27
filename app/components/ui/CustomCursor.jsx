@@ -8,14 +8,16 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false); // only show after first move to avoid top-left spawn
 
   useEffect(() => {
+    // Check if device supports touch (likely no cursor needed)
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouch) return;
+
     const handleMouseMove = (e) => {
       if (!isVisible) setIsVisible(true);
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    // Use event delegation to check for hovers
     const handleMouseOver = (e) => {
-      // If we hover over a button, link, or elements explicitly using cursor-pointer
       const target = e.target;
       const computedStyle = window.getComputedStyle(target);
       if (
@@ -31,16 +33,15 @@ export default function CustomCursor() {
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     window.addEventListener('mouseover', handleMouseOver);
 
-    // Also hide the default cursor on the whole body
     document.body.style.cursor = 'none';
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseover', handleMouseOver);
-      document.body.style.cursor = 'auto'; // restore on unmount
+      document.body.style.cursor = 'auto';
     };
   }, [isVisible]);
 
@@ -49,37 +50,41 @@ export default function CustomCursor() {
   // Render a combination: solid dot + hollow trailing ring
   return (
     <>
-      {/* Small Dot (no delay/spring) */}
       <motion.div
         className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[10000] mix-blend-screen"
-        style={{
-          backgroundColor: '#00f0ff',
-          x: mousePosition.x - 4, // center it (width/2)
+        animate={{
+          x: mousePosition.x - 4,
           y: mousePosition.y - 4,
-          boxShadow: '0 0 10px #00f0ff',
+          scale: isHovering ? 1.5 : 1,
         }}
-        transition={{ type: 'tween', ease: 'linear', duration: 0 }}
+        transition={{ type: 'spring', damping: 30, stiffness: 250, mass: 0.1 }}
+        style={{
+          backgroundColor: isHovering ? '#ffd700' : '#00f0ff',
+          boxShadow: isHovering ? '0 0 15px #ffd700' : '0 0 10px #00f0ff',
+        }}
       />
       
-      {/* Hollow Ring (Spring dynamics) */}
       <motion.div
         className="fixed top-0 left-0 rounded-full border border-[#00f0ff] pointer-events-none z-[9999]"
         animate={{
-          x: mousePosition.x - (isHovering ? 20 : 16),
-          y: mousePosition.y - (isHovering ? 20 : 16),
-          width: isHovering ? 40 : 32,
-          height: isHovering ? 40 : 32,
-          backgroundColor: isHovering ? 'rgba(0, 240, 255, 0.1)' : 'transparent',
-          scale: isHovering ? 1.2 : 1,
+          x: mousePosition.x - (isHovering ? 24 : 16),
+          y: mousePosition.y - (isHovering ? 24 : 16),
+          width: isHovering ? 48 : 32,
+          height: isHovering ? 48 : 32,
+          backgroundColor: isHovering ? 'rgba(255, 215, 0, 0.1)' : 'rgba(0, 240, 255, 0.05)',
+          scale: isHovering ? 1.3 : 1,
+          borderColor: isHovering ? '#ffd700' : '#00f0ff',
         }}
         transition={{
           type: 'spring',
-          damping: 25,
-          stiffness: 150,
-          mass: 0.5,
+          damping: 20,
+          stiffness: 120,
+          mass: 0.6,
         }}
         style={{
-          boxShadow: '0 0 15px rgba(0,240,255,0.3)',
+          boxShadow: isHovering 
+            ? '0 0 25px rgba(255,215,0,0.4), inset 0 0 15px rgba(255,215,0,0.2)' 
+            : '0 0 15px rgba(0,240,255,0.3)',
         }}
       />
     </>
