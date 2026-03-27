@@ -13,6 +13,9 @@ import AchievementsSection from './sections/AchievementsSection';
 import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
+import { PerformanceProvider } from '../context/PerformanceContext';
+import CustomCursor from './ui/CustomCursor';
+import PerformanceToggle from './ui/PerformanceToggle';
 
 export default function PageWrapper() {
   const [showIntro, setShowIntro] = useState(true);
@@ -37,7 +40,9 @@ export default function PageWrapper() {
   }, [showIntro]);
 
   return (
-    <>
+    <PerformanceProvider>
+      <CustomCursor />
+      
       <AnimatePresence>
         {showIntro && (
           <CinematicIntro onComplete={() => setShowIntro(false)} />
@@ -47,6 +52,7 @@ export default function PageWrapper() {
       <div style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}>
         <ScrollProgress />
         <Navbar />
+        <PerformanceToggle />
         <main>
           <HeroSection isMobile={isMobile} />
           <SkillsSection />
@@ -59,6 +65,6 @@ export default function PageWrapper() {
         </main>
         <BackToTop />
       </div>
-    </>
+    </PerformanceProvider>
   );
 }

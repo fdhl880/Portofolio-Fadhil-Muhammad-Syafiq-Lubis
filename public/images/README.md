@@ -2,7 +2,7 @@
 
 Place your photos in this directory:
 
-- `photo1.jpg` — Hero section photo (gold medal / I2SPO ceremony)
+- `photo1.jpg` — Hero section photo (gold medal / I2ASPO ceremony)
 - `photo2.jpg` — Education section photo (MTE Awards Winners)
 - `photo3.jpg` — Trophy section photo (IPITEx with Indonesia flag)
 

@@ -1,33 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-
-const timeline = [
-  {
-    year: '2024',
-    title: 'International Science Competition',
-    desc: 'Represented Indonesia at IPITEx 2024 in Thailand, winning a Silver Medal for innovative research.',
-    color: '#00f0ff',
-  },
-  {
-    year: '2025',
-    title: 'Malaysia Technology Expo',
-    desc: 'Showcased innovation at MTE 2025, earning a Silver Medal in international competition.',
-    color: '#8b5cf6',
-  },
-  {
-    year: '2025',
-    title: 'I2SPO Gold Medal',
-    desc: 'Achieved Gold Medal at I2SPO 2025, demonstrating excellence in scientific innovation.',
-    color: '#ffd700',
-  },
-  {
-    year: 'Ongoing',
-    title: 'Continuous Growth',
-    desc: 'Expanding into engineering, finance, and entrepreneurship while pursuing academic excellence.',
-    color: '#ff6b9d',
-  },
-];
+import { timeline } from './AchievementsSection';
 
 export default function EducationSection() {
   return (

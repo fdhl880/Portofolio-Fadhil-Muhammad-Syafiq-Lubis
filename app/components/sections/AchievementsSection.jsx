@@ -177,4 +177,30 @@ export default function AchievementsSection() {
       </div>
     </section>
   );
-}
+}export const timeline = [
+  {
+    year: '2024',
+    title: 'International Science Competition',
+    desc: 'Represented Indonesia at IPITEx 2024 in Thailand, winning a Silver Medal for innovative research.',
+    color: '#00f0ff',
+  },
+  {
+    year: '2025',
+    title: 'Malaysia Technology Expo',
+    desc: 'Showcased innovation at MTE 2025, earning a Silver Medal in international competition.',
+    color: '#8b5cf6',
+  },
+  {
+    year: '2025',
+    title: ' Gold Medal',
+    desc: 'Achieved Gold Medal at I2SPO 2025, demonstrating excellence in scientific innovation.',
+    color: '#ffd700',
+  },
+  {
+    year: 'Ongoing',
+    title: 'Continuous Growth',
+    desc: 'Expanding into engineering, finance, and entrepreneurship while pursuing academic excellence.',
+    color: '#ff6b9d',
+  },
+];
+
