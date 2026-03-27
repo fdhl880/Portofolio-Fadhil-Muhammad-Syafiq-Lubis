@@ -5,7 +5,7 @@ import { useState } from 'react';
 const international = [
   { medal: 'Silver', event: 'IPITEx 2024', loc: 'Thailand', color: '#c0c0c0' },
   { medal: 'Silver', event: 'Malaysia Technology Expo 2025', loc: 'Malaysia', color: '#c0c0c0' },
-  { medal: 'Gold', event: 'I2SPO 2025', loc: 'International', color: '#ffd700' },
+  { medal: 'Gold', event: 'I2ASPO 2025', loc: 'International', color: '#ffd700' },
 ];
 
 const national = [
@@ -193,7 +193,7 @@ export default function AchievementsSection() {
   {
     year: '2025',
     title: ' Gold Medal',
-    desc: 'Achieved Gold Medal at I2SPO 2025, demonstrating excellence in scientific innovation.',
+    desc: 'Achieved Gold Medal at I2ASPO 2025, demonstrating excellence in scientific innovation.',
     color: '#ffd700',
   },
   {
