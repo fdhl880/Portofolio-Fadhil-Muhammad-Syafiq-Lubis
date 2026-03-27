@@ -10,6 +10,7 @@ import SkillsSection from './sections/SkillsSection';
 import EducationSection from './sections/EducationSection';
 import TrophySection from './sections/TrophySection';
 import AchievementsSection from './sections/AchievementsSection';
+import DiscoverySection from './sections/DiscoverySection';
 import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
@@ -61,6 +62,7 @@ export default function PageWrapper() {
           <EducationSection />
           <TrophySection isMobile={isMobile} />
           <AchievementsSection />
+          <DiscoverySection />
           <ProjectsSection />
           <VisionSection />
           <ContactSection />
