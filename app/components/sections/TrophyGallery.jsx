@@ -157,8 +157,23 @@ export default function TrophyGallery() {
               <Environment preset="city" />
             </Canvas>
 
+            {/* Scanning HUD Overlay */}
+            <div className="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+               <div className="flex justify-between items-start">
+                  <div className="w-4 h-4 border-t-2 border-l-2 border-cyan-500/50" />
+                  <div className="text-[8px] font-mono text-cyan-400 font-bold tracking-widest animate-pulse">
+                     ANALYZING_OBJECT_{i+1}
+                  </div>
+                  <div className="w-4 h-4 border-t-2 border-r-2 border-cyan-500/50" />
+               </div>
+               <div className="flex justify-between items-end">
+                  <div className="w-4 h-4 border-b-2 border-l-2 border-cyan-500/50" />
+                  <div className="w-4 h-4 border-b-2 border-r-2 border-cyan-500/50" />
+               </div>
+            </div>
+
             {/* Medal Label */}
-            <div className="absolute bottom-10 left-0 right-0 text-center pointer-events-none">
+            <div className="absolute bottom-10 left-0 right-0 text-center pointer-events-none group-hover:opacity-40 transition-opacity">
               <div className="text-[10px] font-mono text-white/30 tracking-[0.3em] uppercase mb-1">Entry_No_{i+1}</div>
               <div className="text-xl font-bold text-white uppercase tracking-wider">{trophy.id.toUpperCase()}_UNIT</div>
             </div>

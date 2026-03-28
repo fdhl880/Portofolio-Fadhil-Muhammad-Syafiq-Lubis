@@ -111,8 +111,53 @@ export function SoundProvider({ children }) {
     osc.stop(audioContextRef.current.currentTime + duration);
   };
 
+  const playBootSequence = () => {
+    if (!isAudioEnabled || !audioContextRef.current) return;
+    
+    const now = audioContextRef.current.currentTime;
+    
+    // Quick rising pulses
+    [880, 1320, 1760, 2640].forEach((freq, i) => {
+      const osc = audioContextRef.current.createOscillator();
+      const g = audioContextRef.current.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + i * 0.1);
+      g.gain.setValueAtTime(0, now + i * 0.1);
+      g.gain.linearRampToValueAtTime(0.05, now + i * 0.1 + 0.05);
+      g.gain.linearRampToValueAtTime(0, now + i * 0.1 + 0.1);
+      osc.connect(g);
+      g.connect(masterGainRef.current);
+      osc.start(now + i * 0.1);
+      osc.stop(now + i * 0.1 + 0.1);
+    });
+
+    // Final deep resonance
+    const osc2 = audioContextRef.current.createOscillator();
+    const g2 = audioContextRef.current.createGain();
+    const f2 = audioContextRef.current.createBiquadFilter();
+    
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(40, now + 0.4);
+    osc2.frequency.exponentialRampToValueAtTime(80, now + 1.5);
+    
+    f2.type = 'lowpass';
+    f2.frequency.setValueAtTime(100, now + 0.4);
+    f2.frequency.exponentialRampToValueAtTime(1000, now + 1.5);
+    
+    g2.gain.setValueAtTime(0, now + 0.4);
+    g2.gain.linearRampToValueAtTime(0.15, now + 0.5);
+    g2.gain.linearRampToValueAtTime(0, now + 2.0);
+    
+    osc2.connect(f2);
+    f2.connect(g2);
+    g2.connect(masterGainRef.current);
+    
+    osc2.start(now + 0.4);
+    osc2.stop(now + 2.0);
+  };
+
   return (
-    <SoundContext.Provider value={{ isAudioEnabled, toggleAudio, playPip, playSweep }}>
+    <SoundContext.Provider value={{ isAudioEnabled, toggleAudio, playPip, playSweep, playBootSequence }}>
       {children}
     </SoundContext.Provider>
   );

@@ -1,5 +1,5 @@
 'use client';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useState, useRef } from 'react';
 
 const projects = [
@@ -96,10 +96,39 @@ function ProjectCard({ project, index }) {
           ))}
         </div>
 
+        {/* Technical Reveal Overlay */}
+        <AnimatePresence>
+          {hovered && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 pointer-events-none z-20 flex flex-col justify-end p-6 bg-dark/40 backdrop-blur-[2px]"
+            >
+              <div className="absolute inset-0 border border-cyan-500/30 m-2 rounded-xl pointer-events-none" />
+              {/* Scanning line */}
+              <motion.div 
+                animate={{ y: [0, 200, 0] }}
+                transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
+                className="absolute top-0 left-2 right-2 h-px bg-cyan-400/30 blur-sm"
+              />
+              
+              <div className="relative font-mono text-[8px] text-cyan-400/80 leading-tight space-y-1">
+                <div>{"// OBJECT_ANALYSIS: COMPLETED"}</div>
+                <div>{"// DATA_STREAM: ACTIVE"}</div>
+                <div>{"// SECTOR_READ: 0x"}{index}{"F4A"}</div>
+                <div className="text-[10px] text-white font-bold tracking-widest mt-2">
+                  {"PERMISSION: GRANTED_ >"}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Hover glow overlay */}
         {hovered && (
           <div
-            className="absolute inset-0 pointer-events-none rounded-2xl"
+            className="absolute inset-0 pointer-events-none rounded-2xl z-10"
             style={{
               background: `radial-gradient(circle at 50% 0%, ${project.color}10, transparent 60%)`,
             }}

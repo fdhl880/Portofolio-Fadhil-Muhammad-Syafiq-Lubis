@@ -44,7 +44,10 @@ export const metadata = {
     follow: true,
   },
   icons: {
-    icon: '/logo-initials.png',
+    icon: [
+      { url: '/logo-initials.png' },
+      { url: '/logo-initials.png', sizes: '32x32', type: 'image/png' },
+    ],
     apple: '/logo-initials.png',
   },
 };

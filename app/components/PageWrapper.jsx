@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
@@ -15,12 +15,14 @@ import DiscoverySection from './sections/DiscoverySection';
 import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
+import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import SoundToggle from './ui/SoundToggle';
 import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
+import { useSound } from '../context/SoundContext';
 
 // Global Scanline Effect
 function Scanline() {
@@ -49,7 +51,7 @@ function SidebarHUD() {
   
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
+      const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'nexus-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
       for (const id of sections.reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 300) {
@@ -129,6 +131,8 @@ function NotificationSystem() {
 export default function PageWrapper() {
   const [showIntro, setShowIntro] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
+  const { playBootSequence } = useSound();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -141,12 +145,19 @@ export default function PageWrapper() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const handleIntroComplete = useCallback(() => {
+    setShowIntro(false);
+    playBootSequence();
+    setIsShaking(true);
+    setTimeout(() => setIsShaking(false), 1000);
+  }, [playBootSequence]);
+
   useEffect(() => {
     if (showIntro) {
-      const timer = setTimeout(() => setShowIntro(false), 4500);
+      const timer = setTimeout(handleIntroComplete, 4500);
       return () => clearTimeout(timer);
     }
-  }, [showIntro]);
+  }, [showIntro, handleIntroComplete]);
 
   return (
     <PerformanceProvider>
@@ -154,11 +165,19 @@ export default function PageWrapper() {
       
       <AnimatePresence>
         {showIntro && (
-          <CinematicIntro onComplete={() => setShowIntro(false)} />
+          <CinematicIntro onComplete={handleIntroComplete} />
         )}
       </AnimatePresence>
 
-      <div className="relative overflow-x-hidden min-h-screen" style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}>
+      <motion.div 
+        animate={isShaking ? { 
+          x: [0, -10, 10, -10, 10, 0],
+          y: [0, 5, -5, 5, -5, 0]
+        } : {}}
+        transition={{ duration: 0.5 }}
+        className="relative overflow-x-hidden min-h-screen" 
+        style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
+      >
         <Scanline />
         <SidebarHUD />
         <NotificationSystem />
@@ -175,6 +194,7 @@ export default function PageWrapper() {
           <section id="education"><EducationSection /></section>
           <section id="trophy"><TrophyGallery /></section>
           <section id="achievements"><AchievementsSection /></section>
+          <section id="nexus-globe"><GlobeSection /></section>
           <section id="roadmap"><RoadmapSection /></section>
           <section id="discovery"><DiscoverySection /></section>
           <section id="projects"><ProjectsSection /></section>
@@ -185,7 +205,7 @@ export default function PageWrapper() {
         <BackToTop />
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
-      </div>
+      </motion.div>
     </PerformanceProvider>
   );
 }

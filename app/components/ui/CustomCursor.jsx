@@ -47,44 +47,73 @@ export default function CustomCursor() {
 
   if (!isVisible) return null;
 
-  // Render a combination: solid dot + hollow trailing ring
   return (
     <>
+      {/* Central Crosshair Dot */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[10000] mix-blend-screen"
+        className="fixed top-0 left-0 w-1.5 h-1.5 bg-cyan-400 rounded-full pointer-events-none z-[10000] mix-blend-screen"
         animate={{
-          x: mousePosition.x - 4,
-          y: mousePosition.y - 4,
-          scale: isHovering ? 1.5 : 1,
+          x: mousePosition.x - 3,
+          y: mousePosition.y - 3,
+          scale: isHovering ? 2 : 1,
         }}
-        transition={{ type: 'spring', damping: 30, stiffness: 250, mass: 0.1 }}
-        style={{
-          backgroundColor: isHovering ? '#ffd700' : '#00f0ff',
-          boxShadow: isHovering ? '0 0 15px #ffd700' : '0 0 10px #00f0ff',
-        }}
+        transition={{ type: 'spring', damping: 40, stiffness: 450, mass: 0.1 }}
+        style={{ boxShadow: '0 0 10px #00f0ff' }}
       />
       
+      {/* HUD Telemetry (Coordinates) */}
       <motion.div
-        className="fixed top-0 left-0 rounded-full border border-[#00f0ff] pointer-events-none z-[9999]"
+        className="fixed top-0 left-0 pointer-events-none z-[9999]"
         animate={{
-          x: mousePosition.x - (isHovering ? 24 : 16),
-          y: mousePosition.y - (isHovering ? 24 : 16),
-          width: isHovering ? 48 : 32,
-          height: isHovering ? 48 : 32,
-          backgroundColor: isHovering ? 'rgba(255, 215, 0, 0.1)' : 'rgba(0, 240, 255, 0.05)',
-          scale: isHovering ? 1.3 : 1,
-          borderColor: isHovering ? '#ffd700' : '#00f0ff',
+          x: mousePosition.x + 20,
+          y: mousePosition.y - 20,
+          opacity: isHovering ? 0.8 : 0.4,
+        }}
+      >
+        <div className="text-[8px] font-mono text-cyan-400 font-bold tracking-tighter shadow-sm bg-black/20 backdrop-blur-sm px-1 rounded">
+          {Math.round(mousePosition.x)}, {Math.round(mousePosition.y)} 
+          <span className="opacity-50 ml-1">{"// TRG_SCAN"}</span>
+        </div>
+      </motion.div>
+
+      {/* Main Reticle Ring */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full border border-cyan-500/30 pointer-events-none z-[9998]"
+        animate={{
+          x: mousePosition.x - (isHovering ? 28 : 20),
+          y: mousePosition.y - (isHovering ? 28 : 20),
+          width: isHovering ? 56 : 40,
+          height: isHovering ? 56 : 40,
+          rotate: isHovering ? [0, 90] : [0, 45],
+          borderColor: isHovering ? '#ffd700' : '#00f0ff50',
         }}
         transition={{
           type: 'spring',
-          damping: 20,
-          stiffness: 120,
-          mass: 0.6,
+          damping: 25,
+          stiffness: 150,
         }}
-        style={{
-          boxShadow: isHovering 
-            ? '0 0 25px rgba(255,215,0,0.4), inset 0 0 15px rgba(255,215,0,0.2)' 
-            : '0 0 15px rgba(0,240,255,0.3)',
+      >
+        {/* Notch - Top */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1 h-2 bg-current opacity-40" />
+        {/* Notch - Bottom */}
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-2 bg-current opacity-40" />
+      </motion.div>
+
+      {/* Outer Rotating HUD Ring */}
+      <motion.div
+        className="fixed top-0 left-0 rounded-full border border-dashed border-cyan-500/20 pointer-events-none z-[9997]"
+        animate={{
+          x: mousePosition.x - (isHovering ? 40 : 30),
+          y: mousePosition.y - (isHovering ? 40 : 30),
+          width: isHovering ? 80 : 60,
+          height: isHovering ? 80 : 60,
+          rotate: [0, 360],
+        }}
+        transition={{
+          rotate: { repeat: Infinity, duration: 10, ease: 'linear' },
+          type: 'spring',
+          damping: 30,
+          stiffness: 100,
         }}
       />
     </>
