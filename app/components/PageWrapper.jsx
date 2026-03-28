@@ -8,12 +8,15 @@ import BackToTop from './ui/BackToTop';
 import HeroSection from './sections/HeroSection';
 import SkillsSection from './sections/SkillsSection';
 import EducationSection from './sections/EducationSection';
-import TrophySection from './sections/TrophySection';
+import TrophyGallery from './sections/TrophyGallery';
+import RoadmapSection from './sections/RoadmapSection';
 import AchievementsSection from './sections/AchievementsSection';
 import DiscoverySection from './sections/DiscoverySection';
 import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
+import NeuralCore from './ui/NeuralCore';
+import SoundToggle from './ui/SoundToggle';
 import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
@@ -56,12 +59,15 @@ export default function PageWrapper() {
         <ScrollProgress />
         <Navbar />
         <PerformanceToggle />
+        <SoundToggle />
+        <NeuralCore />
         <main>
           <HeroSection isMobile={isMobile} />
           <SkillsSection />
           <EducationSection />
-          <TrophySection isMobile={isMobile} />
+          <TrophyGallery />
           <AchievementsSection />
+          <RoadmapSection />
           <DiscoverySection />
           <ProjectsSection />
           <VisionSection />
