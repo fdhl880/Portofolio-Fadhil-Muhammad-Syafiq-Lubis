@@ -10,7 +10,7 @@ const HeroScene = dynamic(() => import('../three/HeroScene'), {
 
 export default function HeroSection({ isMobile }) {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* 3D Background */}
       {/* 3D Background */}
       <HeroScene />

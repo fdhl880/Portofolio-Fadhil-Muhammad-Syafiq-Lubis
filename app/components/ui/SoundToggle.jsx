@@ -7,8 +7,13 @@ export default function SoundToggle() {
 
   return (
     <motion.button
-      onClick={toggleAudio}
-      className={`fixed top-24 right-4 md:right-32 z-[100] rounded-full px-4 py-2 text-[10px] font-bold font-display uppercase tracking-widest transition-all duration-300 cursor-pointer pointer-events-auto border backdrop-blur-md shadow-lg
+      onClick={() => {
+        toggleAudio();
+        window.dispatchEvent(new CustomEvent('NEXUS_NOTIFY', { 
+          detail: `AUDIO_COMMS: ${!isAudioEnabled ? 'ENABLED' : 'DISABLED'}` 
+        }));
+      }}
+      className={`fixed top-24 right-4 md:right-32 z-[150] rounded-full px-4 py-2 text-[10px] font-bold font-display uppercase tracking-widest transition-all duration-300 cursor-pointer pointer-events-auto border backdrop-blur-md shadow-lg
         ${isAudioEnabled ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/50 hover:bg-cyan-500/20 shadow-cyan-500/20' 
                        : 'bg-white/5 text-white/50 border-white/20 hover:bg-white/10 shadow-none'}
       `}

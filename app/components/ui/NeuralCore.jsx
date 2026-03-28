@@ -26,29 +26,30 @@ function TypingEffect({ text, onComplete }) {
   return <span>{displayed}</span>;
 }
 
-function CoreModel() {
+function CoreModel({ isFast }) {
   const meshRef = useRef();
   const { isCinematic } = usePerformance();
 
   useFrame((state) => {
     if (isCinematic && meshRef.current) {
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.4;
-      meshRef.current.rotation.z = state.clock.getElapsedTime() * 0.2;
+      const speed = isFast ? 1.2 : 0.4;
+      meshRef.current.rotation.y = state.clock.getElapsedTime() * speed;
+      meshRef.current.rotation.z = state.clock.getElapsedTime() * (speed / 2);
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+    <Float speed={isFast ? 4 : 2} rotationIntensity={isFast ? 2 : 1} floatIntensity={isFast ? 2 : 1}>
       <Sphere ref={meshRef} args={[1, 64, 64]}>
         <MeshDistortMaterial
           color="#00f0ff"
-          speed={isCinematic ? 3 : 0}
-          distort={0.4}
+          speed={isCinematic ? (isFast ? 6 : 3) : 0}
+          distort={isFast ? 0.6 : 0.4}
           radius={1}
           metalness={0.9}
           roughness={0.1}
           emissive="#00f0ff"
-          emissiveIntensity={0.5}
+          emissiveIntensity={isFast ? 1 : 0.5}
         />
       </Sphere>
     </Float>
