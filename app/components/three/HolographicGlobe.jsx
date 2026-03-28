@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Sphere, Float, Points, PointMaterial } from '@react-three/drei';
+import { Sphere, Float, Points, PointMaterial, useTexture, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Marker({ lat, lon, label, onClick }) {
@@ -19,19 +19,26 @@ function Marker({ lat, lon, label, onClick }) {
 
   return (
     <group position={pos}>
-      <mesh onClick={onClick}>
-        <sphereGeometry args={[0.04, 16, 16]} />
+      <mesh onClick={onClick} className="cursor-pointer">
+        <sphereGeometry args={[0.05, 16, 16]} />
         <meshBasicMaterial color="#00f0ff" />
       </mesh>
       <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[0.08, 16, 16]} />
+        <sphereGeometry args={[0.09, 16, 16]} />
         <meshBasicMaterial color="#00f0ff" transparent opacity={0.3} />
       </mesh>
       {/* Pulse ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0.05, 0.07, 32]} />
-        <meshBasicMaterial color="#00f0ff" transparent opacity={0.5} side={THREE.DoubleSide} />
+        <ringGeometry args={[0.06, 0.08, 32]} />
+        <meshBasicMaterial color="#00f0ff" transparent opacity={0.6} side={THREE.DoubleSide} />
       </mesh>
+
+      {/* 3D Floating Label */}
+      <Html position={[0, 0.15, 0]} center onClick={onClick} style={{ pointerEvents: 'none' }}>
+        <div className="bg-dark/80 backdrop-blur-md border border-cyan-500/50 px-3 py-1.5 rounded-lg shadow-[0_0_15px_rgba(0,240,255,0.4)] whitespace-nowrap">
+          <div className="text-[10px] font-mono font-bold text-cyan-400 tracking-widest">{label}</div>
+        </div>
+      </Html>
     </group>
   );
 }
@@ -52,40 +59,46 @@ function generateGlobePoints(count = 3000) {
 
 export default function HolographicGlobe() {
   const globeRef = useRef();
+
+  // Load realistic Earth textures from reliable open-source CDC (three-globe examples)
+  const [colorMap, bumpMap, specularMap] = useTexture([
+    'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg',
+    'https://unpkg.com/three-globe/example/img/earth-topology.png',
+    'https://unpkg.com/three-globe/example/img/earth-water.png'
+  ]);
   
   // Static points for the "stars" shell
   const points = useMemo(() => generateGlobePoints(3000), []);
 
   useFrame((state) => {
     if (globeRef.current) {
-      globeRef.current.rotation.y += 0.002;
+      globeRef.current.rotation.y += 0.0015; // Slowed down slightly for realism
     }
   });
 
   const locations = [
-    { lat: 3.5952, lon: 98.6722, label: 'MEDAN_HQ' },
-    { lat: -7.7956, lon: 110.3695, label: 'I2ASPO_YOGYAKARTA' },
-    { lat: 13.7563, lon: 100.5018, label: 'IPITEx_BANGKOK' },
-    { lat: 3.1390, lon: 101.6869, label: 'MTE_KUALA_LUMPUR' }
+    { lat: 3.5952, lon: 98.6722, label: 'MEDAN HQ' },
+    { lat: -7.7956, lon: 110.3695, label: 'I2ASPO YOGYAKARTA' },
+    { lat: 13.7563, lon: 100.5018, label: 'IPITEx BANGKOK' },
+    { lat: 3.1390, lon: 101.6869, label: 'MTE KUALA LUMPUR' }
   ];
 
   return (
     <group ref={globeRef}>
-      {/* Main Globe Mesh */}
+      {/* Main Realistic Globe Mesh */}
       <Sphere args={[2, 64, 64]}>
-        <meshStandardMaterial 
-          color="#111" 
-          wireframe 
-          transparent 
-          opacity={0.15} 
-          emissive="#00f0ff" 
-          emissiveIntensity={0.2}
+        <meshPhongMaterial
+           map={colorMap}
+           bumpMap={bumpMap}
+           bumpScale={0.015}
+           specularMap={specularMap}
+           specular={new THREE.Color('grey')}
         />
       </Sphere>
 
-      {/* Outer atmosphere glow */}
-      <Sphere args={[2.1, 64, 64]}>
-        <meshBasicMaterial color="#00f0ff" wireframe transparent opacity={0.05} />
+      {/* Atmospheric Glow */}
+      <Sphere args={[2.02, 64, 64]}>
+        <meshBasicMaterial color="#00f0ff" transparent opacity={0.1} side={THREE.BackSide} />
       </Sphere>
 
       {/* Points shell */}
@@ -115,8 +128,10 @@ export default function HolographicGlobe() {
         />
       ))}
 
-      <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} color="#00f0ff" />
+      <ambientLight intensity={0.2} />
+      {/* Strong directional light to simulate the Sun on the realistic Earth */}
+      <directionalLight position={[5, 3, 5]} intensity={1.5} color="#ffffff" shadow />
+      <directionalLight position={[-5, 3, -5]} intensity={0.3} color="#00f0ff" />
     </group>
   );
 }

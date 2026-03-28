@@ -65,21 +65,8 @@ export default function NeuralCore() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const scrollRef = useRef(null);
+  const hasGreeted = useRef(false);
   const { playPip, playSweep } = useSound();
-
-  // Auto-greeting logic
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isOpen) {
-        setIsOpen(true);
-        setTimeout(() => {
-          setHistory(prev => [...prev, { role: 'sys', text: 'WELCOME_USER. SYSTEM_READY_FOR_INPUT. TYPE /HELP.' }]);
-          playPip(880, 0.1);
-        }, 1000);
-      }
-    }, 8000); // 8 seconds post-load (to account for intro)
-    return () => clearTimeout(timer);
-  }, [isOpen, playPip]);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -90,6 +77,19 @@ export default function NeuralCore() {
   const toggleCore = () => {
     setIsOpen(!isOpen);
     playSweep(isOpen ? 800 : 200, isOpen ? 200 : 800, 0.3);
+    
+    // User requested: "NEXUX WILL BE GREETING IF THE NEXUX IS TOUCH BY THE VISITOR"
+    if (!isOpen && !hasGreeted.current) {
+      hasGreeted.current = true;
+      setTimeout(() => {
+        setHistory(prev => [...prev, { 
+          role: 'sys', 
+          text: 'GREETINGS VISITOR. I AM NEXUS. HOW CAN I ASSIST? TYPE /HELP.', 
+          isNew: true 
+        }]);
+        playPip(1200, 0.1);
+      }, 600);
+    }
   };
 
   const executeCommand = (e) => {

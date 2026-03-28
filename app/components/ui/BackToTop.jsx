@@ -15,11 +15,11 @@ export default function BackToTop() {
     <AnimatePresence>
       {show && (
         <motion.button
-          initial={{ opacity: 0, x: 50 }}
+          initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 50 }}
+          exit={{ opacity: 0, x: -50 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-32 md:bottom-8 right-6 md:right-8 z-[150] w-14 h-14 cyber-button flex items-center justify-center cursor-pointer group hover:scale-110"
+          className="fixed bottom-32 md:bottom-8 left-6 md:left-8 z-[150] w-14 h-14 cyber-button flex items-center justify-center cursor-pointer group hover:scale-110"
           aria-label="Back to top"
         >
           <div className="absolute inset-0 bg-cyan-500/5 group-hover:bg-cyan-500/10 transition-colors" />
