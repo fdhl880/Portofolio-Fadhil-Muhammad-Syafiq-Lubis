@@ -10,7 +10,8 @@ export default function CinematicIntro({ onComplete }) {
 
   const handleSkip = useCallback(() => {
     setPhase(3);
-    setTimeout(onComplete, 800);
+    // Use an immediate callback for skips to guarantee execution
+    requestAnimationFrame(() => onComplete());
   }, [onComplete]);
 
   // Background Canvas Effect
@@ -80,7 +81,10 @@ export default function CinematicIntro({ onComplete }) {
           clearInterval(interval);
           setTimeout(() => {
             setPhase(3); // fade out
-            setTimeout(onComplete, 800); // callback
+            // Ensure callback fires even if throttled
+            requestAnimationFrame(() => {
+               setTimeout(onComplete, 300);
+            });
           }, 500);
         } else {
           setProgress(Math.floor(currentProgress));

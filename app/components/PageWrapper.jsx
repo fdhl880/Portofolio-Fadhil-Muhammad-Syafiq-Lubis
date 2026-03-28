@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
@@ -129,10 +129,16 @@ function NotificationSystem() {
 }
 
 export default function PageWrapper() {
+  const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const { playBootSequence } = useSound();
+  const introFinished = useRef(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -146,18 +152,43 @@ export default function PageWrapper() {
   }, []);
 
   const handleIntroComplete = useCallback(() => {
+    if (introFinished.current) return;
+    introFinished.current = true;
     setShowIntro(false);
-    playBootSequence();
+    
+    // Attempt audio boot sequence safely
+    try {
+      playBootSequence();
+    } catch (e) {
+      console.warn("Nexus Audio Engine: Boot Sequence Suppressed");
+    }
+
     setIsShaking(true);
     setTimeout(() => setIsShaking(false), 1000);
   }, [playBootSequence]);
 
   useEffect(() => {
     if (showIntro) {
+      // Primary Cinematic Timer
       const timer = setTimeout(handleIntroComplete, 4500);
-      return () => clearTimeout(timer);
+      
+      // Secondary FAIL-SAFE Timer: Force reveal after 6.5 seconds no matter what
+      const failsafe = setTimeout(() => {
+         if (!introFinished.current) {
+            console.warn("Nexus Runtime: Intro hanging. Firing Force Reveal Protocol.");
+            handleIntroComplete();
+         }
+      }, 6500);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(failsafe);
+      };
     }
   }, [showIntro, handleIntroComplete]);
+
+  // Prevent Hydration Errors by delaying DOM assembly until client mounts
+  if (!mounted) return null;
 
   return (
     <PerformanceProvider>
