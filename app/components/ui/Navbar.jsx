@@ -81,26 +81,66 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
+      {/* Full-screen Mobile Dashboard */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="glass rounded-2xl mt-2 px-4 py-3 md:hidden"
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.1 }}
+            className="fixed inset-0 z-[100] bg-dark/95 backdrop-blur-2xl flex flex-col p-10 md:hidden"
           >
-            {navLinks.map(link => (
-              <button
-                key={link.id}
-                onClick={() => scrollTo(link.id)}
-                className={`block w-full text-left px-3 py-2 rounded-lg text-sm transition cursor-pointer ${
-                  activeSection === link.id ? 'text-neon bg-neon/10' : 'text-muted hover:text-white'
-                }`}
+            {/* Background HUD Decor */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.2)_50%),linear-gradient(90deg,rgba(0,240,255,0.05),rgba(0,0,0,0),rgba(0,240,255,0.05))] bg-[length:100%_8px,20px_100%]" />
+              <motion.div 
+                animate={{ y: ['0%', '100%'] }}
+                transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
+                className="absolute top-0 left-0 w-full h-px bg-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.5)]"
+              />
+            </div>
+
+            <div className="flex justify-between items-start relative z-10 w-full mb-16">
+              <div className="space-y-1">
+                <div className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-[0.3em]">System_Dashboard</div>
+                <div className="text-2xl font-black text-white uppercase tracking-tighter">NEXUS_OS_v3</div>
+              </div>
+              <button 
+                onClick={() => setMobileOpen(false)}
+                className="w-12 h-12 glass rounded-2xl flex items-center justify-center border border-white/20 text-white"
               >
-                {link.label}
+                ✕
               </button>
-            ))}
+            </div>
+
+            <div className="flex-1 flex flex-col justify-center space-y-8 relative z-10">
+              {navLinks.map((link, i) => (
+                <motion.button
+                  key={link.id}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  onClick={() => scrollTo(link.id)}
+                  className={`text-left group flex items-center gap-6 ${
+                    activeSection === link.id ? 'text-cyan-400' : 'text-white/40'
+                  }`}
+                >
+                  <span className="text-xs font-mono opacity-30 mt-1">0{i+1}</span>
+                  <span className="text-4xl font-bold font-display uppercase tracking-widest group-hover:text-white transition-colors">{link.label}</span>
+                </motion.button>
+              ))}
+            </div>
+
+            <div className="mt-auto grid grid-cols-2 gap-4 relative z-10 pt-10 border-t border-white/10 uppercase font-mono">
+               <div>
+                  <div className="text-[9px] text-white/30 tracking-widest">Status</div>
+                  <div className="text-xs text-green-400">OPTIMAL_READY</div>
+               </div>
+               <div className="text-right">
+                  <div className="text-[9px] text-white/30 tracking-widest">Innovation_Rate</div>
+                  <div className="text-xs text-white">MAX_LEVEL</div>
+               </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

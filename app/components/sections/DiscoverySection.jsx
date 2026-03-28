@@ -115,10 +115,10 @@ export default function DiscoverySection() {
         className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[500px] w-[500px] mx-auto rounded-full blur-[180px] opacity-[0.08]" 
       />
 
-      <div className="container max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="container max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center relative z-10">
         
         {/* Left: Info */}
-        <div className="order-2 lg:order-1 space-y-8">
+        <div className="order-2 lg:order-1 space-y-6 lg:space-y-8">
           {/* Search Bar */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

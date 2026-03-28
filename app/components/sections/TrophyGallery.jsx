@@ -73,10 +73,10 @@ const trophyData = [
   },
   {
     id: 'ipitex',
-    title: 'IPITEx Gold Medal',
+    title: 'IPITEx Silver Medal',
     event: 'Thailand Inventors\' Day (IPITEx)',
     year: '2024',
-    color: '#ffd700',
+    color: '#c0c0c0',
     ribbonColor: '#fbbf24', // yellow
     desc: 'Top honor from the National Research Council of Thailand (NRCT) on the global stage.',
     stats: { innovation: '92%', complexity: '88%', impact: 'GLOBAL' }
@@ -170,21 +170,23 @@ export default function TrophyGallery() {
       <AnimatePresence>
         {activeId && activeTrophy && (
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
-            className="fixed top-1/2 right-12 -translate-y-1/2 w-80 glass rounded-3xl border border-white/20 p-8 z-[150] shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
+            animate={{ opacity: 1, y: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : -window.innerHeight/2 + 250, x: 0 }}
+            exit={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
+            className="fixed bottom-0 md:top-1/2 right-0 md:right-12 w-full md:w-80 glass rounded-t-[3rem] md:rounded-3xl border-t md:border border-white/20 p-8 z-[200] shadow-2xl overflow-hidden max-h-[80vh] md:max-h-none overflow-y-auto"
           >
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/10 rounded-full md:hidden" />
+            
             <div className="absolute top-0 right-0 p-4">
               <button 
                 onClick={() => setActiveId(null)}
-                className="text-white/30 hover:text-white transition-colors"
+                className="text-white/30 hover:text-white transition-colors p-2"
               >
                 [ CLOSE ]
               </button>
             </div>
 
-            <div className="relative z-10 space-y-6">
+            <div className="relative z-10 space-y-6 pt-4 md:pt-0">
               <div>
                 <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">{activeTrophy.year}{" // "}HONORS</span>
                 <h3 className="text-2xl font-bold text-white mt-1 leading-tight">{activeTrophy.title}</h3>
@@ -214,7 +216,7 @@ export default function TrophyGallery() {
             </div>
 
             {/* Background Decorative Circuitry */}
-            <div className="absolute bottom-0 right-0 w-32 h-32 opacity-10 pointer-events-none">
+            <div className="absolute bottom-0 right-0 w-32 h-32 opacity-10 pointer-events-none hidden md:block">
               <svg viewBox="0 0 100 100" className="w-full h-full text-cyan-500 fill-none stroke-current stroke-1">
                 <path d="M0,50 L50,50 L50,100 M50,50 L100,0" />
                 <circle cx="50" cy="50" r="5" />

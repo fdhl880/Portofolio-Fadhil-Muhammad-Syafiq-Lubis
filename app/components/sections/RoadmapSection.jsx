@@ -9,7 +9,7 @@ const roadmapData = [
     title: 'THE_SPARK',
     event: 'IPITEx Thailand (International Competition)',
     desc: 'First entry into the global scientific community. Won Silver Medal for research on sustainable tech.',
-    color: '#00f0ff',
+    color: '#c0c0c0',
     side: 'left'
   },
   {
