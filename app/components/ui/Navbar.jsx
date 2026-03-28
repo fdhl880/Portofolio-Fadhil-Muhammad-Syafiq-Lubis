@@ -32,7 +32,7 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    window.dispatchEvent(new CustomEvent('NEXUS_WARP_INIT', { detail: id }));
     setMobileOpen(false);
   };
 

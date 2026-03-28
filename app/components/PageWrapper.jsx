@@ -22,6 +22,8 @@ import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
+import AudioVisualizer from './ui/AudioVisualizer';
+import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 
 // Global Scanline Effect
@@ -52,8 +54,15 @@ function WarpEngine() {
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       z: Math.random() * 2 + 0.5,
+      z: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
+    
+    // Quantum Liquid Trail State
+    const trails = [];
+    const handleMouseMove = (e) => {
+      trails.push({ x: e.clientX, y: e.clientY, age: 0 });
+    };
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -61,6 +70,7 @@ function WarpEngine() {
     };
     resize();
     window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', handleMouseMove);
 
     const animate = () => {
       const v = smoothVelocity.get();
@@ -86,13 +96,56 @@ function WarpEngine() {
         ctx.fillRect(s.x, s.y, s.z, Math.max(s.z, stretchFactor));
       });
 
+      // Render Quantum Liquid Cursor Trail
+      if (trails.length > 1) {
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(trails[0].x, trails[0].y);
+        
+        for (let i = 1; i < trails.length; i++) {
+          const pt = trails[i];
+          const prev = trails[i - 1];
+          const xc = (prev.x + pt.x) / 2;
+          const yc = (prev.y + pt.y) / 2;
+          ctx.quadraticCurveTo(prev.x, prev.y, xc, yc);
+          pt.age += 1;
+        }
+        
+        // Final line to exact cursor
+        const last = trails[trails.length - 1];
+        ctx.quadraticCurveTo(last.x, last.y, last.x, last.y);
+
+        // Fluid gradient trail
+        if (trails.length > 5) {
+            const first = trails[0];
+            const grad = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
+            grad.addColorStop(0, 'rgba(0, 240, 255, 0)');
+            grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.3)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
+            
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 20;
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 12;
+            ctx.stroke();
+            ctx.shadowBlur = 0; // reset
+        }
+
+        while (trails.length && trails[0].age > 15) {
+          trails.shift();
+        }
+      }
+
       animId = requestAnimationFrame(animate);
+
     };
     animate();
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, [smoothVelocity, setEngineDrive]);
 
@@ -257,6 +310,7 @@ export default function PageWrapper() {
   return (
     <PerformanceProvider>
       <CustomCursor />
+      <WarpPortal />
       
       <AnimatePresence>
         {showIntro && (
@@ -274,6 +328,7 @@ export default function PageWrapper() {
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
         <WarpEngine />
+        <AudioVisualizer />
         <Scanline />
         <SidebarHUD />
         <NotificationSystem />

@@ -8,6 +8,8 @@ export function SoundProvider({ children }) {
   const audioContextRef = useRef(null);
   const masterGainRef = useRef(null);
   const engineStateRef = useRef(null);
+  const analyserRef = useRef(null);
+  const dataArrayRef = useRef(null);
 
   const startAmbientHum = () => {
     if (!audioContextRef.current) return;
@@ -66,10 +68,22 @@ export function SoundProvider({ children }) {
     
     masterGainRef.current = audioContextRef.current.createGain();
     masterGainRef.current.gain.value = 0.45; // Increased from 0.15
-    masterGainRef.current.connect(audioContextRef.current.destination);
+    
+    analyserRef.current = audioContextRef.current.createAnalyser();
+    analyserRef.current.fftSize = 64; // 32 frequency bins
+    dataArrayRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
+    
+    masterGainRef.current.connect(analyserRef.current);
+    analyserRef.current.connect(audioContextRef.current.destination);
     
     setIsAudioEnabled(true);
     startAmbientHum();
+  }, []);
+
+  const getAudioData = useCallback(() => {
+    if (!analyserRef.current || !dataArrayRef.current) return null;
+    analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+    return dataArrayRef.current;
   }, []);
 
   const toggleAudio = () => {
@@ -178,7 +192,8 @@ export function SoundProvider({ children }) {
       playPip, 
       playSweep, 
       playBootSequence,
-      setEngineDrive 
+      setEngineDrive,
+      getAudioData
     }}>
       {children}
     </SoundContext.Provider>

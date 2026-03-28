@@ -36,32 +36,116 @@ const projects = [
   },
 ];
 
-function HologramAsset({ type, color }) {
-  const meshRef = useRef();
-  
-  useFrame((state) => {
-    meshRef.current.rotation.x += 0.01;
-    meshRef.current.rotation.y += 0.02;
+function DNAHelix({ color }) {
+  const group = useRef();
+  useFrame(({ clock }) => {
+    group.current.rotation.y = clock.getElapsedTime() * 0.5;
   });
+  return (
+    <group ref={group}>
+      {Array.from({ length: 24 }).map((_, i) => {
+        const y = (i - 12) * 0.25;
+        const angle = i * 0.6;
+        const radius = 1.2;
+        const x1 = Math.cos(angle) * radius;
+        const z1 = Math.sin(angle) * radius;
+        const x2 = Math.cos(angle + Math.PI) * radius;
+        const z2 = Math.sin(angle + Math.PI) * radius;
+        
+        return (
+          <group key={i}>
+            <mesh position={[x1, y, z1]}>
+              <sphereGeometry args={[0.15, 16, 16]} />
+              <meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} />
+            </mesh>
+            <mesh position={[x2, y, z2]}>
+              <sphereGeometry args={[0.15, 16, 16]} />
+              <meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} />
+            </mesh>
+            <mesh position={[0, y, 0]} rotation={[0, -angle, Math.PI / 2]}>
+              <cylinderGeometry args={[0.02, 0.02, radius * 2]} />
+              <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.5} transparent opacity={0.5} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
 
+function DataCube({ color }) {
+  const group = useRef();
+  useFrame(({ clock }) => {
+    group.current.rotation.x = clock.getElapsedTime() * 0.3;
+    group.current.rotation.y = clock.getElapsedTime() * 0.4;
+  });
+  return (
+    <group ref={group}>
+      <mesh>
+        <boxGeometry args={[2.5, 2.5, 2.5]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.2} />
+      </mesh>
+      <mesh rotation={[Math.PI/4, Math.PI/4, 0]}>
+        <boxGeometry args={[1.5, 1.5, 1.5]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.6} />
+      </mesh>
+      <mesh>
+        <boxGeometry args={[0.8, 0.8, 0.8]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={2} />
+      </mesh>
+    </group>
+  );
+}
+
+function MarketMatrix({ color }) {
+  const group = useRef();
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    group.current.rotation.y = t * 0.2;
+    group.current.scale.setScalar(1 + Math.sin(t * 2) * 0.1);
+  });
+  return (
+    <group ref={group}>
+      <mesh>
+        <octahedronGeometry args={[2, 1]} />
+        <meshBasicMaterial color={color} wireframe transparent opacity={0.4} />
+      </mesh>
+      <mesh>
+        <octahedronGeometry args={[1.5, 0]} />
+        <meshStandardMaterial color={color} emissive={color} emissiveIntensity={1} wireframe={false} transparent opacity={0.8} />
+      </mesh>
+    </group>
+  );
+}
+
+function NeuralKnot({ color }) {
+  const meshRef = useRef();
+  useFrame((state) => {
+    meshRef.current.rotation.x = state.clock.elapsedTime * 0.4;
+    meshRef.current.rotation.y = state.clock.elapsedTime * 0.5;
+  });
+  return (
+    <mesh ref={meshRef}>
+      <torusKnotGeometry args={[1.2, 0.3, 128, 32]} />
+      <MeshDistortMaterial
+        color={color}
+        emissive={color}
+        emissiveIntensity={1}
+        distort={0.5}
+        speed={4}
+        wireframe
+      />
+    </mesh>
+  );
+}
+
+function HologramAsset({ type, color }) {
   return (
     <Float speed={4} rotationIntensity={2} floatIntensity={1.5}>
-      <mesh ref={meshRef}>
-        {type === 'Science' && <Sphere args={[1.5, 32, 32]} />}
-        {type === 'Technology' && <Torus args={[1.2, 0.4, 16, 50]} />}
-        {type === 'Markets' && <Octahedron args={[1.5, 0]} />}
-        {type === 'Innovation' && <Sphere args={[1.4, 16, 16]} />}
-        <MeshDistortMaterial
-          color={color}
-          emissive={color}
-          emissiveIntensity={0.8}
-          wireframe={type !== 'Innovation'}
-          distort={0.4}
-          speed={type === 'Science' ? 4 : 1}
-          opacity={0.8}
-          transparent
-        />
-      </mesh>
+      {type === 'Science' && <DNAHelix color={color} />}
+      {type === 'Technology' && <DataCube color={color} />}
+      {type === 'Markets' && <MarketMatrix color={color} />}
+      {type === 'Innovation' && <NeuralKnot color={color} />}
     </Float>
   );
 }

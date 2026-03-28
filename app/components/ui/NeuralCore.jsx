@@ -103,7 +103,7 @@ export default function NeuralCore() {
         setIsTyping(true);
         let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
         
-        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /override, /clear';
+        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear';
         else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. PROFESSION: INNOVATOR / RESEARCHER. LOCATION: MEDAN, INDONESIA. CORE: APPLIED SCIENCE & ENGINEERING.';
         else if (cmd === '/achievements') res = 'DATA: 12 TOTAL MEDALS. HIGHLIGHTS: I2ASPO GOLD (2025), IPITEx SILVER (2024), MTE SILVER (2025).';
         else if (cmd === '/projects') res = 'SCANNING_PORTFOLIO... Found multiple high-impact projects in sustainable tech and scientific research. Scroll to PROJECT_LOG to inspect.';
@@ -112,7 +112,32 @@ export default function NeuralCore() {
         else if (cmd === '/override') {
           res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS.';
           document.documentElement.classList.toggle('nexus-breach');
-          playBootSequence(); // Acts as a siren
+          try {
+            playBootSequence(); // Acts as a siren
+          } catch(e){}
+        }
+        else if (cmd === '/analyze') {
+          const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'nexus-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
+          let active = 'UNKNOWN_SECTOR';
+          for (const id of sections.reverse()) {
+            const el = document.getElementById(id);
+            if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.6) {
+              active = id.toUpperCase();
+              break;
+            }
+          }
+          
+          const analyses = {
+            'HERO': 'SUBJECT IS AT THE NEURAL GATEWAY. INITIALIZING NEURAL HANDSHAKE.',
+            'SKILLS': 'ANALYZING KNOWLEDGE GRAPH. SUBJECT DEMONSTRATES HIGH PROFICIENCY IN DIVERSE TECHNOLOGICAL VECTORS.',
+            'EDUCATION': 'SCANNING ACADEMIC RECORDS... OUTSTANDING TRAJECTORY DETECTED.',
+            'TROPHY': 'QUANTIFYING ACHIEVEMENTS... NUMEROUS INTERNATIONAL ACOLADES FOUND.',
+            'PROJECTS': 'INSPECTING PROTOTYPES. HIGH LEVEL OF INNOVATION DETECTED IN STRUCTURAL DATA.',
+            'CONTACT': 'COMMUNICATION CHANNELS OPEN. AWAITING TRANSMISSION FROM VISITOR.'
+          };
+          
+          const specific = analyses[active] || `VISITOR IS IN SPECTATOR MODE WITHIN [${active}].`;
+          res = `[AI_ANALYSIS_COMPLETE]: ${specific} RECOMMENDATION: CONTINUE EXPLORATION.`;
         }
         else if (cmd === '/clear') {
           setHistory([{ role: 'sys', text: 'TERMINAL_RESET_COMPLETE' }]);
