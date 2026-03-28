@@ -1,6 +1,9 @@
 'use client';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import GlitchText from '../ui/GlitchText';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float, Sphere, Torus, Octahedron, MeshDistortMaterial, Html } from '@react-three/drei';
 
 const projects = [
   {
@@ -33,7 +36,37 @@ const projects = [
   },
 ];
 
-function ProjectCard({ project, index }) {
+function HologramAsset({ type, color }) {
+  const meshRef = useRef();
+  
+  useFrame((state) => {
+    meshRef.current.rotation.x += 0.01;
+    meshRef.current.rotation.y += 0.02;
+  });
+
+  return (
+    <Float speed={4} rotationIntensity={2} floatIntensity={1.5}>
+      <mesh ref={meshRef}>
+        {type === 'Science' && <Sphere args={[1.5, 32, 32]} />}
+        {type === 'Technology' && <Torus args={[1.2, 0.4, 16, 50]} />}
+        {type === 'Markets' && <Octahedron args={[1.5, 0]} />}
+        {type === 'Innovation' && <Sphere args={[1.4, 16, 16]} />}
+        <MeshDistortMaterial
+          color={color}
+          emissive={color}
+          emissiveIntensity={0.8}
+          wireframe={type !== 'Innovation'}
+          distort={0.4}
+          speed={type === 'Science' ? 4 : 1}
+          opacity={0.8}
+          transparent
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+function ProjectCard({ project, index, onClick }) {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
@@ -56,6 +89,7 @@ function ProjectCard({ project, index }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+      onClick={() => onClick(project)}
       className="group cursor-pointer"
       style={{ perspective: '1000px' }}
     >
@@ -141,6 +175,14 @@ function ProjectCard({ project, index }) {
 
 export default function ProjectsSection() {
   const containerRef = useRef(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (selectedProject) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'auto';
+  }, [selectedProject]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
@@ -170,7 +212,9 @@ export default function ProjectsSection() {
           className="text-center mb-16"
         >
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Projects</span>
+            <span className="text-gradient">
+               <GlitchText text="Projects & Ventures" />
+            </span>
           </h2>
           <p className="text-muted max-w-2xl mx-auto">
             Areas of focus spanning science, engineering, finance, and entrepreneurship.
@@ -179,10 +223,81 @@ export default function ProjectsSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, i) => (
-            <ProjectCard key={project.title} project={project} index={i} />
+            <ProjectCard 
+               key={project.title} 
+               project={project} 
+               index={i} 
+               onClick={setSelectedProject}
+            />
           ))}
         </div>
       </div>
+
+      {/* Holographic Project Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto bg-dark/90 backdrop-blur-xl p-4 md:p-12 overflow-hidden"
+          >
+             <div className="absolute inset-0 pointer-events-none bg-[url('/images/grid.svg')] opacity-5 bg-[length:30px_30px]" />
+             
+             {/* 3D Asset Canvas */}
+             <div className="absolute inset-0 pointer-events-none opacity-50">
+               <Canvas camera={{ position: [0, 0, 8] }}>
+                 <ambientLight intensity={0.5} />
+                 <pointLight position={[10, 10, 10]} intensity={2} color={selectedProject.color} />
+                 <HologramAsset type={selectedProject.tags[2]} color={selectedProject.color} />
+               </Canvas>
+             </div>
+
+             <motion.div 
+               initial={{ scale: 0.9, y: 50 }}
+               animate={{ scale: 1, y: 0 }}
+               exit={{ scale: 0.9, y: 50 }}
+               className="relative z-10 w-full max-w-4xl glass rounded-3xl border border-white/10 p-8 md:p-12 shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+               style={{ boxShadow: `0 0 80px ${selectedProject.color}30` }}
+             >
+                <div className="absolute top-0 right-0 w-32 h-32 blur-[80px] pointer-events-none" style={{ background: selectedProject.color }} />
+                
+                <button 
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-6 right-6 text-white/50 hover:text-white pointer-events-auto"
+                >
+                  <span className="font-mono text-sm tracking-widest uppercase border border-white/20 px-3 py-1 rounded-full hover:bg-white/10 transition-colors">Close</span>
+                </button>
+
+                <div className="flex flex-col gap-6 font-mono relative z-20">
+                  <div className="text-4xl">{selectedProject.icon}</div>
+                  <h3 className="text-3xl md:text-5xl font-display font-bold max-w-2xl" style={{ color: selectedProject.color }}>
+                     <GlitchText text={selectedProject.title} />
+                  </h3>
+                  
+                  <div className="bg-black/40 border-l border-white/20 p-6 rounded-r-xl max-w-xl">
+                     <p className="text-lg text-white/90 leading-relaxed font-sans">
+                       {selectedProject.desc}
+                     </p>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {selectedProject.tags.map(tag => (
+                      <span key={tag} className="border px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase" style={{ borderColor: `${selectedProject.color}50`, color: selectedProject.color }}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-8 text-[10px] text-white/30 tracking-widest">
+                     {"// END_OF_FILE :: SYS_SCAN_COMPLETE"}
+                  </div>
+                </div>
+             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </section>
   );
 }

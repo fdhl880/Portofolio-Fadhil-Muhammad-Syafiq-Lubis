@@ -7,7 +7,7 @@ export function SoundProvider({ children }) {
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const audioContextRef = useRef(null);
   const masterGainRef = useRef(null);
-  const humOscRef = useRef(null);
+  const engineStateRef = useRef(null);
 
   const startAmbientHum = () => {
     if (!audioContextRef.current) return;
@@ -40,8 +40,23 @@ export function SoundProvider({ children }) {
     
     hum.start();
     pulseOsc.start();
-    humOscRef.current = { osc: hum, gain: humGain };
+    engineStateRef.current = { hum, filter, humGain };
   };
+
+  const setEngineDrive = useCallback((velocity) => {
+    if (!isAudioEnabled || !engineStateRef.current || !audioContextRef.current) return;
+    const { hum, filter } = engineStateRef.current;
+    const now = audioContextRef.current.currentTime;
+    
+    // Base frequency is 40Hz. High speed pushes it to 100Hz.
+    const targetFreq = 40 + Math.min(Math.abs(velocity) * 0.05, 60);
+    // Filter opens up at high speeds (base 150Hz -> 800Hz)
+    const targetFilter = 150 + Math.min(Math.abs(velocity) * 0.5, 650);
+    
+    // Smoothly ramp to the target
+    hum.frequency.exponentialRampToValueAtTime(targetFreq, now + 0.5);
+    filter.frequency.exponentialRampToValueAtTime(targetFilter, now + 0.5);
+  }, [isAudioEnabled]);
 
   const initAudio = useCallback(() => {
     if (audioContextRef.current) return;
@@ -157,7 +172,14 @@ export function SoundProvider({ children }) {
   };
 
   return (
-    <SoundContext.Provider value={{ isAudioEnabled, toggleAudio, playPip, playSweep, playBootSequence }}>
+    <SoundContext.Provider value={{ 
+      isAudioEnabled, 
+      toggleAudio, 
+      playPip, 
+      playSweep, 
+      playBootSequence,
+      setEngineDrive 
+    }}>
       {children}
     </SoundContext.Provider>
   );

@@ -6,14 +6,43 @@ import * as THREE from 'three';
 
 function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
   const ref = useRef();
-  useFrame((state) => {
+  const velocity = useRef(new THREE.Vector3());
+  const origin = useMemo(() => new THREE.Vector3(...position), [position]);
+
+  useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
-    ref.current.rotation.x = t * speed * 0.15;
-    ref.current.rotation.y = t * speed * 0.1;
+    ref.current.rotation.x += delta * speed * 0.5;
+    ref.current.rotation.y += delta * speed * 0.3;
+
+    // Apply Velocity
+    ref.current.position.addScaledVector(velocity.current, delta);
+    
+    // Tension (Spring back to origin)
+    const tension = origin.clone().sub(ref.current.position).multiplyScalar(2.0);
+    velocity.current.addScaledVector(tension, delta);
+    
+    // Friction
+    velocity.current.multiplyScalar(0.92);
   });
+
+  const handleSmash = (e) => {
+    e.stopPropagation();
+    // Simulate high-impact physics hit
+    velocity.current.set(
+      (Math.random() - 0.5) * 40,
+      (Math.random() - 0.5) * 40,
+      -30 // Push it back into the screen
+    );
+  };
+
   return (
     <Float speed={1.5} rotationIntensity={0.3} floatIntensity={0.8}>
-      <mesh ref={ref} position={position} scale={scale}>
+      <mesh 
+        ref={ref} 
+        position={position} 
+        scale={scale}
+        onPointerEnter={handleSmash}
+      >
         {geometry}
         <meshStandardMaterial
           color={color}

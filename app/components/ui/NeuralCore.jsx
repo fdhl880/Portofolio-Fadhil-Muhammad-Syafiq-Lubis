@@ -103,12 +103,17 @@ export default function NeuralCore() {
         setIsTyping(true);
         let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
         
-        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /clear';
+        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /override, /clear';
         else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. PROFESSION: INNOVATOR / RESEARCHER. LOCATION: MEDAN, INDONESIA. CORE: APPLIED SCIENCE & ENGINEERING.';
         else if (cmd === '/achievements') res = 'DATA: 12 TOTAL MEDALS. HIGHLIGHTS: I2ASPO GOLD (2025), IPITEx SILVER (2024), MTE SILVER (2025).';
         else if (cmd === '/projects') res = 'SCANNING_PORTFOLIO... Found multiple high-impact projects in sustainable tech and scientific research. Scroll to PROJECT_LOG to inspect.';
         else if (cmd === '/contact') res = 'LINKING_COMMS... Email: syfqlubis@gmail.com | LinkedIn: /in/fadhilmslubis. Console awaits further commands.';
         else if (cmd === '/status') res = 'NEXUS_STATUS: OPTIMAL. UPTIME: 100%. PERFORMANCE_MODE: ACTIVE. ALL_SYSTEMS_NOMINAL.';
+        else if (cmd === '/override') {
+          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS.';
+          document.documentElement.classList.toggle('nexus-breach');
+          playBootSequence(); // Acts as a siren
+        }
         else if (cmd === '/clear') {
           setHistory([{ role: 'sys', text: 'TERMINAL_RESET_COMPLETE' }]);
           setIsTyping(false);

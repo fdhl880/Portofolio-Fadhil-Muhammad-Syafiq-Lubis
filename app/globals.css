@@ -122,3 +122,65 @@ body {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
 }
+
+/* ----------------------------------
+   PHASE 7 GLOBAL PROTOCOLS
+------------------------------------- */
+
+/* Task 10: Nexus Breach Protocol (Emergency Red) */
+html.nexus-breach {
+  --color-neon: #ff0f4a;
+  --color-dark: #120002;
+  --color-dark-2: #1a0004;
+  --color-dark-3: #2a0008;
+  --color-violet: #ff4d00;
+  --color-gold: #ff0000;
+  --color-rose: #ff3333;
+}
+html.nexus-breach body {
+  background: var(--color-dark);
+}
+
+/* Task 5: Quantum Shift (Light/Mirror's Edge Theme) */
+html.quantum-shift {
+  --color-dark: #f5f5fa;
+  --color-dark-2: #ebebf2;
+  --color-dark-3: #dfdfe8;
+  --color-neon: #0044ff;
+  --color-violet: #d400ff;
+  --color-gold: #ff9900;
+  --color-rose: #ff0055;
+}
+html.quantum-shift body {
+  background: var(--color-dark);
+  color: #111122;
+}
+html.quantum-shift .glass {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+html.quantum-shift .text-white, html.quantum-shift .text-white\/90 {
+  color: #111122 !important;
+}
+html.quantum-shift .text-muted {
+  color: #555566 !important;
+}
+
+.quantum-shockwave {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #ffffff;
+  transform: translate(-50%, -50%) scale(0);
+  animation: shockwave 1.2s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+  z-index: 99999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+}
+
+@keyframes shockwave {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(150); opacity: 0; }
+}

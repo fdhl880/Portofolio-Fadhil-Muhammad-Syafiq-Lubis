@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
+import GlitchText from '../ui/GlitchText';
 
 const HeroScene = dynamic(() => import('../three/HeroScene'), {
   ssr: false,
@@ -53,17 +54,19 @@ export default function HeroSection({ isMobile }) {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
         >
-          <span className="text-gradient">Fadhil Muhammad Syafiq</span>
+          <span className="text-gradient">
+            <GlitchText text="Fadhil Muhammad Syafiq" />
+          </span>
         </motion.h1>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
           className="text-xl md:text-2xl text-muted mb-2 font-display"
         >
-          Student Innovator
-        </motion.p>
+          <GlitchText text="Student Innovator" />
+        </motion.div>
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}

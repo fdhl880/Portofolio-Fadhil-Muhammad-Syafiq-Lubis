@@ -1,6 +1,35 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float, Sphere, MeshDistortMaterial } from '@react-three/drei';
+import { usePerformance } from '../../context/PerformanceContext';
+
+function DroneModel({ isHovering }) {
+  const meshRef = useRef();
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x = state.clock.getElapsedTime();
+      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.5;
+    }
+  });
+
+  return (
+    <Float speed={5} rotationIntensity={2} floatIntensity={isHovering ? 4 : 2}>
+      <Sphere ref={meshRef} args={[0.5, 32, 32]}>
+        <MeshDistortMaterial
+          color={isHovering ? "#ffd700" : "#00f0ff"}
+          emissive={isHovering ? "#ffd700" : "#00f0ff"}
+          emissiveIntensity={isHovering ? 0.8 : 0.4}
+          roughness={0.2}
+          metalness={0.8}
+          distort={isHovering ? 0.6 : 0.2}
+          speed={isHovering ? 8 : 2}
+        />
+      </Sphere>
+    </Float>
+  );
+}
 
 export default function CustomCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -45,21 +74,50 @@ export default function CustomCursor() {
     };
   }, [isVisible]);
 
+  const { isCinematic } = usePerformance();
+
   if (!isVisible) return null;
 
   return (
     <>
-      {/* Central Crosshair Dot */}
-      <motion.div
-        className="fixed top-0 left-0 w-1.5 h-1.5 bg-cyan-400 rounded-full pointer-events-none z-[10000] mix-blend-screen"
-        animate={{
-          x: mousePosition.x - 3,
-          y: mousePosition.y - 3,
-          scale: isHovering ? 2 : 1,
-        }}
-        transition={{ type: 'spring', damping: 40, stiffness: 450, mass: 0.1 }}
-        style={{ boxShadow: '0 0 10px #00f0ff' }}
-      />
+      {/* 3D Sentinel Drone Container */}
+      {isCinematic ? (
+        <motion.div
+           className="fixed top-0 left-0 w-16 h-16 pointer-events-none z-[10000]"
+           animate={{
+             x: mousePosition.x - 32,
+             y: mousePosition.y - 32,
+             scale: isHovering ? 1.5 : 1
+           }}
+           transition={{ type: 'spring', damping: 20, stiffness: 200, mass: 0.5 }}
+        >
+          <Canvas camera={{ position: [0, 0, 2] }} gl={{ alpha: true }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[2, 2, 2]} intensity={2} color="#ffffff" />
+            <DroneModel isHovering={isHovering} />
+          </Canvas>
+          {/* Laser targeting beam overlay when hovering */}
+          {isHovering && (
+             <motion.div 
+               initial={{ height: 0, opacity: 0 }}
+               animate={{ height: 100, opacity: 0.4 }}
+               className="absolute top-1/2 left-1/2 -mt-1 -ml-[1px] w-[2px] bg-yellow-400 blur-[1px] shadow-[0_0_10px_#ffd700] origin-top"
+               style={{ transform: 'rotate(25deg)' }}
+             />
+          )}
+        </motion.div>
+      ) : (
+        <motion.div
+          className="fixed top-0 left-0 w-1.5 h-1.5 bg-cyan-400 rounded-full pointer-events-none z-[10000] mix-blend-screen"
+          animate={{
+            x: mousePosition.x - 3,
+            y: mousePosition.y - 3,
+            scale: isHovering ? 2 : 1,
+          }}
+          transition={{ type: 'spring', damping: 40, stiffness: 450, mass: 0.1 }}
+          style={{ boxShadow: '0 0 10px #00f0ff' }}
+        />
+      )}
       
       {/* HUD Telemetry (Coordinates) */}
       <motion.div

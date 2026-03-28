@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
 import ScrollProgress from './ui/ScrollProgress';
@@ -33,6 +33,70 @@ function Scanline() {
       className="fixed inset-x-0 h-[30vh] bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent pointer-events-none z-[100] opacity-30"
     />
   );
+}
+
+// Warp Speed & Audio Engine Tracker
+function WarpEngine() {
+  const canvasRef = useRef(null);
+  const { scrollY } = useScroll();
+  const velocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(velocity, { damping: 50, stiffness: 200 });
+  const { setEngineDrive } = useSound();
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let animId;
+    const stars = Array.from({ length: 150 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      z: Math.random() * 2 + 0.5,
+      opacity: Math.random() * 0.5 + 0.1
+    }));
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    const animate = () => {
+      const v = smoothVelocity.get();
+      // Update Audio Pitch based on scroll speed
+      setEngineDrive(v); 
+
+      // Clear canvas with trail effect for lightspeed blur
+      ctx.fillStyle = 'rgba(5, 5, 16, 0.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const speedFactor = v * 0.05;
+      const stretchFactor = Math.abs(speedFactor) * 2;
+
+      stars.forEach(s => {
+        s.y -= speedFactor * s.z;
+        
+        // Wrap around screen
+        if (s.y < -100) s.y = canvas.height + 50;
+        if (s.y > canvas.height + 100) s.y = -50;
+
+        ctx.fillStyle = `rgba(0, 240, 255, ${s.opacity})`;
+        // Stretch star vertically based on scroll velocity
+        ctx.fillRect(s.x, s.y, s.z, Math.max(s.z, stretchFactor));
+      });
+
+      animId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', resize);
+    };
+  }, [smoothVelocity, setEngineDrive]);
+
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen" />;
 }
 
 // Sector Glitch Wipe Effect
@@ -209,6 +273,7 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
+        <WarpEngine />
         <Scanline />
         <SidebarHUD />
         <NotificationSystem />
