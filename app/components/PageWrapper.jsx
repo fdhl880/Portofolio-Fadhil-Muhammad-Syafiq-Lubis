@@ -20,6 +20,7 @@ import SoundToggle from './ui/SoundToggle';
 import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
+import HolographicFooter from './ui/HolographicFooter';
 
 // Global Scanline Effect
 function Scanline() {
@@ -29,6 +30,16 @@ function Scanline() {
       transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
       className="fixed inset-x-0 h-[30vh] bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent pointer-events-none z-[100] opacity-30"
     />
+  );
+}
+
+// Sector Glitch Wipe Effect
+function SectorWipe({ trigger }) {
+  return (
+    <div key={trigger} className="fixed inset-0 pointer-events-none z-[200] overflow-hidden">
+      <div className="absolute inset-y-0 w-20 bg-cyan-500/20 blur-xl animate-glitch-wipe shadow-[0_0_50px_rgba(0,240,255,0.4)]" />
+      <div className="absolute inset-0 bg-cyan-500/5 opacity-0 animate-[pulse_1.2s_ease-out_forwards]" />
+    </div>
   );
 }
 
@@ -53,6 +64,7 @@ function SidebarHUD() {
 
   return (
     <>
+      <SectorWipe trigger={activeLabel} />
       {/* Left Sidebar */}
       <div className="fixed left-4 top-1/2 -translate-y-1/2 z-[100] hidden xl:flex flex-col gap-8 pointer-events-none">
         <div className="h-32 w-px bg-white/10 mx-auto" />
@@ -169,6 +181,7 @@ export default function PageWrapper() {
           <section id="vision"><VisionSection /></section>
           <section id="contact"><ContactSection /></section>
         </main>
+        <HolographicFooter />
         <BackToTop />
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />

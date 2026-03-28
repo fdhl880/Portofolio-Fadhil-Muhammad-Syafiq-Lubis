@@ -13,17 +13,20 @@ export default function PerformanceToggle() {
           detail: `PERF_MODE: ${!isCinematic ? 'CINEMATIC' : 'EFFICIENT'}` 
         }));
       }}
-      className={`fixed top-12 md:top-24 right-4 md:right-8 z-[150] rounded-full px-4 py-2 text-[10px] font-bold font-display uppercase tracking-widest transition-all duration-300 cursor-pointer pointer-events-auto border backdrop-blur-md shadow-lg
-        ${isCinematic ? 'bg-[#00f0ff]/10 text-[#00f0ff] border-[#00f0ff]/50 hover:bg-[#00f0ff]/20 shadow-[#00f0ff]/20' 
-                   : 'bg-[#ff6b9d]/10 text-[#ff6b9d] border-[#ff6b9d]/50 hover:bg-[#ff6b9d]/20 shadow-[#ff6b9d]/20'}
+      className={`fixed top-12 md:top-24 right-4 md:right-8 z-[150] cyber-button px-6 py-3 flex items-center gap-2
+        ${isCinematic ? 'text-cyan-400 border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]' 
+                   : 'text-rose-400 border-rose-500/50 shadow-[0_0_15px_rgba(255,107,157,0.2)]'}
       `}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.05)' }}
       whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 1 }} // spawn slightly after load to not distract
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 1 }}
     >
-      {isCinematic ? '🎬 Cinematic' : '⚡ Efficient'}
+      <div className={`w-2 h-2 rounded-full ${isCinematic ? 'bg-cyan-500 animate-pulse' : 'bg-rose-500'}`} />
+      <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em]">
+        {isCinematic ? 'Cinematic_Active' : 'Efficient_Mode'}
+      </span>
     </motion.button>
   );
 }

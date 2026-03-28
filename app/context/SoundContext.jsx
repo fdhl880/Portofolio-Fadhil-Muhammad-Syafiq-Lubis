@@ -9,6 +9,40 @@ export function SoundProvider({ children }) {
   const masterGainRef = useRef(null);
   const humOscRef = useRef(null);
 
+  const startAmbientHum = () => {
+    if (!audioContextRef.current) return;
+    
+    const hum = audioContextRef.current.createOscillator();
+    const humGain = audioContextRef.current.createGain();
+    const filter = audioContextRef.current.createBiquadFilter();
+    const pulseGain = audioContextRef.current.createGain();
+    const pulseOsc = audioContextRef.current.createOscillator();
+    
+    hum.type = 'sawtooth';
+    hum.frequency.setValueAtTime(40, audioContextRef.current.currentTime);
+    
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(150, audioContextRef.current.currentTime);
+    
+    // Add pulsing life to the hum
+    pulseOsc.frequency.setValueAtTime(0.5, audioContextRef.current.currentTime);
+    pulseGain.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
+    
+    humGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+    humGain.gain.linearRampToValueAtTime(0.2, audioContextRef.current.currentTime + 3);
+    
+    pulseOsc.connect(pulseGain);
+    pulseGain.connect(humGain.gain);
+    
+    hum.connect(filter);
+    filter.connect(humGain);
+    humGain.connect(masterGainRef.current);
+    
+    hum.start();
+    pulseOsc.start();
+    humOscRef.current = { osc: hum, gain: humGain };
+  };
+
   const initAudio = useCallback(() => {
     if (audioContextRef.current) return;
     
@@ -16,7 +50,7 @@ export function SoundProvider({ children }) {
     audioContextRef.current = new AudioContext();
     
     masterGainRef.current = audioContextRef.current.createGain();
-    masterGainRef.current.gain.value = 0.15; // master volume
+    masterGainRef.current.gain.value = 0.45; // Increased from 0.15
     masterGainRef.current.connect(audioContextRef.current.destination);
     
     setIsAudioEnabled(true);
@@ -35,31 +69,6 @@ export function SoundProvider({ children }) {
         setIsAudioEnabled(false);
       }
     }
-  };
-
-  const startAmbientHum = () => {
-    if (!audioContextRef.current) return;
-    
-    // Low cinematic hum
-    const hum = audioContextRef.current.createOscillator();
-    const humGain = audioContextRef.current.createGain();
-    const filter = audioContextRef.current.createBiquadFilter();
-    
-    hum.type = 'sawtooth';
-    hum.frequency.setValueAtTime(40, audioContextRef.current.currentTime);
-    
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(200, audioContextRef.current.currentTime);
-    
-    humGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-    humGain.gain.linearRampToValueAtTime(0.05, audioContextRef.current.currentTime + 2);
-    
-    hum.connect(filter);
-    filter.connect(humGain);
-    humGain.connect(masterGainRef.current);
-    
-    hum.start();
-    humOscRef.current = { osc: hum, gain: humGain };
   };
 
   const playPip = (freq = 880, duration = 0.1, volume = 0.05) => {

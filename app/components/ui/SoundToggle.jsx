@@ -13,28 +13,30 @@ export default function SoundToggle() {
           detail: `AUDIO_COMMS: ${!isAudioEnabled ? 'ENABLED' : 'DISABLED'}` 
         }));
       }}
-      className={`fixed top-24 right-4 md:right-32 z-[150] rounded-full px-4 py-2 text-[10px] font-bold font-display uppercase tracking-widest transition-all duration-300 cursor-pointer pointer-events-auto border backdrop-blur-md shadow-lg
-        ${isAudioEnabled ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/50 hover:bg-cyan-500/20 shadow-cyan-500/20' 
-                       : 'bg-white/5 text-white/50 border-white/20 hover:bg-white/10 shadow-none'}
+      className={`fixed top-24 md:top-24 right-4 md:right-56 z-[150] cyber-button px-6 py-3
+        ${isAudioEnabled ? 'text-cyan-400 border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]' 
+                       : 'text-white/30 border-white/10 opacity-50'}
       `}
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.05)' }}
       whileTap={{ scale: 0.95 }}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, x: 20 }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 1.2 }}
     >
-      <div className="flex items-center gap-2">
-        <div className="flex gap-0.5 items-end h-3">
+      <div className="flex items-center gap-3">
+        <div className="flex gap-1 items-end h-3">
           {[1,2,3].map(i => (
             <motion.div 
                key={i}
                animate={{ height: isAudioEnabled ? ['30%', '100%', '30%'] : '30%' }}
-               transition={{ repeat: Infinity, duration: 0.5 + i*0.2 }}
-               className="w-[2px] bg-current"
+               transition={{ repeat: Infinity, duration: 0.4 + i*0.1 }}
+               className="w-[3px] bg-current"
             />
           ))}
         </div>
-        {isAudioEnabled ? 'AUDIO_ON' : 'AUDIO_OFF'}
+        <span className="text-[10px] font-mono font-bold uppercase tracking-[0.2em]">
+           {isAudioEnabled ? 'Audio_Stream' : 'Audio_Muted'}
+        </span>
       </div>
     </motion.button>
   );
