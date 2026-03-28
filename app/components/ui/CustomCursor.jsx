@@ -91,7 +91,7 @@ export default function CustomCursor() {
            }}
            transition={{ type: 'spring', damping: 20, stiffness: 200, mass: 0.5 }}
         >
-          <Canvas camera={{ position: [0, 0, 2] }} gl={{ alpha: true }}>
+          <Canvas style={{ pointerEvents: 'none' }} camera={{ position: [0, 0, 2] }} gl={{ alpha: true }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[2, 2, 2]} intensity={2} color="#ffffff" />
             <DroneModel isHovering={isHovering} />

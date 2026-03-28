@@ -36,7 +36,7 @@ export default function PerformanceToggle() {
   };
 
   return (
-    <div className="fixed top-12 md:top-24 right-4 md:right-8 z-[150] flex flex-col gap-2 pointer-events-none">
+    <div className="fixed top-12 md:top-24 right-4 md:right-8 z-[200] flex flex-col gap-3">
       <motion.button
         onClick={() => {
           toggleMode();
@@ -44,7 +44,7 @@ export default function PerformanceToggle() {
             detail: `PERF_MODE: ${!isCinematic ? 'CINEMATIC' : 'EFFICIENT'}` 
           }));
         }}
-        className={`pointer-events-auto cyber-button px-6 py-3 flex items-center justify-between gap-2 w-48
+        className={`cyber-button px-6 py-3 flex items-center justify-between gap-2 w-48
           ${isCinematic ? 'text-cyan-400 border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]' 
                      : 'text-rose-400 border-rose-500/50 shadow-[0_0_15px_rgba(255,107,157,0.2)]'}
         `}
@@ -62,7 +62,7 @@ export default function PerformanceToggle() {
 
       <motion.button
         onClick={triggerQuantumShift}
-        className={`pointer-events-auto cyber-button px-6 py-3 flex items-center justify-between gap-2 w-48
+        className={`cyber-button px-6 py-3 flex items-center justify-between gap-2 w-48
           ${isQuantum ? 'text-violet-400 border-violet-500/50 shadow-[0_0_15px_rgba(139,92,246,0.3)] bg-white/5' 
                      : 'text-white/50 border-white/20'}
         `}
