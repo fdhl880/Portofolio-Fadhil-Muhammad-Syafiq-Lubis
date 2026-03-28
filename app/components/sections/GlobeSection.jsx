@@ -4,8 +4,7 @@ import dynamic from 'next/dynamic';
 import { Canvas } from '@react-three/fiber';
 
 const HolographicGlobe = dynamic(() => import('../three/HolographicGlobe'), {
-  ssr: false,
-  loading: () => <div className="w-full h-full bg-dark/20 animate-pulse" />
+  ssr: false
 });
 
 export default function GlobeSection() {

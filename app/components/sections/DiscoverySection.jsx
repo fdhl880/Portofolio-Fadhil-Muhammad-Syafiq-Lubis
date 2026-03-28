@@ -261,6 +261,7 @@ export default function DiscoverySection() {
                   src="/logo-initials.png"
                   alt="FMS Logo"
                   fill
+                  sizes="96px"
                   className="object-contain p-4"
                 />
                 <div className="absolute inset-0 bg-gradient-to-tr from-cyan-500/10 to-transparent pointer-events-none" />

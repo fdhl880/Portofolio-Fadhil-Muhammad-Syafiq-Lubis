@@ -134,7 +134,7 @@ export default function TrophyGallery() {
             <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
               <ambientLight intensity={0.5} />
               <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
-              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#white" />
+              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
               
               <PresentationControls
                 global

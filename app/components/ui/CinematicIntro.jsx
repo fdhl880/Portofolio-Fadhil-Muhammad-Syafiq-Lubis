@@ -121,6 +121,7 @@ export default function CinematicIntro({ onComplete }) {
                       src="/icon.png" 
                       alt="Nexus Core Boot" 
                       fill 
+                      sizes="(max-width: 768px) 96px, 128px"
                       className="object-cover"
                       priority
                     />
