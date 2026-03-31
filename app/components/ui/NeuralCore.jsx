@@ -12,46 +12,87 @@ function TypingEffect({ text, onComplete }) {
   
   useEffect(() => {
     let index = 0;
+    const speed = text.length > 200 ? 5 : 15;
     const interval = setInterval(() => {
+      index += text.length > 500 ? 3 : 1; 
       setDisplayed(text.slice(0, index));
-      index++;
-      if (index > text.length) {
+      if (index >= text.length) {
+        setDisplayed(text); // Ensure full completion
         clearInterval(interval);
         onComplete?.();
       }
-    }, 20);
+    }, speed);
     return () => clearInterval(interval);
   }, [text, onComplete]);
 
   return <span>{displayed}</span>;
 }
 
-function CoreModel({ isFast }) {
+function CoreModel() {
   const meshRef = useRef();
+  const wireRef = useRef();
+  const ringRef = useRef();
   const { isCinematic } = usePerformance();
 
   useFrame((state) => {
-    if (isCinematic && meshRef.current) {
-      const speed = isFast ? 1.2 : 0.4;
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * speed;
-      meshRef.current.rotation.z = state.clock.getElapsedTime() * (speed / 2);
+    if (isCinematic) {
+      const time = state.clock.getElapsedTime();
+      if (meshRef.current) {
+        meshRef.current.rotation.y = time * 0.4;
+        meshRef.current.rotation.z = time * 0.2;
+      }
+      if (wireRef.current) {
+        wireRef.current.rotation.y = -time * 0.2;
+        wireRef.current.rotation.x = time * 0.3;
+      }
+      if (ringRef.current) {
+        ringRef.current.rotation.z = time * 0.5;
+        ringRef.current.scale.setScalar(1 + Math.sin(time * 2) * 0.05);
+      }
     }
   });
 
   return (
-    <Float speed={isFast ? 4 : 2} rotationIntensity={isFast ? 2 : 1} floatIntensity={isFast ? 2 : 1}>
-      <Sphere ref={meshRef} args={[1, 64, 64]}>
-        <MeshDistortMaterial
-          color="#00f0ff"
-          speed={isCinematic ? (isFast ? 6 : 3) : 0}
-          distort={isFast ? 0.6 : 0.4}
-          radius={1}
-          metalness={0.9}
-          roughness={0.1}
-          emissive="#00f0ff"
-          emissiveIntensity={isFast ? 1 : 0.5}
-        />
-      </Sphere>
+    <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+      <group>
+        {/* Central Core */}
+        <Sphere ref={meshRef} args={[1, 64, 64]}>
+          <MeshDistortMaterial
+            color="#00f0ff"
+            speed={isCinematic ? 3 : 0}
+            distort={0.4}
+            radius={1}
+            metalness={0.9}
+            roughness={0.1}
+            emissive="#00f0ff"
+            emissiveIntensity={0.5}
+          />
+        </Sphere>
+        
+        {/* Wireframe Shell */}
+        <Sphere ref={wireRef} args={[1.2, 32, 32]}>
+          <meshPhongMaterial 
+            color="#00f0ff" 
+            wireframe 
+            transparent 
+            opacity={0.2} 
+            emissive="#00f0ff"
+            emissiveIntensity={0.2}
+          />
+        </Sphere>
+
+        {/* Energy Ring */}
+        <mesh ref={ringRef} rotation-x={Math.PI / 2}>
+          <torusGeometry args={[1.5, 0.02, 16, 100]} />
+          <meshStandardMaterial 
+            color="#8b5cf6" 
+            emissive="#8b5cf6" 
+            emissiveIntensity={2} 
+            transparent 
+            opacity={0.6}
+          />
+        </mesh>
+      </group>
     </Float>
   );
 }
@@ -59,8 +100,8 @@ function CoreModel({ isFast }) {
 export default function NeuralCore() {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([
-    { role: 'sys', text: 'NEXUS_CORE_v3.0.4_ENCRYPTED' },
-    { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_1' }
+    { role: 'sys', text: 'NEXUS_CORE_v4.0.1_ENCRYPTED' },
+    { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_SECURED' }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -78,13 +119,12 @@ export default function NeuralCore() {
     setIsOpen(!isOpen);
     playSweep(isOpen ? 800 : 200, isOpen ? 200 : 800, 0.3);
     
-    // User requested: "NEXUX WILL BE GREETING IF THE NEXUX IS TOUCH BY THE VISITOR"
     if (!isOpen && !hasGreeted.current) {
       hasGreeted.current = true;
       setTimeout(() => {
         setHistory(prev => [...prev, { 
           role: 'sys', 
-          text: 'GREETINGS VISITOR. I AM NEXUS. HOW CAN I ASSIST? TYPE /HELP.', 
+          text: 'GREETINGS VISITOR. I AM NEXUS, THE COGNITIVE INTERFACE OF THIS DOMAIN. HOW CAN I ASSIST? TYPE /HELP FOR SUB-ROUTINES.', 
           isNew: true 
         }]);
         playPip(1200, 0.1);
@@ -92,57 +132,52 @@ export default function NeuralCore() {
     }
   };
 
-  const executeCommand = (e) => {
+  const executeCommand = async (e) => {
     if (e.key === 'Enter' && input.trim() && !isTyping) {
-      const cmd = input.toLowerCase().trim();
-      setHistory(prev => [...prev, { role: 'user', text: input }]);
+      const userText = input.trim();
+      const cmd = userText.toLowerCase();
+      setHistory(prev => [...prev, { role: 'user', text: userText }]);
       setInput('');
       playPip(880, 0.05);
 
-      setTimeout(() => {
-        setIsTyping(true);
+      if (cmd === '/clear') {
+        setHistory([{ role: 'sys', text: 'TERMINAL_RESET_COMPLETE' }]);
+        return;
+      }
+
+      setIsTyping(true);
+
+      setTimeout(async () => {
         let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
         
-        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear';
-        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. PROFESSION: INNOVATOR / RESEARCHER. LOCATION: MEDAN, INDONESIA. CORE: APPLIED SCIENCE & ENGINEERING.';
-        else if (cmd === '/achievements') res = 'DATA: 12 TOTAL MEDALS. HIGHLIGHTS: I2ASPO GOLD (2025), IPITEx SILVER (2024), MTE SILVER (2025).';
-        else if (cmd === '/projects') res = 'SCANNING_PORTFOLIO... Found multiple high-impact projects in sustainable tech and scientific research. Scroll to PROJECT_LOG to inspect.';
-        else if (cmd === '/contact') res = 'LINKING_COMMS... Email: syfqlubis@gmail.com | LinkedIn: /in/fadhilmslubis. Console awaits further commands.';
-        else if (cmd === '/status') res = 'NEXUS_STATUS: OPTIMAL. UPTIME: 100%. PERFORMANCE_MODE: ACTIVE. ALL_SYSTEMS_NOMINAL.';
+        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear. OR: Engage in natural linguistic exchange.';
+        else if (cmd === '/status') res = 'NEXUS_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
         else if (cmd === '/override') {
-          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS.';
+          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
           document.documentElement.classList.toggle('nexus-breach');
+        }
+        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
+        else {
           try {
-            playBootSequence(); // Acts as a siren
-          } catch(e){}
-        }
-        else if (cmd === '/analyze') {
-          const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'nexus-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
-          let active = 'UNKNOWN_SECTOR';
-          for (const id of sections.reverse()) {
-            const el = document.getElementById(id);
-            if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.6) {
-              active = id.toUpperCase();
-              break;
-            }
+            // Map internal history to API format (sys -> model)
+            const chatHistory = history
+              .filter(h => h.role !== 'sys' || h.text !== 'NEXUS_CORE_v4.0.1_ENCRYPTED')
+              .map(h => ({ 
+                role: h.role === 'sys' ? 'model' : 'user', 
+                text: h.text 
+              }));
+
+            const response = await fetch('/api/chat', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: userText, history: chatHistory }),
+            });
+            const data = await response.json();
+            res = data.text || 'NEXUS_SYSTEM_LINK_FAILURE';
+          } catch (error) {
+            console.error("Nexus AI Error:", error);
+            res = 'NEXUS_CORE_TIMEOUT: RECONNECT_PROTOCOL_REQUIRED.';
           }
-          
-          const analyses = {
-            'HERO': 'SUBJECT IS AT THE NEURAL GATEWAY. INITIALIZING NEURAL HANDSHAKE.',
-            'SKILLS': 'ANALYZING KNOWLEDGE GRAPH. SUBJECT DEMONSTRATES HIGH PROFICIENCY IN DIVERSE TECHNOLOGICAL VECTORS.',
-            'EDUCATION': 'SCANNING ACADEMIC RECORDS... OUTSTANDING TRAJECTORY DETECTED.',
-            'TROPHY': 'QUANTIFYING ACHIEVEMENTS... NUMEROUS INTERNATIONAL ACOLADES FOUND.',
-            'PROJECTS': 'INSPECTING PROTOTYPES. HIGH LEVEL OF INNOVATION DETECTED IN STRUCTURAL DATA.',
-            'CONTACT': 'COMMUNICATION CHANNELS OPEN. AWAITING TRANSMISSION FROM VISITOR.'
-          };
-          
-          const specific = analyses[active] || `VISITOR IS IN SPECTATOR MODE WITHIN [${active}].`;
-          res = `[AI_ANALYSIS_COMPLETE]: ${specific} RECOMMENDATION: CONTINUE EXPLORATION.`;
-        }
-        else if (cmd === '/clear') {
-          setHistory([{ role: 'sys', text: 'TERMINAL_RESET_COMPLETE' }]);
-          setIsTyping(false);
-          return;
         }
 
         setHistory(prev => [...prev, { role: 'sys', text: res, isNew: true }]);
@@ -153,7 +188,6 @@ export default function NeuralCore() {
 
   return (
     <div className="fixed bottom-8 right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
-      {/* Terminal Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -162,31 +196,35 @@ export default function NeuralCore() {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="w-[calc(100vw-4rem)] sm:w-80 h-[450px] glass rounded-2xl border border-white/10 overflow-hidden flex flex-col shadow-2xl pointer-events-auto relative"
           >
-            {/* CRT Scanline Effect */}
             <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-20 z-50" />
             
             <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex justify-between items-center relative z-10">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-bold">Nexus_Console_v3_STABLE</span>
+                <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-bold">Nexus_Console_v4_CONNECTED</span>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
-                className="text-white/20 hover:text-white transition-colors"
+                className="text-white/20 hover:text-white transition-colors p-1"
               >
-                [X]
+                <div className="w-4 h-4 flex items-center justify-center border border-white/20 rounded-sm text-[8px]">X</div>
               </button>
             </div>
             
             <div 
               ref={scrollRef}
-              className="flex-1 p-4 font-mono text-[10px] overflow-y-auto space-y-3 custom-scrollbar scroll-smooth relative z-10"
+              className="flex-1 p-4 font-mono text-[10px] overflow-y-auto space-y-4 custom-scrollbar scroll-smooth relative z-10"
             >
               {history.map((msg, i) => (
-                <div key={i} className={msg.role === 'sys' ? 'text-cyan-400/90' : 'text-white/90 font-bold'}>
+                <motion.div 
+                  initial={{ opacity: 0, x: -5 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  key={i} 
+                  className={msg.role === 'sys' ? 'text-cyan-400/90' : 'text-white/90 font-bold'}
+                >
                   <div className="flex gap-2">
-                    <span className="shrink-0 opacity-40">{msg.role === 'sys' ? 'CORE:' : 'USER:'}</span>
-                    <div className="break-words">
+                    <span className="shrink-0 opacity-40">[{msg.role === 'sys' ? 'CORE' : 'USER'}]</span>
+                    <div className="break-words leading-relaxed">
                       {msg.isNew ? (
                         <TypingEffect text={msg.text} onComplete={() => {
                           setIsTyping(false);
@@ -197,28 +235,32 @@ export default function NeuralCore() {
                       )}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
               {isTyping && (
                 <div className="text-cyan-400/40 animate-pulse flex gap-2">
-                   <span className="opacity-40">CORE:</span>
-                   <span>DECIPHERING...</span>
+                   <span className="opacity-40">[CORE]</span>
+                   <span className="flex gap-1">
+                     <span className="animate-bounce">.</span>
+                     <span className="animate-bounce delay-75">.</span>
+                     <span className="animate-bounce delay-150">.</span>
+                   </span>
                 </div>
               )}
             </div>
 
-            <div className="p-4 bg-black/20 border-t border-white/10 relative z-10">
+            <div className="p-4 bg-black/40 border-t border-white/10 relative z-10">
               <div className="flex items-center gap-2">
-                <span className="text-cyan-500 font-bold">$</span>
+                <span className="text-cyan-500 font-bold ml-1">❯</span>
                 <input 
                   autoFocus
                   type="text"
-                  placeholder={isTyping ? "WAITING..." : "EXECUTE_CMD..."}
+                  placeholder={isTyping ? "PROCESSING..." : "INPUT_CMD..."}
                   disabled={isTyping}
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={executeCommand}
-                  className="w-full bg-transparent border-none text-base md:text-[11px] font-mono text-white placeholder:text-white/10 focus:ring-0 p-0"
+                  className="w-full bg-transparent border-none text-base md:text-[11px] font-mono text-white placeholder:text-white/20 focus:ring-0 p-0"
                 />
               </div>
             </div>
@@ -226,49 +268,50 @@ export default function NeuralCore() {
         )}
       </AnimatePresence>
 
-      {/* Floating Sparkle Core */}
       <button 
         onClick={toggleCore}
         className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto"
       >
-        <div className="absolute inset-0 bg-cyan-500/20 rounded-full blur-2xl group-hover:bg-cyan-500/40 transition-colors" />
-        <div className="relative w-full h-full">
-          <Canvas camera={{ position: [0, 0, 3] }}>
+        <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500" />
+        <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
+          <Canvas camera={{ position: [0, 0, 4] }}>
             <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1} color="#00f0ff" />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
             <CoreModel />
             <Environment preset="city" />
           </Canvas>
         </div>
         
-        {/* Pulsing HUD Ring */}
         <motion.div 
           animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 20, ease: 'linear' }}
-          className="absolute inset-0 rounded-full border border-dashed border-cyan-500/30 scale-125"
+          transition={{ repeat: Infinity, duration: 25, ease: 'linear' }}
+          className="absolute inset-0 rounded-full border border-dashed border-cyan-500/20 scale-[1.3]"
         />
         <motion.div 
           animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
-          className="absolute inset-0 rounded-full border border-dotted border-cyan-500/20 scale-150"
+          transition={{ repeat: Infinity, duration: 18, ease: 'linear' }}
+          className="absolute inset-0 rounded-full border border-dotted border-violet-500/20 scale-[1.45]"
         />
         
-        <div className="absolute top-0 right-0 flex gap-1">
-          <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-ping" />
-          <div className="bg-cyan-500 text-black text-[7px] font-black px-1.5 py-0.5 rounded-sm uppercase">Nexus</div>
+        <div className="absolute top-0 right-0 flex items-center gap-2 glass px-2 py-0.5 rounded-full border-cyan-500/20">
+          <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_8px_#00f0ff]" />
+          <span className="text-white text-[8px] font-black uppercase tracking-tighter">Nexus_01</span>
         </div>
       </button>
 
       <style jsx global>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 4px;
+          width: 3px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
+          background: rgba(255, 255, 255, 0.02);
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0, 240, 255, 0.2);
-          border-radius: 2px;
+          background: rgba(0, 240, 255, 0.3);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 240, 255, 0.5);
         }
       `}</style>
     </div>
