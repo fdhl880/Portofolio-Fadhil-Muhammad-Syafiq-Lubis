@@ -10,7 +10,7 @@ const contactInfo = [
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="relative py-24 md:py-32 px-4">
+    <section id="contact" className="relative py-16 md:py-32 px-4">
       {/* Background */}
       <div className="absolute inset-0"
         style={{
@@ -80,17 +80,7 @@ export default function ContactSection() {
           <ContactForm />
         </div>
 
-        {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-24 pt-8 border-t border-white/5"
-        >
-          <p className="text-muted text-sm">
-            © {new Date().getFullYear()} Fadhil Muhammad Syafiq. Built with passion from Medan, Indonesia.
-          </p>
-        </motion.div>
+        {/* Footer removed to avoid duplication with HolographicFooter */}
       </div>
     </section>
   );

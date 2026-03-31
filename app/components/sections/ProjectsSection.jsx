@@ -276,7 +276,7 @@ export default function ProjectsSection() {
   const y2 = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   return (
-    <section id="projects" ref={containerRef} className="relative py-24 md:py-32 px-4 overflow-hidden">
+    <section id="projects" ref={containerRef} className="relative py-16 md:py-32 px-4 overflow-hidden">
       {/* Parallax Background Elements */}
       <motion.div 
         style={{ y: y1 }}
@@ -324,7 +324,7 @@ export default function ProjectsSection() {
              initial={{ opacity: 0 }}
              animate={{ opacity: 1 }}
              exit={{ opacity: 0 }}
-             className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto bg-dark/90 backdrop-blur-xl p-4 md:p-12 overflow-hidden"
+             className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-auto bg-dark/95 backdrop-blur-xl p-4 md:p-12 overflow-y-auto"
           >
              <div className="absolute inset-0 pointer-events-none bg-[url('/images/grid.svg')] opacity-5 bg-[length:30px_30px]" />
              
@@ -341,7 +341,7 @@ export default function ProjectsSection() {
                initial={{ scale: 0.9, y: 50 }}
                animate={{ scale: 1, y: 0 }}
                exit={{ scale: 0.9, y: 50 }}
-               className="relative z-10 w-full max-w-4xl glass rounded-3xl border border-white/10 p-8 md:p-12 shadow-[0_0_100px_rgba(0,0,0,0.8)]"
+               className="relative z-10 w-full max-w-4xl glass rounded-3xl border border-white/10 p-6 md:p-12 shadow-[0_0_100px_rgba(0,0,0,0.8)] my-auto"
                style={{ boxShadow: `0 0 80px ${selectedProject.color}30` }}
              >
                 <div className="absolute top-0 right-0 w-32 h-32 blur-[80px] pointer-events-none" style={{ background: selectedProject.color }} />
@@ -355,7 +355,7 @@ export default function ProjectsSection() {
 
                 <div className="flex flex-col gap-6 font-mono relative z-20">
                   <div className="text-4xl">{selectedProject.icon}</div>
-                  <h3 className="text-3xl md:text-5xl font-display font-bold max-w-2xl" style={{ color: selectedProject.color }}>
+                  <h3 className="text-2xl md:text-5xl font-display font-bold max-w-2xl" style={{ color: selectedProject.color }}>
                      <GlitchText text={selectedProject.title} />
                   </h3>
                   

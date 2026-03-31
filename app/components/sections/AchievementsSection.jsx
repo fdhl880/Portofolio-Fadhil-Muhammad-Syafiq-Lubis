@@ -106,7 +106,7 @@ export default function AchievementsSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="achievements" ref={containerRef} className="relative py-24 md:py-32 px-4 overflow-hidden">
+    <section id="achievements" ref={containerRef} className="relative py-16 md:py-32 px-4 overflow-hidden">
       {/* Parallax Background Elements */}
       <motion.div 
         style={{ y: y1 }}

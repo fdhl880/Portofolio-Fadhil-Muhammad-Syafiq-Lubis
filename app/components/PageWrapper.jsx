@@ -232,7 +232,7 @@ function NotificationSystem() {
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -50 }}
-          className="fixed top-8 left-8 z-[250] flex items-center gap-4 pointer-events-none"
+          className="fixed top-4 left-4 md:top-8 md:left-8 z-[250] flex items-center gap-4 pointer-events-none"
         >
           <div className="w-1 h-8 bg-cyan-500 shadow-[0_0_10px_#00f0ff]" />
           <div className="glass px-4 py-2 border-l-0 rounded-r-xl">

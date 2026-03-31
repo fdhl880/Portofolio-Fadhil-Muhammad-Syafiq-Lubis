@@ -23,7 +23,7 @@ export default function HolographicFooter() {
             <span>Latency: 24ms</span>
             <span>Packet_Status: OK</span>
           </div>
-          <div className="h-1 w-64 bg-white/5 rounded-full overflow-hidden relative">
+          <div className="h-1 w-full max-w-[256px] bg-white/5 rounded-full overflow-hidden relative">
             <motion.div 
               animate={{ x: ['-100%', '100%'] }}
               transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}

@@ -5,7 +5,7 @@ import { timeline } from './AchievementsSection';
 
 export default function EducationSection() {
   return (
-    <section id="education" className="relative py-24 md:py-32 px-4 overflow-hidden">
+    <section id="education" className="relative py-16 md:py-32 px-4 overflow-hidden">
       {/* Background accent */}
       <div className="absolute top-1/2 left-0 w-72 h-72 rounded-full bg-violet/5 blur-3xl -translate-y-1/2" />
       <div className="absolute top-1/3 right-0 w-72 h-72 rounded-full bg-neon/5 blur-3xl" />
@@ -35,7 +35,7 @@ export default function EducationSection() {
             transition={{ duration: 0.7 }}
             className="md:pr-12 flex justify-center md:justify-end md:sticky md:top-32"
           >
-            <div className="relative w-56 h-72 md:w-64 md:h-80 rounded-2xl overflow-hidden glass glow-purple animate-float">
+            <div className="relative w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 rounded-2xl overflow-hidden glass glow-purple animate-float">
               <Image
                 src="/images/photo2.jpg"
                 alt="Fadhil at Malaysia Technology Expo 2025"
@@ -57,7 +57,10 @@ export default function EducationSection() {
           </div>
 
           {/* Timeline nodes */}
-          <div className="md:pl-12 space-y-8">
+          <div className="md:pl-12 space-y-8 relative">
+            {/* Mobile Timeline Line */}
+            <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-neon/40 via-violet/40 to-gold/40 md:hidden" />
+
             {timeline.map((item, i) => (
               <motion.div
                 key={i}
@@ -76,7 +79,7 @@ export default function EducationSection() {
                   }}
                 />
 
-                <div className="glass rounded-xl p-5 hover:bg-white/[0.04] transition-colors">
+                <div className="glass rounded-xl p-5 ml-8 md:ml-0 hover:bg-white/[0.04] transition-colors">
                   <span
                     className="text-xs font-bold tracking-widest uppercase"
                     style={{ color: item.color }}

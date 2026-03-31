@@ -9,7 +9,7 @@ const HolographicGlobe = dynamic(() => import('../three/HolographicGlobe'), {
 
 export default function GlobeSection() {
   return (
-    <section id="nexus-globe" className="relative h-[80vh] md:h-screen w-full flex items-center justify-center overflow-hidden py-24 px-6 bg-dark/30 border-y border-white/5">
+    <section id="nexus-globe" className="relative h-auto md:h-screen w-full flex items-center justify-center overflow-hidden py-16 md:py-24 px-6 bg-dark/30 border-y border-white/5">
       {/* Background HUD Layers */}
       <div className="absolute inset-x-0 top-12 flex justify-between px-12 opacity-20 hidden md:flex">
         <div className="text-[10px] font-mono font-bold tracking-[0.5em] vertical-text">NEXUS_CORE_v6 // ESTABLISHED</div>
@@ -26,7 +26,7 @@ export default function GlobeSection() {
         >
           <div className="flex items-center gap-4">
             <div className="h-px w-12 bg-cyan-500 shadow-[0_0_10px_#00f0ff]" />
-            <h2 className="text-3xl md:text-5xl font-bold font-display uppercase tracking-widest text-gradient">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold font-display uppercase tracking-widest text-gradient">
               Global Impact
             </h2>
           </div>
@@ -55,7 +55,7 @@ export default function GlobeSection() {
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          className="h-[400px] md:h-[600px] w-full order-1 lg:order-2 cursor-grab active:cursor-grabbing"
+          className="h-[300px] sm:h-[400px] md:h-[600px] w-full order-1 lg:order-2 cursor-grab active:cursor-grabbing"
         >
           <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
             <HolographicGlobe />

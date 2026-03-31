@@ -12,19 +12,19 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "Fadhil Muhammad Syafiq | Student Innovator & Researcher",
-  description: "Portfolio of Fadhil Muhammad Syafiq — a student innovator from Medan, Indonesia. International medal winner in science, engineering, and technology competitions.",
-  keywords: ["Fadhil Muhammad Syafiq", "student innovator", "portfolio", "science olympiad", "engineering", "Indonesia"],
-  authors: [{ name: "Fadhil Muhammad Syafiq" }],
-  creator: "Fadhil Muhammad Syafiq",
-  publisher: "Fadhil Muhammad Syafiq",
+  title: "Fadhil Muhammad Syafiq Lubis | Student Innovator & Researcher",
+  description: "Portfolio of Fadhil Muhammad Syafiq Lubis — a student innovator from Medan, Indonesia. International medal winner in science, engineering, and technology competitions.",
+  keywords: ["Fadhil Muhammad Syafiq Lubis", "student innovator", "portfolio", "science olympiad", "engineering", "Indonesia"],
+  authors: [{ name: "Fadhil Muhammad Syafiq Lubis" }],
+  creator: "Fadhil Muhammad Syafiq Lubis",
+  publisher: "Fadhil Muhammad Syafiq Lubis",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: "Fadhil Muhammad Syafiq | Student Innovator",
+    title: "Fadhil Muhammad Syafiq Lubis | Student Innovator",
     description: "Explore the portfolio of an award-winning student innovator from Medan, Indonesia.",
     url: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app",
     siteName: "Fadhil Portfolio",
@@ -33,7 +33,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fadhil Muhammad Syafiq | Student Innovator",
+    title: "Fadhil Muhammad Syafiq Lubis | Student Innovator",
     description: "Award-winning researcher and innovator from Indonesia.",
   },
   verification: {

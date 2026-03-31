@@ -38,7 +38,7 @@ export default function HeroSection({ isMobile }) {
           <div className="relative w-36 h-36 md:w-44 md:h-44 mx-auto rounded-2xl overflow-hidden glass glow-cyan animate-float">
             <Image
               src="/images/photo1.jpg"
-              alt="Fadhil Muhammad Syafiq - Gold Medal Winner"
+              alt="Fadhil Muhammad Syafiq Lubis - Gold Medal Winner"
               fill
               priority
               sizes="(max-width: 768px) 144px, 176px"
@@ -52,10 +52,10 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="font-display text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+          className="font-display text-[2.2rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
         >
           <span className="text-gradient">
-            <GlitchText text="Fadhil Muhammad Syafiq" />
+            <GlitchText text="Fadhil Muhammad Syafiq Lubis" />
           </span>
         </motion.h1>
 
@@ -85,13 +85,13 @@ export default function HeroSection({ isMobile }) {
         >
           <button
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3 rounded-xl bg-gradient-to-r from-neon/20 to-violet/20 border border-neon/30 text-neon font-semibold hover:from-neon/30 hover:to-violet/30 transition-all duration-300 cursor-pointer hover:scale-105"
+            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-neon/20 to-violet/20 border border-neon/30 text-neon font-semibold hover:from-neon/30 hover:to-violet/30 transition-all duration-300 cursor-pointer hover:scale-105"
           >
             View Portfolio
           </button>
           <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3 rounded-xl glass text-white font-semibold hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105"
+            className="w-full sm:w-auto px-8 py-3 rounded-xl glass text-white font-semibold hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105"
           >
             Contact Me
           </button>

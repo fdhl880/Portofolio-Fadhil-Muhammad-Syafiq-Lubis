@@ -98,7 +98,7 @@ export default function DiscoverySection() {
   };
 
   return (
-    <section className="relative h-screen bg-dark overflow-hidden flex items-center justify-center py-20">
+    <section className="relative min-h-[100dvh] bg-dark overflow-hidden flex items-center justify-center py-20">
       {/* Background Parallax Text */}
       <div className="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
         <motion.h2 
@@ -159,7 +159,7 @@ export default function DiscoverySection() {
                 </span>
               </div>
               
-              <h2 className="text-4xl md:text-6xl font-bold mb-6 font-display leading-tight text-white">
+              <h2 className="text-3xl md:text-6xl font-bold mb-6 font-display leading-tight text-white">
                 <DecodingEvent text={current.title} trigger={current.title} />
               </h2>
               
@@ -196,7 +196,7 @@ export default function DiscoverySection() {
 
         {/* Right: 3D Card Image */}
         <div 
-          className="relative order-1 lg:order-2 h-[400px] md:h-[500px]"
+          className="relative order-1 lg:order-2 h-[300px] sm:h-[400px] md:h-[500px]"
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           style={{ perspective: '2000px' }}

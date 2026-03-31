@@ -113,7 +113,7 @@ export default function TrophyGallery() {
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-bold font-display mb-6"
+          className="text-3xl md:text-6xl font-bold font-display mb-6"
         >
           <span className="text-gradient">3D Virtual Trophy Gallery</span>
         </motion.h2>
@@ -124,14 +124,14 @@ export default function TrophyGallery() {
 
       <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
         {trophyData.map((trophy, i) => (
-          <div key={trophy.id} className="relative h-[500px] group">
+          <div key={trophy.id} className="relative h-[400px] md:h-[500px] group">
             <div 
               className={`absolute inset-0 rounded-[3rem] transition-all duration-700 pointer-events-none
                 ${activeId === trophy.id ? 'bg-white/5 border-white/20 scale-105' : 'bg-transparent border-transparent'}
               `} 
             />
             
-            <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
               <ambientLight intensity={0.5} />
               <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
               <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
@@ -192,12 +192,14 @@ export default function TrophyGallery() {
           >
             <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/10 rounded-full md:hidden" />
             
-            <div className="absolute top-0 right-0 p-4">
+            <div className="absolute top-4 right-4 md:top-0 md:right-0 md:p-4">
               <button 
                 onClick={() => setActiveId(null)}
-                className="text-white/30 hover:text-white transition-colors p-2"
+                className="absolute top-4 right-4 md:top-6 md:right-6 text-white/50 hover:text-white pointer-events-auto z-50"
               >
-                [ CLOSE ]
+                <div className="w-10 h-10 glass rounded-full flex items-center justify-center border border-white/20 hover:bg-white/10 transition-colors">
+                  <span className="text-xl">✕</span>
+                </div>
               </button>
             </div>
 

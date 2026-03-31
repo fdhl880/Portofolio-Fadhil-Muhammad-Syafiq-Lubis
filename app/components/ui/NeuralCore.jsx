@@ -160,7 +160,7 @@ export default function NeuralCore() {
             initial={{ opacity: 0, scale: 0.9, y: 20, transformOrigin: 'bottom right' }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="w-80 h-[450px] glass rounded-2xl border border-white/10 overflow-hidden flex flex-col shadow-2xl pointer-events-auto relative"
+            className="w-[calc(100vw-4rem)] sm:w-80 h-[450px] glass rounded-2xl border border-white/10 overflow-hidden flex flex-col shadow-2xl pointer-events-auto relative"
           >
             {/* CRT Scanline Effect */}
             <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%),linear-gradient(90deg,rgba(255,0,0,0.03),rgba(0,255,0,0.01),rgba(0,0,255,0.03))] bg-[length:100%_4px,3px_100%] opacity-20 z-50" />
@@ -218,7 +218,7 @@ export default function NeuralCore() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={executeCommand}
-                  className="w-full bg-transparent border-none text-[11px] font-mono text-white placeholder:text-white/10 focus:ring-0 p-0"
+                  className="w-full bg-transparent border-none text-base md:text-[11px] font-mono text-white placeholder:text-white/10 focus:ring-0 p-0"
                 />
               </div>
             </div>

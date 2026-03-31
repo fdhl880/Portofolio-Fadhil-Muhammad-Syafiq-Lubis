@@ -49,7 +49,7 @@ export default function Navbar() {
         scrolled ? 'shadow-lg shadow-neon/10' : ''
       }`}>
         <button onClick={() => scrollTo('hero')} className="font-display font-bold text-lg text-gradient cursor-pointer">
-          FMS
+          FMSL
         </button>
 
         {/* Desktop */}
@@ -103,7 +103,7 @@ export default function Navbar() {
             <div className="flex justify-between items-start relative z-10 w-full mb-16">
               <div className="space-y-1">
                 <div className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-[0.3em]">System_Dashboard</div>
-                <div className="text-2xl font-black text-white uppercase tracking-tighter">NEXUS_OS_v3</div>
+                <div className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter">NEXUS_OS_v3</div>
               </div>
               <button 
                 onClick={() => setMobileOpen(false)}
@@ -126,7 +126,7 @@ export default function Navbar() {
                   }`}
                 >
                   <span className="text-xs font-mono opacity-30 mt-1">0{i+1}</span>
-                  <span className="text-4xl font-bold font-display uppercase tracking-widest group-hover:text-white transition-colors">{link.label}</span>
+                  <span className="text-3xl md:text-4xl font-bold font-display uppercase tracking-widest group-hover:text-white transition-colors">{link.label}</span>
                 </motion.button>
               ))}
             </div>

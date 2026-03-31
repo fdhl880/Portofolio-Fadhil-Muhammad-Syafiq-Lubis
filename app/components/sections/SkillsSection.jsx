@@ -123,7 +123,7 @@ export default function SkillsSection() {
   const [activeNode, setActiveNode] = useState(null);
 
   return (
-    <section id="skills" className="relative py-24 md:py-32 w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden">
+    <section id="skills" className="relative py-16 md:py-32 w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden">
       <div className="absolute top-0 w-full text-center z-10 pt-24 px-4 pointer-events-none">
         <motion.div
            initial={{ opacity: 0, y: 30 }}
@@ -140,7 +140,7 @@ export default function SkillsSection() {
         </motion.div>
       </div>
 
-      <div className="w-full h-[650px] relative mt-16 z-0">
+      <div className="w-full h-[450px] md:h-[650px] relative mt-16 z-0">
         <Canvas camera={{ position: [0, 0, 11], fov: 45 }}>
           <ambientLight intensity={0.4} />
           <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />

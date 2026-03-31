@@ -43,7 +43,7 @@ function RoadmapNode({ item, index }) {
   const { playPip } = useSound();
   
   return (
-    <div className={`relative flex items-center justify-center w-full min-h-[400px] py-20
+    <div className={`relative flex items-center justify-center w-full min-h-[300px] md:min-h-[400px] py-12 md:py-20
       ${item.side === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'}
     `}>
       {/* Node Content */}
@@ -53,7 +53,7 @@ function RoadmapNode({ item, index }) {
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
         onViewportEnter={() => playPip(660 + index * 110, 0.1, 0.03)}
-        className="w-full md:w-[45%] p-8 glass rounded-[2.5rem] border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all"
+        className="w-full md:w-[45%] ml-10 md:ml-0 p-6 md:p-8 glass rounded-[2rem] md:rounded-[2.5rem] border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all"
         style={{ boxShadow: `0 0 50px ${item.color}10` }}
       >
         <div className="absolute top-0 right-0 p-6 opacity-5 font-black text-6xl tracking-tighter text-white">
@@ -77,7 +77,7 @@ function RoadmapNode({ item, index }) {
       </motion.div>
 
       {/* Center Circle Trigger */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 bg-dark border-2 border-white/20 rounded-full z-20" />
+      <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-dark border-2 border-white/20 rounded-full z-20 shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
     </div>
   );
 }
@@ -116,7 +116,7 @@ export default function RoadmapSection() {
 
       <div className="max-w-7xl mx-auto relative px-4 md:px-0">
         {/* The 3D Plasma Circuit Line */}
-        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[4px] bg-dark-3 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] border border-white/5">
+        <div className="absolute left-4 md:left-1/2 -translate-x-1/2 top-0 bottom-0 w-[4px] bg-dark-3 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] border border-white/5">
            <motion.div 
              style={{ scaleY: pathLength, transformOrigin: 'top', background: 'linear-gradient(to bottom, transparent, #00f0ff, #8b5cf6, #ff6b9d)' }}
              className="absolute inset-x-0 bottom-0 top-0 rounded-full shadow-[0_0_20px_#00f0ff,0_0_40px_#8b5cf6] z-10"

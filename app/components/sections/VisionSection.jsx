@@ -30,7 +30,7 @@ export default function VisionSection() {
   );
 
   return (
-    <section ref={containerRef} className="relative py-32 md:py-48 px-4 overflow-hidden">
+    <section ref={containerRef} className="relative py-16 md:py-48 px-4 overflow-hidden">
       {/* Light rays background */}
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(5)].map((_, i) => (
@@ -87,7 +87,7 @@ export default function VisionSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: '-20px' }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
-              className={`font-display text-lg md:text-2xl leading-relaxed ${
+              className={`font-display text-base sm:text-lg md:text-2xl leading-relaxed ${
                 line === '' ? 'h-4' : i >= visionLines.length - 2 ? 'text-neon font-semibold' : 'text-white/80'
               }`}
               style={{ textAlign: 'center' }}
