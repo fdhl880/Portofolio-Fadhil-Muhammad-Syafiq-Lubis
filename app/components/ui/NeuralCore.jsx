@@ -173,7 +173,7 @@ export default function NeuralCore() {
               body: JSON.stringify({ message: userText, history: chatHistory }),
             });
             const data = await response.json();
-            res = data.text || 'NEXUS_SYSTEM_LINK_FAILURE';
+            res = data.text || data.error || 'NEXUS_SYSTEM_LINK_FAILURE';
           } catch (error) {
             console.error("Nexus AI Error:", error);
             res = 'NEXUS_CORE_TIMEOUT: RECONNECT_PROTOCOL_REQUIRED.';
@@ -262,6 +262,9 @@ export default function NeuralCore() {
                   onKeyDown={executeCommand}
                   className="w-full bg-transparent border-none text-base md:text-[11px] font-mono text-white placeholder:text-white/20 focus:ring-0 p-0"
                 />
+              </div>
+              <div className="mt-2 text-[7px] font-mono text-white/10 uppercase tracking-widest text-center">
+                Critical Note: AI Data Processing may produce inaccuracies.
               </div>
             </div>
           </motion.div>

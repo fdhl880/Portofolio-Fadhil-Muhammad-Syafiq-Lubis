@@ -1,12 +1,21 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 export async function POST(req) {
   try {
     const { message, history: clientHistory } = await req.json();
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    // Ensure the API key is present
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      console.error("Nexus AI Error: Missing GEMINI_API_KEY");
+      return new Response(JSON.stringify({ error: "NEXUS_SYSTEM_LINK_FAILURE: Key missing or invalid." }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" }); 
 
     const systemPrompt = `
       You are NEXUS AI, the digital brain of Fadhil Muhammad Syafiq Lubis's professional portfolio.
@@ -36,14 +45,11 @@ export async function POST(req) {
       - Maintain the immersive "Nexus OS" experience.
     `;
 
-    // Map history to Gemini format and ensure it ends with user message (or model response)
-    // Gemini history expects role: 'user' | 'model' and parts: [{ text: '...' }]
     const formattedHistory = clientHistory.map(h => ({
       role: h.role,
       parts: [{ text: h.text }]
     }));
 
-    // Start chat with system prompt as the first message
     const chat = model.startChat({
       history: [
         { role: "user", parts: [{ text: systemPrompt }] },
@@ -60,8 +66,8 @@ export async function POST(req) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Nexus AI Error:", error);
-    return new Response(JSON.stringify({ error: "NEXUS_SYSTEM_LINK_FAILURE: " + error.message }), {
+    console.error("Nexus AI Critical Failure:", error);
+    return new Response(JSON.stringify({ error: `NEXUS_SYSTEM_LINK_FAILURE: ${error.message}` }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
