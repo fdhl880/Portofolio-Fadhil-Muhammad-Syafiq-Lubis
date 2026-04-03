@@ -37,7 +37,7 @@ export const metadata = {
     description: "Award-winning researcher and innovator from Indonesia.",
   },
   verification: {
-    google: "3LWyba_1f-aSCFMezB-AS0NvwbB1TsWWpopLYT3EaEc",
+    google: "RRNhDnUv9CP2uOt2K5vOuzymCxd9HKXFU_ZBrbRftq8",
   },
   robots: {
     index: true,
