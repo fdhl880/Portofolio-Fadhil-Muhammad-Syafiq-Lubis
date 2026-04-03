@@ -1,5 +1,5 @@
 export default function robots() {
-  const baseUrl = 'https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app';
+  const baseUrl = 'https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/';
   
   return {
     rules: [
@@ -9,6 +9,6 @@ export default function robots() {
         disallow: ['/private/'],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${baseUrl}sitemap.xml`,
   };
 }

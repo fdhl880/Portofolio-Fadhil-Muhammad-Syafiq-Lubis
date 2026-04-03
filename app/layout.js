@@ -12,7 +12,7 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app"),
+  metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/"),
   title: {
     default: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator & Researcher",
     template: "%s | Fadhil Muhammad Syafiq Lubis",
@@ -36,7 +36,7 @@ export const metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: "/",
+    canonical: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/",
   },
   openGraph: {
     title: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator",
