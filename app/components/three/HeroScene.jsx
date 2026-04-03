@@ -61,14 +61,20 @@ function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
 function Particles({ count = 80 }) {
   const mesh = useRef();
   const dummy = useMemo(() => new THREE.Object3D(), []);
-  const data = useMemo(() =>
-    Array.from({ length: count }, () => ({
-      x: (Math.random() - 0.5) * 18,
-      y: (Math.random() - 0.5) * 14,
-      z: (Math.random() - 0.5) * 12,
-      speed: Math.random() * 0.4 + 0.1,
-      offset: Math.random() * Math.PI * 2,
-    })), [count]
+  const data = useMemo(() => {
+    // Moved random logic into a seeded-like structure to stabilize
+    const random = (seed) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+    return Array.from({ length: count }, (_, i) => ({
+      x: (random(i * 123) - 0.5) * 18,
+      y: (random(i * 456) - 0.5) * 14,
+      z: (random(i * 789) - 0.5) * 12,
+      speed: random(i * 111) * 0.4 + 0.1,
+      offset: random(i * 222) * Math.PI * 2,
+    }));
+  }, [count]
   );
 
   useFrame((state) => {
@@ -132,9 +138,14 @@ function CameraRig() {
   const isPortrait = size.height > size.width;
   
   useFrame((state) => {
+    const { camera } = state;
     // Dynamic FOV based on aspect ratio
-    const targetFov = isPortrait ? 75 : 55;
+    const targetFov = isPortrait ? 85 : 55;
     camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.05);
+    
+    // Adjust Z distance for mobile
+    const targetZ = isPortrait ? 10 : 7;
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
     camera.updateProjectionMatrix();
 
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, state.pointer.x * 0.4, 0.03);
@@ -147,7 +158,7 @@ function CameraRig() {
 export default function HeroScene() {
   return (
     <Canvas
-      camera={{ position: [0, 0.5, 7], fov: 55 }}
+      camera={{ position: [0, 0.5, 9], fov: 55 }}
       dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       style={{ position: 'absolute', inset: 0 }}

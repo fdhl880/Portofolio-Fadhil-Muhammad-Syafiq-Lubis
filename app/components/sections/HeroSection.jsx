@@ -32,10 +32,10 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 40, rotateY: -15 }}
           animate={{ opacity: 1, y: 0, rotateY: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
-          className="mb-8 inline-block"
+          className="mb-6 inline-block"
           style={{ perspective: '1000px' }}
         >
-          <div className="relative w-36 h-36 md:w-44 md:h-44 mx-auto rounded-2xl overflow-hidden glass glow-cyan animate-float">
+          <div className="relative w-32 h-32 md:w-44 md:h-44 mx-auto rounded-2xl overflow-hidden glass glow-cyan animate-float">
             <Image
               src="/images/photo1.jpg"
               alt="Fadhil Muhammad Syafiq Lubis - Gold Medal Winner"
@@ -52,7 +52,7 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="font-display text-[2.2rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4"
+          className="font-display text-[1.75rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
         >
           <span className="text-gradient">
             <GlitchText text="Fadhil Muhammad Syafiq Lubis" />

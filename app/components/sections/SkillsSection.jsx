@@ -140,8 +140,8 @@ export default function SkillsSection() {
         </motion.div>
       </div>
 
-      <div className="w-full h-[450px] md:h-[650px] relative mt-16 z-0">
-        <Canvas camera={{ position: [0, 0, 11], fov: 45 }}>
+      <div className="w-full h-[350px] md:h-[650px] relative mt-16 z-0">
+        <Canvas camera={{ position: [0, 0, 14], fov: 45 }}>
           <ambientLight intensity={0.4} />
           <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
           <pointLight position={[-10, -10, -10]} intensity={1.5} color="#ff6b9d" />
