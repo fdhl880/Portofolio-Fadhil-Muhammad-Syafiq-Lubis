@@ -7,32 +7,32 @@ import { Float, Sphere, Torus, Octahedron, MeshDistortMaterial, Html } from '@re
 
 const projects = [
   {
-    title: 'Scientific Research and Innovation',
-    desc: 'Conducting cutting-edge research in science, developing innovative solutions to real-world problems, and presenting findings at international competitions.',
-    icon: '🔬',
+    title: 'IPITEx Thailand Gold Medalist',
+    desc: 'Awarded the gold medal for groundbreaking scientific research and innovation at the International Intellectual Property, Invention, Innovation and Technology Exposition (IPITEx) in Thailand.',
+    icon: '🥇',
     color: '#00f0ff',
-    tags: ['Research', 'Innovation', 'Science'],
+    tags: ['International Research', 'Innovation', 'Science'],
   },
   {
-    title: 'Engineering and Technology Development',
-    desc: 'Building technology prototypes and engineering solutions, leveraging modern tools and frameworks to create impactful projects.',
+    title: 'Advanced Engineering Prototypes',
+    desc: 'Leading the development of complex technical solutions and engineering prototypes, leveraging modern robotics and automated system frameworks for high-impact industrial applications.',
     icon: '⚙️',
     color: '#8b5cf6',
-    tags: ['Engineering', 'Prototyping', 'Technology'],
+    tags: ['Engineering', 'System Architecture', 'Tech'],
   },
   {
-    title: 'Financial Markets and Trading Analysis',
-    desc: 'Analyzing financial markets, studying trading strategies, and developing insights into market behavior and economic trends.',
+    title: 'Strategic Market & Neural Analysis',
+    desc: 'Developing sophisticated market analysis models and trading strategies based on data-driven research and financial behavior studies for modern economic ecosystems.',
     icon: '📈',
     color: '#ffd700',
-    tags: ['Finance', 'Analysis', 'Markets'],
+    tags: ['Finance', 'Data Model', 'Strategy'],
   },
   {
-    title: 'Entrepreneurship and Business Ideas',
-    desc: 'Developing innovative business concepts, creating business models, and exploring entrepreneurial opportunities in emerging markets.',
+    title: 'Innovation & Start-up Incubation',
+    desc: 'Founding and developing entrepreneurial concepts from ideation to business modeling, focusing on emerging markets and creative problem-solving ventures.',
     icon: '💡',
     color: '#ff6b9d',
-    tags: ['Business', 'Startups', 'Innovation'],
+    tags: ['Entrepreneurship', 'Venture', 'Brand'],
   },
 ];
 
@@ -126,14 +126,16 @@ function NeuralKnot({ color }) {
   });
   return (
     <mesh ref={meshRef}>
-      <torusKnotGeometry args={[1.2, 0.3, 128, 32]} />
+      <torusKnotGeometry args={[1.2, 0.4, 128, 32]} />
       <MeshDistortMaterial
         color={color}
         emissive={color}
-        emissiveIntensity={1}
-        distort={0.5}
-        speed={4}
-        wireframe
+        emissiveIntensity={1.5}
+        distort={0.6}
+        speed={5}
+        wireframe={false}
+        roughness={0}
+        metalness={1}
       />
     </mesh>
   );

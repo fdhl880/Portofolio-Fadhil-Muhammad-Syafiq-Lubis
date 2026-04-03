@@ -98,6 +98,27 @@ export default function HeroSection({ isMobile }) {
         </motion.div>
       </div>
 
+      {/* System Status Indicator */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 2.5, duration: 1 }}
+        className="absolute bottom-8 left-8 hidden md:flex flex-col gap-1 font-mono text-[10px] tracking-widest text-neon/40"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-neon animate-pulse" />
+          <span>SYS_STATUS: OPTIMAL</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-violet" />
+          <span>SEO_INDEX: ACTIVE</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-gold" />
+          <span>CORE_PERF: 60FPS</span>
+        </div>
+      </motion.div>
+
       {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
