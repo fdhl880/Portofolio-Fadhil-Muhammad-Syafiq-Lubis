@@ -74,6 +74,14 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: [
+      { url: "/logo-initials.png" },
+      { url: "/logo-initials.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/logo-initials.png",
+  },
+  themeColor: "#050510",
 };
 
 export default function RootLayout({ children }) {
