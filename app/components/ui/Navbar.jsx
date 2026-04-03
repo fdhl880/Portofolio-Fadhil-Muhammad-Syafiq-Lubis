@@ -48,7 +48,11 @@ export default function Navbar() {
       <div className={`glass rounded-2xl px-6 py-3 flex items-center justify-between ${
         scrolled ? 'shadow-lg shadow-neon/10' : ''
       }`}>
-        <button onClick={() => scrollTo('hero')} className="font-display font-bold text-lg text-gradient cursor-pointer">
+        <button 
+          onClick={() => scrollTo('hero')} 
+          className="font-display font-bold text-lg text-gradient cursor-pointer"
+          aria-label="Fadhil Muhammad Syafiq Lubis - Home"
+        >
           FMSL
         </button>
 
@@ -58,6 +62,7 @@ export default function Navbar() {
             <button
               key={link.id}
               onClick={() => scrollTo(link.id)}
+              aria-label={`Go to ${link.label} section`}
               className={`px-3 py-1.5 rounded-lg text-sm transition-all duration-300 cursor-pointer ${
                 activeSection === link.id
                   ? 'text-neon bg-neon/10'
@@ -121,6 +126,7 @@ export default function Navbar() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                   onClick={() => scrollTo(link.id)}
+                  aria-label={`Navigate to ${link.label}`}
                   className={`text-left group flex items-center gap-6 ${
                     activeSection === link.id ? 'text-cyan-400' : 'text-white/40'
                   }`}

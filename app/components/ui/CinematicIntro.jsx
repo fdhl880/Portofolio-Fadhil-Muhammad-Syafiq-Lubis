@@ -162,6 +162,7 @@ export default function CinematicIntro({ onComplete }) {
 
           <button
             onClick={handleSkip}
+            aria-label="Skip cinematic introduction"
             className="absolute bottom-10 text-[#00f0ff]/50 hover:text-[#00f0ff] text-xs uppercase tracking-widest transition-colors z-20"
           >
             [ Skip_Sequence ]

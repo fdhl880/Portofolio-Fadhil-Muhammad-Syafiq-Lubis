@@ -340,17 +340,17 @@ export default function PageWrapper() {
         <NeuralCore />
         
         <main className="relative z-10 overflow-x-hidden">
-          <section id="hero"><HeroSection isMobile={isMobile} /></section>
-          <section id="skills"><SkillsSection /></section>
-          <section id="education"><EducationSection /></section>
-          <section id="trophy"><TrophyGallery /></section>
-          <section id="achievements"><AchievementsSection /></section>
-          <section id="nexus-globe"><GlobeSection /></section>
-          <section id="roadmap"><RoadmapSection /></section>
-          <section id="discovery"><DiscoverySection /></section>
-          <section id="projects"><ProjectsSection /></section>
-          <section id="vision"><VisionSection /></section>
-          <section id="contact"><ContactSection /></section>
+          <section id="hero" aria-label="Introduction"><HeroSection isMobile={isMobile} /></section>
+          <section id="skills" aria-label="Professional Skills Overview"><SkillsSection /></section>
+          <section id="education" aria-label="Academic Background"><EducationSection /></section>
+          <section id="trophy" aria-label="Awards and Trophies Gallery"><TrophyGallery /></section>
+          <section id="achievements" aria-label="Key Career Achievements"><AchievementsSection /></section>
+          <section id="nexus-globe" aria-label="Global Impact and Locations Map"><GlobeSection /></section>
+          <section id="roadmap" aria-label="Growth and Future Roadmap"><RoadmapSection /></section>
+          <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
+          <section id="projects" aria-label="Selected Projects and Ventures"><ProjectsSection /></section>
+          <section id="vision" aria-label="Personal Vision and Philosophy"><VisionSection /></section>
+          <section id="contact" aria-label="Contact and Collaboration"><ContactSection /></section>
         </main>
         <HolographicFooter />
         <BackToTop />
