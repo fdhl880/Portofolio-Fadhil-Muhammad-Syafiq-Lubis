@@ -36,7 +36,7 @@ export default function PerformanceToggle() {
   };
 
   return (
-    <div className="fixed top-12 md:top-24 right-4 md:right-8 z-[200] flex flex-col gap-3">
+    <div className="fixed top-16 md:top-24 right-4 md:right-8 z-[200] flex flex-col gap-3">
       <motion.button
         onClick={() => {
           toggleMode();

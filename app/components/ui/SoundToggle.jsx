@@ -13,7 +13,7 @@ export default function SoundToggle() {
           detail: `AUDIO_COMMS: ${!isAudioEnabled ? 'ENABLED' : 'DISABLED'}` 
         }));
       }}
-      className={`fixed top-24 md:top-24 right-4 md:right-56 z-[150] cyber-button px-6 py-3
+      className={`fixed top-56 md:top-24 right-4 md:right-64 z-[210] cyber-button px-6 py-3
         ${isAudioEnabled ? 'text-cyan-400 border-cyan-500/50 shadow-[0_0_15px_rgba(0,240,255,0.2)]' 
                        : 'text-white/30 border-white/10 opacity-50'}
       `}
