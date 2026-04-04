@@ -40,6 +40,13 @@ const achievements = [
     color: '#ffd700',
   },
   {
+    image: '/images/photo4.jpg',
+    title: 'Official Recognition',
+    category: 'Thailand & Malaysia',
+    description: 'Earning the Silver Prize at IPITEx Thailand and Bronze Award at MTE Malaysia, representing global academic excellence.',
+    color: '#c0c0c0',
+  },
+  {
     image: '/images/photo2.jpg',
     title: 'Future Vision',
     category: 'Continuous Innovation',
