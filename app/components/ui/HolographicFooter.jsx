@@ -13,7 +13,7 @@ export default function HolographicFooter() {
             <span className="font-mono text-[10px] text-cyan-400 font-bold tracking-[0.3em] uppercase">Nexus_System_Active</span>
           </div>
           <p className="text-muted/60 text-xs font-mono lowercase">
-            &copy; {year} Fadhil Muhammad Syafiq Lubis // Port_v5.0.0
+            &copy; {year} Fadhil MS Lbs // Port_v5.0.0
           </p>
         </div>
 

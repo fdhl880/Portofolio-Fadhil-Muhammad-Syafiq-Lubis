@@ -19,12 +19,12 @@ const sora = Sora({
 export const metadata = {
   metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/"),
   title: {
-    default: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator & Researcher",
-    template: "%s | Fadhil Muhammad Syafiq Lubis",
+    default: "Fadhil MS Lbs | Award-Winning Student Innovator & Researcher",
+    template: "%s | Fadhil MS Lbs",
   },
-  description: "Official portfolio of Fadhil Muhammad Syafiq Lubis — an international gold medal winner in science and engineering competitions. Exploring innovations in Engineering, Finance, and Entrepreneurship.",
+  description: "Official portfolio of Fadhil MS Lbs — an international gold medal winner in science and engineering competitions. Exploring innovations in Engineering, Finance, and Entrepreneurship.",
   keywords: [
-    "Fadhil Muhammad Syafiq Lubis", 
+    "Fadhil MS Lbs", 
     "Student Innovator", 
     "International Science Competition Winner", 
     "Research Portfolio", 
@@ -32,9 +32,9 @@ export const metadata = {
     "Medan Indonesia", 
     "Science Olympiad Medalist"
   ],
-  authors: [{ name: "Fadhil Muhammad Syafiq Lubis" }],
-  creator: "Fadhil Muhammad Syafiq Lubis",
-  publisher: "Fadhil Muhammad Syafiq Lubis",
+  authors: [{ name: "Fadhil MS Lbs" }],
+  creator: "Fadhil MS Lbs",
+  publisher: "Fadhil MS Lbs",
   formatDetection: {
     email: false,
     address: false,
@@ -44,10 +44,10 @@ export const metadata = {
     canonical: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/",
   },
   openGraph: {
-    title: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator",
+    title: "Fadhil MS Lbs | Award-Winning Student Innovator",
     description: "Explore the cinematic portfolio of an international award-winning student innovator from Medan, Indonesia.",
     url: "/",
-    siteName: "Fadhil Portfolio",
+    siteName: "Fadhil MS Lbs Portfolio",
     locale: "en_US",
     type: "website",
     images: [
@@ -55,13 +55,13 @@ export const metadata = {
         url: "/images/photo1.jpg",
         width: 1200,
         height: 630,
-        alt: "Fadhil Muhammad Syafiq Lubis - Student Innovator",
+        alt: "Fadhil MS Lbs - Student Innovator",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fadhil Muhammad Syafiq Lubis | Student Innovator",
+    title: "Fadhil MS Lbs | Student Innovator",
     description: "International award-winning researcher and innovator from Indonesia.",
     images: ["/images/photo1.jpg"],
   },
@@ -96,7 +96,7 @@ export default function RootLayout({ children }) {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Person",
-    name: "Fadhil Muhammad Syafiq Lubis",
+    name: "Fadhil MS Lbs",
     jobTitle: "Student Innovator & Researcher",
     url: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app",
     image: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/images/photo1.jpg",

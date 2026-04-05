@@ -40,7 +40,7 @@ export default function Navbar() {
             </div>
             <div className="flex flex-col">
               <span className="font-display font-bold text-white text-xs tracking-widest uppercase">Nexus_Grid</span>
-              <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">Fadhil_Portfolio_V2</span>
+              <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">Fadhil_MS_Lbs_V2</span>
             </div>
           </motion.div>
 

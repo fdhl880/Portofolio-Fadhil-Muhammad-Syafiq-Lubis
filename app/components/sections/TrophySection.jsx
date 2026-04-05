@@ -78,7 +78,7 @@ export default function TrophySection({ isMobile }) {
           <div className="relative w-72 h-48 md:w-96 md:h-64 rounded-2xl overflow-hidden glass glow-gold">
             <Image
               src="/images/photo3.jpg"
-              alt="Fadhil representing Indonesia at IPITEx Thailand"
+              alt="Fadhil MS Lbs representing Indonesia at IPITEx Thailand"
               fill
               sizes="(max-width: 768px) 288px, 384px"
               className="object-cover"
