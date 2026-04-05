@@ -165,7 +165,7 @@ export default function SkillsSection() {
                     &quot;{quotes[quoteIndex].text}&quot;
                  </div>
                  <div className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400/60">
-                    {`- ${quotes[quoteIndex].author} // Nexus_Core`}
+                    {`- ${quotes[quoteIndex].author} // Fadhil MS Lbs`}
                  </div>
               </motion.div>
             </AnimatePresence>
