@@ -6,6 +6,7 @@ import Navbar from './ui/Navbar';
 import ScrollProgress from './ui/ScrollProgress';
 import BackToTop from './ui/BackToTop';
 import HeroSection from './sections/HeroSection';
+import MissionStats from './sections/MissionStats';
 import SkillsSection from './sections/SkillsSection';
 import EducationSection from './sections/EducationSection';
 import TrophyGallery from './sections/TrophyGallery';
@@ -355,6 +356,8 @@ export default function PageWrapper() {
           >
             <HeroSection isMobile={isMobile} />
           </motion.section>
+
+          <MissionStats />
 
           <motion.section 
             initial={{ opacity: 0, y: 50 }}

@@ -1,5 +1,7 @@
 import { Inter, Outfit, Sora } from "next/font/google";
 import "./globals.css";
+import SmoothScroll from "./components/ui/SmoothScroll";
+import TelemetryBar from "./components/ui/TelemetryBar";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -120,7 +122,12 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen">{children}</body>
+      <body className="min-h-screen">
+        <SmoothScroll>
+          {children}
+          <TelemetryBar />
+        </SmoothScroll>
+      </body>
     </html>
   );
 }
