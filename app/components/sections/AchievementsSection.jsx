@@ -119,6 +119,58 @@ export default function AchievementsSection() {
            </div>
         </motion.div>
 
+        {/* DATA-VIZ METRIC: Innovation Score */}
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.95 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true }}
+           className="md:col-span-2 overflow-hidden border border-white/10 bg-gradient-to-br from-violet-600/10 to-cyan-500/10 rounded-3xl p-8 md:p-10 flex flex-col justify-between group"
+        >
+           <div className="flex items-center justify-between">
+              <span className="font-mono text-[9px] text-violet-400 uppercase tracking-[0.4em]">Global_Innovation_Index</span>
+              <div className="flex gap-1">
+                 {[1,2,3].map(i => <div key={i} className="w-1 h-3 bg-violet-400/30 rounded-full animate-pulse" style={{ animationDelay: `${i*150}ms` }} />)}
+              </div>
+           </div>
+
+           <div className="my-6">
+              <div className="flex items-baseline gap-2">
+                 <motion.span 
+                   initial={{ opacity: 0 }}
+                   whileInView={{ opacity: 1 }}
+                   viewport={{ once: true }}
+                   className="font-display text-6xl md:text-8xl font-bold text-white tracking-tighter"
+                 >
+                   99.2
+                 </motion.span>
+                 <span className="text-2xl font-display font-medium text-violet-400/60">%</span>
+              </div>
+              <p className="text-white/30 text-xs md:text-sm font-medium uppercase tracking-widest mt-2">Precision Intelligence Rating</p>
+           </div>
+
+           {/* Animated Sparkline */}
+           <div className="h-16 w-full relative mt-4">
+              <svg className="w-full h-full" viewBox="0 0 100 20" preserveAspectRatio="none">
+                 <motion.path
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    whileInView={{ pathLength: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 2, ease: "easeInOut" }}
+                    d="M0,10 Q10,5 20,10 T40,10 T60,5 T80,15 T100,2"
+                    fill="none"
+                    stroke="url(#sparkline-gradient)"
+                    strokeWidth="1"
+                 />
+                 <defs>
+                    <linearGradient id="sparkline-gradient" x1="0" y1="0" x2="1" y2="0">
+                       <stop offset="0%" stopColor="#8b5cf6" />
+                       <stop offset="100%" stopColor="#06b6d4" />
+                    </linearGradient>
+                 </defs>
+              </svg>
+           </div>
+        </motion.div>
+
       </div>
     </section>
   );

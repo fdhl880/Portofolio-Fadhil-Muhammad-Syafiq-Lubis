@@ -18,11 +18,12 @@ import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import SoundToggle from './ui/SoundToggle';
-import { PerformanceProvider, usePerformance } from '../context/PerformanceContext';
+import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
 import AudioVisualizer from './ui/AudioVisualizer';
+import AuroraOverlay from './ui/AuroraOverlay';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 import CinematicRoom from './three/CinematicRoom';
@@ -52,19 +53,18 @@ function WarpEngine() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
-    const stars = Array.from({ length: 80 }, () => ({
+    const stars = Array.from({ length: 150 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
+      z: Math.random() * 2 + 0.5,
       z: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
     
-    // Quantum Liquid Trail State (Optimized)
+    // Quantum Liquid Trail State
     const trails = [];
     const handleMouseMove = (e) => {
-      if (trails.length < 15) {
-        trails.push({ x: e.clientX, y: e.clientY, age: 0 });
-      }
+      trails.push({ x: e.clientX, y: e.clientY, age: 0 });
     };
 
     const resize = () => {
@@ -77,10 +77,12 @@ function WarpEngine() {
 
     const animate = () => {
       const v = smoothVelocity.get();
+      // Update Audio Pitch based on scroll speed
       setEngineDrive(v); 
 
-      // Use clearRect for max performance
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Clear canvas with trail effect for lightspeed blur
+      ctx.fillStyle = 'rgba(5, 5, 16, 0.3)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       const speedFactor = v * 0.05;
       const stretchFactor = Math.abs(speedFactor) * 2;
@@ -88,14 +90,16 @@ function WarpEngine() {
       stars.forEach(s => {
         s.y -= speedFactor * s.z;
         
+        // Wrap around screen
         if (s.y < -100) s.y = canvas.height + 50;
         if (s.y > canvas.height + 100) s.y = -50;
 
         ctx.fillStyle = `rgba(0, 240, 255, ${s.opacity})`;
+        // Stretch star vertically based on scroll velocity
         ctx.fillRect(s.x, s.y, s.z, Math.max(s.z, stretchFactor));
       });
 
-      // Render Quantum Liquid Cursor Trail (Optimized: No ShadowBlur)
+      // Render Quantum Liquid Cursor Trail
       if (trails.length > 1) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -111,20 +115,27 @@ function WarpEngine() {
           pt.age += 1;
         }
         
+        // Final line to exact cursor
         const last = trails[trails.length - 1];
         ctx.quadraticCurveTo(last.x, last.y, last.x, last.y);
 
+        // Fluid gradient trail
         if (trails.length > 5) {
             const first = trails[0];
             const grad = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
             grad.addColorStop(0, 'rgba(0, 240, 255, 0)');
-            grad.addColorStop(1, 'rgba(0, 240, 255, 0.5)');
+            grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.3)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
+            
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 20;
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 12;
             ctx.stroke();
+            ctx.shadowBlur = 0; // reset
         }
 
-        while (trails.length && trails[0].age > 10) {
+        while (trails.length && trails[0].age > 15) {
           trails.shift();
         }
       }
@@ -141,10 +152,7 @@ function WarpEngine() {
     };
   }, [smoothVelocity, setEngineDrive]);
 
-  const { isCinematic } = usePerformance();
-  if (!isCinematic) return null;
-
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen" />;
 }
 
 // Sector Glitch Wipe Effect
@@ -249,8 +257,8 @@ export default function PageWrapper() {
   const introFinished = useRef(false);
 
   useEffect(() => {
-    if (!mounted) setMounted(true);
-  }, [mounted]);
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -307,6 +315,7 @@ export default function PageWrapper() {
       <div className="noise-overlay" />
       <CustomCursor />
       <WarpPortal />
+      <AuroraOverlay />
       
       <AnimatePresence>
         {showIntro && (
@@ -323,7 +332,7 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        <PerformanceAwareRoom />
+        <CinematicRoom />
         <WarpEngine />
         <AudioVisualizer />
         <Scanline />
@@ -337,30 +346,96 @@ export default function PageWrapper() {
         <NeuralCore />
         
         <main className="relative z-10 overflow-x-hidden">
-          <section id="hero" aria-label="Introduction"><HeroSection isMobile={isMobile} /></section>
-          <section id="skills" aria-label="Professional Skills Overview"><SkillsSection /></section>
-          <section id="education" aria-label="Academic Background"><EducationSection /></section>
-          <section id="trophy" aria-label="Awards and Trophies Gallery"><TrophyGallery /></section>
+          <motion.section 
+            initial={{ opacity: 0, clipPath: 'inset(10% 0 10% 0)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            id="hero" aria-label="Introduction"
+          >
+            <HeroSection isMobile={isMobile} />
+          </motion.section>
+
+          <motion.section 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            id="skills" aria-label="Professional Skills Overview"
+          >
+            <SkillsSection />
+          </motion.section>
+
+          <motion.section 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1 }}
+            id="education" aria-label="Academic Background"
+          >
+            <EducationSection />
+          </motion.section>
+
+          <motion.section 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            id="trophy" aria-label="Awards and Trophies Gallery"
+          >
+            <TrophyGallery />
+          </motion.section>
+
           <div className="bg-[#020208]/80 backdrop-blur-3xl border-y border-white/5">
-             <section id="projects" aria-label="Selected Projects"><ProjectsSection /></section>
-             <section id="achievements" aria-label="Key Achievements"><AchievementsSection /></section>
+             <motion.section 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1 }}
+               id="projects" aria-label="Selected Projects"
+             >
+               <ProjectsSection />
+             </motion.section>
+             
+             <motion.section 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1 }}
+               id="achievements" aria-label="Key Achievements"
+             >
+               <AchievementsSection />
+             </motion.section>
           </div>
-          <section id="nexus-globe" aria-label="Global Impact Map"><GlobeSection /></section>
+
+          <motion.section 
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2 }}
+            id="nexus-globe" aria-label="Global Impact Map"
+          >
+            <GlobeSection />
+          </motion.section>
+
           <section id="roadmap" aria-label="Future Roadmap"><RoadmapSection /></section>
           <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
           <section id="vision" aria-label="Vision and Philosophy"><VisionSection /></section>
-          <section id="contact" aria-label="Contact and Collaboration"><ContactSection /></section>
+          <motion.section 
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "circOut" }}
+            id="contact" aria-label="Contact and Collaboration"
+          >
+            <ContactSection />
+          </motion.section>
         </main>
         <HolographicFooter />
         <BackToTop />
+
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
     </PerformanceProvider>
   );
-}
-
-// Helper to handle context-aware rendering inside the provider
-function PerformanceAwareRoom() {
-  const { isCinematic } = usePerformance();
-  return isCinematic ? <CinematicRoom /> : null;
 }

@@ -1,6 +1,7 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useSound } from '../../context/SoundContext';
 
 const navLinks = [
   { name: 'Identity', target: 'hero', icon: '👤' },
@@ -12,6 +13,7 @@ const navLinks = [
 
 export default function BentoMenu({ isOpen, onClose }) {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
+  const { playPip } = useSound();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -21,6 +23,7 @@ export default function BentoMenu({ isOpen, onClose }) {
   }, []);
 
   const handleNav = (id) => {
+    try { playPip(1320, 0.05, 0.03); } catch(e) {}
     onClose();
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
