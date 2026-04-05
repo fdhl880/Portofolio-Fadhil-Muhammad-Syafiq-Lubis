@@ -1,168 +1,144 @@
 'use client';
 import { motion } from 'framer-motion';
-import { usePerformance } from '../../context/PerformanceContext';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Html, ContactShadows, Line, Sphere, MeshDistortMaterial } from '@react-three/drei';
-import { useRef, useMemo, useState } from 'react';
+import { useState } from 'react';
 
-const skills = [
-  { name: 'Scientific Research', icon: '🔬', color: '#00f0ff', pos: [-4, 2, 0], speed: 1.5 },
-  { name: 'Problem Solving', icon: '🧩', color: '#8b5cf6', pos: [4, 1.5, -1], speed: 2 },
-  { name: 'Critical Thinking', icon: '🧠', color: '#ffd700', pos: [-2.5, -2.5, 1], speed: 1.2 },
-  { name: 'Engineering & Tech', icon: '⚙️', color: '#ff6b9d', pos: [3, -2.5, 0], speed: 1.8 },
-  { name: 'Financial Analysis', icon: '📊', color: '#00f0ff', pos: [0, 3.5, -2], speed: 1 },
-  { name: 'Public Speaking', icon: '🎤', color: '#8b5cf6', pos: [0, -2, 2.5], speed: 2.5 },
+const skillGroups = [
+  {
+    id: 1,
+    category: 'Research & Science',
+    skills: ['Hypothesis Testing', 'Data Analysis', 'Lab Protocol', 'Scientific Writing'],
+    icon: '🔬',
+    color: '#00f0ff',
+    size: 'md:col-span-2 md:row-span-2',
+    desc: 'Scientific inquiry and rigorous experimentation methods.'
+  },
+  {
+    id: 2,
+    category: 'Engineering',
+    skills: ['Prototyping', 'CAD Design', 'Logic Flow', 'Tech Optimization'],
+    icon: '⚙️',
+    color: '#8b5cf6',
+    size: 'md:col-span-2 md:row-span-1',
+    desc: 'Building scalable technical solutions.'
+  },
+  {
+    id: 3,
+    category: 'Strategy & Finance',
+    skills: ['Market Analysis', 'VC Modeling', 'Risk Assessment'],
+    icon: '📊',
+    color: '#ffd700',
+    size: 'md:col-span-1 md:row-span-1',
+    desc: 'Financial forecasting and market entry.'
+  },
+  {
+    id: 4,
+    category: 'Leadership',
+    skills: ['Public Speaking', 'Team Management', 'Pivot Strategy'],
+    icon: '🗣️',
+    color: '#ff6b9d',
+    size: 'md:col-span-1 md:row-span-1',
+    desc: 'Visionary direction and communication.'
+  },
 ];
 
-function NetworkLines({ activeNode }) {
+function SkillBentoCard({ group, index }) {
   return (
-    <group>
-      {skills.map((skill, i) => {
-        const isFocus = activeNode === skill.name;
-        return (
-          <Line
-            key={i}
-            points={[[0, 0, 0], skill.pos]}
-            color={isFocus ? '#ffffff' : skill.color}
-            lineWidth={isFocus ? 4 : 1.5}
-            transparent
-            opacity={isFocus ? 0.8 : 0.2}
-            dashed={!isFocus}
-            dashScale={10}
-            dashSize={2}
-            dashOffset={0}
-          />
-        );
-      })}
-    </group>
-  );
-}
-
-function CoreNode() {
-  const meshRef = useRef();
-  useFrame((state) => {
-    meshRef.current.rotation.x = state.clock.getElapsedTime() * 0.5;
-    meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.3;
-  });
-  return (
-    <Sphere ref={meshRef} args={[0.5, 32, 32]} position={[0,0,0]}>
-      <MeshDistortMaterial
-        color="#ffffff"
-        emissive="#00f0ff"
-        emissiveIntensity={1}
-        distort={0.4}
-        speed={4}
-        transparent
-        opacity={0.9}
-      />
-      <Html center className="pointer-events-none mt-10">
-        <div className="text-[10px] font-mono text-cyan-400/80 uppercase tracking-[0.3em] whitespace-nowrap">Core_Intel</div>
-      </Html>
-    </Sphere>
-  );
-}
-
-function SkillNode({ skill, isActive, setActive }) {
-  const meshRef = useRef();
-  const { isCinematic } = usePerformance();
-
-  useFrame((state, delta) => {
-    if (isCinematic && meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.2 * skill.speed * (isActive ? 3 : 1);
-      meshRef.current.rotation.y += delta * 0.3 * skill.speed * (isActive ? 3 : 1);
-    }
-  });
-
-  return (
-    <Float 
-      speed={isCinematic ? skill.speed : 0} 
-      rotationIntensity={isCinematic ? (isActive ? 2 : 0.5) : 0} 
-      floatIntensity={isCinematic ? (isActive ? 2 : 1) : 0}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
+      whileHover={{ y: -5 }}
+      className={`${group.size} relative group overflow-hidden rounded-3xl border border-white/5 bg-white/[0.02] p-8 flex flex-col justify-between hover:bg-white/[0.05] transition-all`}
     >
-      <group position={skill.pos}>
-        <mesh 
-          ref={meshRef} 
-          onPointerOver={() => setActive(skill.name)}
-          onPointerOut={() => setActive(null)}
-        >
-          <icosahedronGeometry args={[0.5, 0]} />
-          <meshPhysicalMaterial 
-            color={isActive ? '#ffffff' : skill.color} 
-            emissive={isActive ? '#ffffff' : skill.color} 
-            emissiveIntensity={isActive ? 1 : 0.6} 
-            roughness={0.1} 
-            metalness={0.9}
-            wireframe={true}
-          />
-        </mesh>
-        
-        <Html distanceFactor={8} zIndexRange={[100, 0]} transform>
-          <div 
-            className={`glass px-3 py-1.5 rounded-lg flex items-center gap-2 pointer-events-auto cursor-pointer transition-all duration-300 ${isActive ? 'scale-125' : 'hover:scale-110'}`} 
-            style={{ 
-              background: isActive ? `rgba(255, 255, 255, 0.1)` : 'rgba(5, 5, 20, 0.4)',
-              boxShadow: `0 0 ${isActive ? 30 : 15}px ${skill.color}${isActive ? '80' : '30'}`, 
-              border: `1px solid ${skill.color}${isActive ? 'a0' : '50'}`, 
-              whiteSpace: 'nowrap',
-              backdropFilter: isActive ? 'blur(12px)' : 'blur(8px)'
-            }}
-            onPointerEnter={() => setActive(skill.name)}
-            onPointerLeave={() => setActive(null)}
-          >
-            <span className="text-xl" style={{ textShadow: `0 0 10px ${skill.color}` }}>{skill.icon}</span>
-            <span className={`font-display font-semibold tracking-wide text-sm ${isActive ? 'text-white' : 'text-white/90'}`}>{skill.name}</span>
-          </div>
-        </Html>
-      </group>
-    </Float>
+      {/* Dynamic Background Glow */}
+      <div 
+        className="absolute -top-20 -left-20 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-10 transition-opacity"
+        style={{ backgroundColor: group.color }}
+      />
+      
+      <div className="relative z-10 flex flex-col h-full">
+        <div className="flex items-center justify-between mb-8">
+           <div className="text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 origin-left">
+             {group.icon}
+           </div>
+           <div className="text-[9px] font-mono text-white/20 uppercase tracking-[0.4em]">Lab_Module_{group.id}</div>
+        </div>
+
+        <div className="flex-grow">
+           <h3 className="font-display text-xl md:text-2xl font-bold text-white/90 mb-4 tracking-tight">
+             {group.category}
+           </h3>
+           <p className="text-white/40 text-[13px] md:text-sm font-medium mb-8 leading-relaxed max-w-[240px]">
+             {group.desc}
+           </p>
+
+           <div className="flex flex-wrap gap-2">
+             {group.skills.map(skill => (
+               <span key={skill} className="text-[10px] md:text-[11px] font-mono text-white/30 border border-white/5 px-3 py-1.5 rounded-lg bg-black/20 group-hover:text-white/60 transition-colors">
+                 {skill}
+               </span>
+             ))}
+           </div>
+        </div>
+      </div>
+
+      {/* Decorative Corner Arrow */}
+      <div className="absolute bottom-8 right-8 w-10 h-10 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+      </div>
+    </motion.div>
   );
 }
 
 export default function SkillsSection() {
-  const { isCinematic } = usePerformance();
-  const [activeNode, setActiveNode] = useState(null);
-
   return (
-    <section id="skills" className="relative py-16 md:py-32 w-full min-h-[90vh] flex flex-col items-center justify-center overflow-hidden">
-      <div className="absolute top-0 w-full text-center z-10 pt-24 px-4 pointer-events-none">
+    <section id="skills" className="relative py-24 md:py-48 w-full max-w-7xl mx-auto px-6 md:px-12">
+      
+      <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <motion.div
-           initial={{ opacity: 0, y: 30 }}
-           whileInView={{ opacity: 1, y: 0 }}
+           initial={{ opacity: 0, x: -30 }}
+           whileInView={{ opacity: 1, x: 0 }}
            viewport={{ once: true }}
         >
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">3D Skills Arena</span>
+          <span className="font-mono text-[9px] uppercase tracking-[0.6em] text-cyan-400 block mb-6">Expertise_Inventory</span>
+          <h2 className="font-display text-5xl md:text-8xl font-bold tracking-tighter text-white">
+             LABORATORY<span className="text-cyan-400 text-3xl">.</span>
           </h2>
-          <p className="text-muted max-w-2xl mx-auto">
-            A dynamic network of abilities cultivated through innovation and competition.
-            {!isCinematic && <span className="block mt-2 text-yellow-500/80 text-sm">⚡ 3D Animations paused for efficiency</span>}
-          </p>
         </motion.div>
+        
+        <motion.p 
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="text-white/40 max-w-sm text-sm md:text-lg leading-relaxed font-medium"
+        >
+          Deconstructing complex challenges into scientific breakthroughs and engineering feats.
+        </motion.p>
       </div>
 
-      <div className="w-full h-[350px] md:h-[650px] relative mt-16 z-0">
-        <Canvas camera={{ position: [0, 0, 14], fov: 45 }}>
-          <ambientLight intensity={0.4} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-          <pointLight position={[-10, -10, -10]} intensity={1.5} color="#ff6b9d" />
-          
-          <CoreNode />
-          {isCinematic && <NetworkLines activeNode={activeNode} />}
-          
-          {skills.map((skill) => (
-            <SkillNode 
-               key={skill.name} 
-               skill={skill} 
-               isActive={activeNode === skill.name}
-               setActive={setActiveNode}
-            />
-          ))}
-          
-          {isCinematic && (
-            <ContactShadows position={[0, -4.5, 0]} opacity={0.6} scale={30} blur={2.5} far={10} color="#00f0ff" />
-          )}
-        </Canvas>
+      {/* Bento Laboratory Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-fr">
+         {skillGroups.map((group, i) => (
+           <SkillBentoCard key={group.id} group={group} index={i} />
+         ))}
+
+         {/* Meta Stat Tile */}
+         <motion.div 
+           initial={{ opacity: 0 }}
+           whileInView={{ opacity: 1 }}
+           viewport={{ once: true }}
+           className="md:col-span-2 border border-white/5 bg-[#0a0a1a] rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-4"
+         >
+            <div className="text-cyan-400 font-mono text-[9px] uppercase tracking-[0.4em]">Continuous_Optimization</div>
+            <div className="text-3xl md:text-5xl font-display font-bold text-white/90 leading-tight italic">
+               Never stop questioning.<br />Never stop building.
+            </div>
+         </motion.div>
       </div>
+
     </section>
   );
 }
