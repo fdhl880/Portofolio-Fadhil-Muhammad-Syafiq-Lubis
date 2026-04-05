@@ -26,7 +26,6 @@ import AudioVisualizer from './ui/AudioVisualizer';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 import CinematicRoom from './three/CinematicRoom';
-import FluidCursor from './ui/FluidCursor';
 
 
 // Global Scanline Effect
@@ -312,6 +311,7 @@ export default function PageWrapper() {
 
   return (
     <PerformanceProvider>
+      <div className="noise-overlay" />
       <CustomCursor />
       <WarpPortal />
       
@@ -327,11 +327,10 @@ export default function PageWrapper() {
           y: [0, 5, -5, 5, -5, 0]
         } : {}}
         transition={{ duration: 0.5 }}
-        className="relative overflow-x-hidden min-h-screen" 
+        className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
         <CinematicRoom />
-        <FluidCursor />
         <WarpEngine />
         <AudioVisualizer />
         <Scanline />
@@ -349,12 +348,14 @@ export default function PageWrapper() {
           <section id="skills" aria-label="Professional Skills Overview"><SkillsSection /></section>
           <section id="education" aria-label="Academic Background"><EducationSection /></section>
           <section id="trophy" aria-label="Awards and Trophies Gallery"><TrophyGallery /></section>
-          <section id="achievements" aria-label="Key Career Achievements"><AchievementsSection /></section>
-          <section id="nexus-globe" aria-label="Global Impact and Locations Map"><GlobeSection /></section>
-          <section id="roadmap" aria-label="Growth and Future Roadmap"><RoadmapSection /></section>
+          <div className="bg-[#020208]/80 backdrop-blur-3xl border-y border-white/5">
+             <section id="projects" aria-label="Selected Projects"><ProjectsSection /></section>
+             <section id="achievements" aria-label="Key Achievements"><AchievementsSection /></section>
+          </div>
+          <section id="nexus-globe" aria-label="Global Impact Map"><GlobeSection /></section>
+          <section id="roadmap" aria-label="Future Roadmap"><RoadmapSection /></section>
           <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
-          <section id="projects" aria-label="Selected Projects and Ventures"><ProjectsSection /></section>
-          <section id="vision" aria-label="Personal Vision and Philosophy"><VisionSection /></section>
+          <section id="vision" aria-label="Vision and Philosophy"><VisionSection /></section>
           <section id="contact" aria-label="Contact and Collaboration"><ContactSection /></section>
         </main>
         <HolographicFooter />

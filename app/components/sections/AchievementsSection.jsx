@@ -1,204 +1,130 @@
 'use client';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { useRef } from 'react';
 
 const international = [
-  { medal: 'Silver', event: 'IPITEx 2024', loc: 'Thailand', color: '#c0c0c0' },
-  { medal: 'Silver', event: 'Malaysia Technology Expo 2025', loc: 'Malaysia', color: '#c0c0c0' },
-  { medal: 'Gold', event: 'I2ASPO 2025', loc: 'International', color: '#ffd700' },
+  { medal: 'Gold', event: 'I2ASPO 2025', loc: 'International', color: '#ffd700', icon: '🥇', size: 'md:col-span-2' },
+  { medal: 'Silver', event: 'IPITEx 2024', loc: 'Thailand', color: '#c0c0c0', icon: '🥈', size: 'md:col-span-1' },
+  { medal: 'Silver', event: 'MTE 2025', loc: 'Malaysia', color: '#c0c0c0', icon: '🥈', size: 'md:col-span-1' },
 ];
 
 const national = [
-  { medal: 'Gold', event: 'Olimpiade Siswa Jenius' },
-  { medal: 'Gold', event: 'Olimpiade Prestasi Gemilang' },
-  { medal: 'Participant', event: 'OPSI (Olimpiade Penelitian Siswa Indonesia)' },
-  { medal: 'Gold', event: 'Kompetisi Pelajar Berprestasi Indonesia' },
-  { medal: 'Gold', event: 'Olimpiade Siswa Pintar' },
-  { medal: 'Gold', event: 'Best National Student Olympiad' },
+  'Olimpiade Siswa Jenius (Gold)',
+  'Olimpiade Prestasi Gemilang (Gold)',
+  'OPSI Participant (Research)',
+  'Best National Student Olympiad',
+  'Olimpiade Siswa Pintar (Gold)',
+  'Kompetisi Pelajar Berprestasi',
 ];
 
-function MedalCard({ item, index }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, rotateY: -20 }}
-      whileInView={{ opacity: 1, y: 0, rotateY: 0 }}
-      viewport={{ once: true, margin: '-30px' }}
-      transition={{ duration: 0.6, delay: index * 0.12 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="relative group"
-      style={{ perspective: '1000px' }}
-    >
-      <div
-        className="glass rounded-2xl p-6 text-center transition-all duration-300 relative overflow-hidden"
-        style={{
-          transform: hovered ? 'rotateY(5deg) scale(1.03)' : 'rotateY(0) scale(1)',
-          boxShadow: hovered ? `0 0 40px ${item.color}30, 0 0 80px ${item.color}10` : 'none',
-        }}
-      >
-        {/* Rotating medal icon */}
-        <motion.div
-          animate={{ rotateY: hovered ? 360 : 0 }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
-          className="w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center relative"
-          style={{
-            background: `radial-gradient(circle, ${item.color}30, transparent)`,
-            border: `2px solid ${item.color}40`,
-          }}
-        >
-          <div className="text-3xl font-bold" style={{ color: item.color }}>
-            {item.medal === 'Gold' ? '🥇' : item.medal === 'Silver' ? '🥈' : '🏅'}
-          </div>
-        </motion.div>
-
-        <span
-          className="text-xs font-bold tracking-widest uppercase"
-          style={{ color: item.color }}
-        >
-          {item.medal} Medal
-        </span>
-        <h3 className="font-display text-lg font-semibold mt-2 text-white">{item.event}</h3>
-        {item.loc && <p className="text-muted text-sm mt-1">📍 {item.loc}</p>}
-
-        {/* Bottom glow */}
-        <div
-          className="absolute bottom-0 left-0 right-0 h-1 transition-opacity duration-300"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${item.color}, transparent)`,
-            opacity: hovered ? 1 : 0.3,
-          }}
-        />
-      </div>
-    </motion.div>
-  );
-}
-
-function NationalPanel({ item, index }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, margin: '-20px' }}
-      transition={{ duration: 0.4, delay: index * 0.06 }}
-      className="holographic rounded-xl p-4 flex items-center gap-4 hover:bg-white/[0.04] transition-colors group"
-    >
-      <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-gold/10 border border-gold/20 shrink-0">
-        <span className="text-lg">{item.medal === 'Gold' ? '🥇' : item.medal === 'Participant' ? '🏅' : '🥈'}</span>
-      </div>
-      <div>
-        <p className="font-semibold text-white/90 text-sm group-hover:text-white transition">{item.event}</p>
-        <p className="text-xs text-muted">{item.medal} Medal</p>
-      </div>
-    </motion.div>
-  );
-}
-
 export default function AchievementsSection() {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
   return (
-    <section id="achievements" ref={containerRef} className="relative py-16 md:py-32 px-4 overflow-hidden">
-      {/* Parallax Background Elements */}
-      <motion.div 
-        style={{ y: y1 }}
-        className="absolute top-1/4 -left-20 w-80 h-80 rounded-full bg-neon/5 blur-[100px] pointer-events-none" 
-      />
-      <motion.div 
-        style={{ y: y2 }}
-        className="absolute bottom-1/4 -right-20 w-80 h-80 rounded-full bg-violet/5 blur-[100px] pointer-events-none" 
-      />
-
-      <div className="max-w-6xl mx-auto relative z-10">
-        {/* International */}
+    <section id="achievements" className="relative py-24 md:py-48 w-full max-w-7xl mx-auto px-6 md:px-12">
+      
+      <div className="mb-16 md:mb-24">
         <motion.div
-          style={{ opacity }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
+           initial={{ opacity: 0, y: 20 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           className="flex flex-col md:flex-row md:items-end justify-between gap-6"
         >
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Achievements</span>
-          </h2>
-          <p className="text-muted">Awards and recognitions from international and national competitions.</p>
+          <div>
+            <span className="font-mono text-[9px] uppercase tracking-[0.6em] text-violet-400 block mb-6">Credential_Registry</span>
+            <h2 className="font-display text-5xl md:text-8xl font-bold tracking-tighter text-white">
+               AWARDS<span className="text-violet-500 text-3xl">.</span>
+            </h2>
+          </div>
+          <p className="text-white/40 max-w-xs text-sm md:text-lg leading-relaxed font-medium">
+            Recognitions for excellence in scientific research and academic competitions.
+          </p>
         </motion.div>
+      </div>
 
-        {/* International medals - large rotating cards */}
-        <div className="mb-16">
-          <motion.h3
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+      {/* Bento Grid: Achievements */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        
+        {/* International Highlights */}
+        {international.map((item, i) => (
+          <motion.div
+            key={item.event}
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="font-display text-xl font-semibold text-neon mb-6 flex items-center gap-2"
+            transition={{ duration: 0.5, delay: i * 0.1 }}
+            className={`${item.size} group relative overflow-hidden rounded-3xl border border-white/5 bg-white/[0.02] p-8 md:p-10 flex flex-col justify-between hover:bg-white/[0.04] transition-all`}
           >
-            <span className="w-8 h-px bg-neon/40" />
-            International Achievements
-          </motion.h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {international.map((item, i) => (
-              <MedalCard key={item.event} item={item} index={i} />
-            ))}
-          </div>
-        </div>
-
-        {/* National achievements - glowing wall panels */}
-        <div className="mb-16">
-          <motion.h3
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-display text-xl font-semibold text-violet mb-6 flex items-center gap-2"
-          >
-            <span className="w-8 h-px bg-violet/40" />
-            National Achievements
-          </motion.h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {national.map((item, i) => (
-              <NationalPanel key={item.event} item={item} index={i} />
-            ))}
-          </div>
-        </div>
-
-        {/* Regional - spotlight */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative"
-        >
-          <motion.h3
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="font-display text-xl font-semibold text-gold mb-6 flex items-center gap-2"
-          >
-            <span className="w-8 h-px bg-gold/40" />
-            Regional Achievement
-          </motion.h3>
-          <div className="glass rounded-2xl p-8 text-center relative overflow-hidden">
-            {/* Spotlight effect */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-40 h-40 rounded-full bg-gold/10 blur-3xl" />
             <div className="relative z-10">
-              <div className="text-4xl mb-4">🏆</div>
-              <h4 className="font-display text-2xl font-bold text-gold mb-2">10th Place</h4>
-              <p className="text-white font-semibold">National Science Olympiad (OSN)</p>
-              <p className="text-muted text-sm mt-1">Regional Level Achievement</p>
+              <div className="text-4xl mb-6 opacity-40 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500 origin-left">
+                {item.icon}
+              </div>
+              <span className="text-[10px] font-mono text-violet-400 uppercase tracking-[0.3em] font-bold mb-2 block">
+                {item.medal} Medal
+              </span>
+              <h3 className="font-display text-xl md:text-3xl font-bold text-white/90 leading-tight">
+                {item.event}
+              </h3>
+            </div>
+            
+            <div className="mt-8 flex items-center justify-between">
+               <span className="text-xs text-white/30 font-medium tracking-wider">📍 {item.loc}</span>
+               <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white/40">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+               </div>
+            </div>
+            
+            {/* Background Accent */}
+            <div className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full blur-[80px] opacity-10 group-hover:opacity-20 transition-opacity" style={{ backgroundColor: item.color }} />
+          </motion.div>
+        ))}
+
+        {/* National Achievements List Bento */}
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.95 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true }}
+           className="md:col-span-2 md:row-span-1 glass rounded-3xl p-8 md:p-10 border border-white/5 flex flex-col justify-between"
+        >
+          <div>
+            <h4 className="font-display text-lg font-bold text-white/80 mb-6 flex items-center gap-4">
+               National Honor_Roll
+               <div className="h-px flex-grow bg-white/10" />
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+               {national.map((item, i) => (
+                 <div key={i} className="flex items-center gap-3 group">
+                    <div className="w-1.5 h-1.5 rounded-full bg-violet-500/50 group-hover:bg-violet-400 transition-colors" />
+                    <span className="text-xs text-white/50 group-hover:text-white/80 transition-colors">{item}</span>
+                 </div>
+               ))}
             </div>
           </div>
         </motion.div>
+
+        {/* Regional Spotlight Bento */}
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.95 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true }}
+           className="md:col-span-2 glass rounded-3xl p-8 md:p-10 border border-white/5 flex items-center gap-8 group"
+        >
+           <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-500">
+              🏆
+           </div>
+           <div>
+              <span className="font-mono text-[9px] text-white/30 uppercase tracking-[0.4em] mb-2 block">Regional_Special_Award</span>
+              <h4 className="text-white font-display text-xl font-bold mb-1">National Science Olympiad (OSN)</h4>
+              <p className="text-white/40 text-sm font-medium">10th Place &bull; Highest Academic Distinction</p>
+           </div>
+        </motion.div>
+
       </div>
     </section>
   );
-}export const timeline = [
+}
+
+export const timeline = [
   {
     year: '2024',
     title: 'International Science Competition',
@@ -224,4 +150,3 @@ export default function AchievementsSection() {
     color: '#ff6b9d',
   },
 ];
-
