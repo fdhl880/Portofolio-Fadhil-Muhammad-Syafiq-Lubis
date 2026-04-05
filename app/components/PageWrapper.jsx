@@ -16,7 +16,6 @@ import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
-import CoreReactorSection from './sections/CoreReactorSection';
 import NeuralCore from './ui/NeuralCore';
 import SoundToggle from './ui/SoundToggle';
 import { PerformanceProvider } from '../context/PerformanceContext';
@@ -354,7 +353,6 @@ export default function PageWrapper() {
           <section id="nexus-globe" aria-label="Global Impact and Locations Map"><GlobeSection /></section>
           <section id="roadmap" aria-label="Growth and Future Roadmap"><RoadmapSection /></section>
           <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
-          <section id="reactor" aria-label="The Reactor Core"><CoreReactorSection /></section>
           <section id="projects" aria-label="Selected Projects and Ventures"><ProjectsSection /></section>
           <section id="vision" aria-label="Personal Vision and Philosophy"><VisionSection /></section>
           <section id="contact" aria-label="Contact and Collaboration"><ContactSection /></section>
