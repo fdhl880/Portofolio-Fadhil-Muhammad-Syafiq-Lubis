@@ -81,6 +81,9 @@ export const metadata = {
     ],
     apple: "/logo-initials.png",
   },
+};
+
+export const viewport = {
   themeColor: "#050510",
 };
 
