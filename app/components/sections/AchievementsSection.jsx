@@ -4,19 +4,53 @@ import { useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial, Float, PerspectiveCamera } from '@react-three/drei';
 
-function CelestialOrb({ color, type = 'planet' }) {
+function OrbScene({ color, type }) {
   const meshRef = useRef();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
   
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.5;
     }
   });
+
+  return (
+    <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+      <mesh ref={meshRef}>
+        <sphereGeometry args={[0.8, 64, 64]} />
+        {type === 'gas' ? (
+          <MeshDistortMaterial
+            color={color}
+            speed={2}
+            distort={0.4}
+            radius={0.8}
+            metalness={0.2}
+            roughness={0.1}
+            emissive={color}
+            emissiveIntensity={0.2}
+          />
+        ) : (
+          <meshPhysicalMaterial
+            color={color}
+            metalness={0.8}
+            roughness={0.2}
+            clearcoat={1}
+            clearcoatRoughness={0.1}
+            reflectivity={1}
+            emissive={color}
+            emissiveIntensity={0.3}
+          />
+        )}
+      </mesh>
+    </Float>
+  );
+}
+
+function CelestialOrb({ color, type = 'planet' }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   if (!mounted) return <div className="w-full h-full bg-white/[0.02] rounded-full animate-pulse transition-opacity" />;
 
@@ -25,35 +59,7 @@ function CelestialOrb({ color, type = 'planet' }) {
       <ambientLight intensity={0.5} />
       <pointLight position={[5, 5, 5]} intensity={2} color={color} />
       <spotLight position={[-5, 5, 5]} angle={0.15} penumbra={1} intensity={1} color="#ffffff" />
-      
-      <Float speed={2} rotationIntensity={1} floatIntensity={1}>
-        <mesh ref={meshRef}>
-          <sphereGeometry args={[0.8, 64, 64]} />
-          {type === 'gas' ? (
-            <MeshDistortMaterial
-              color={color}
-              speed={2}
-              distort={0.4}
-              radius={0.8}
-              metalness={0.2}
-              roughness={0.1}
-              emissive={color}
-              emissiveIntensity={0.2}
-            />
-          ) : (
-            <meshPhysicalMaterial
-              color={color}
-              metalness={0.8}
-              roughness={0.2}
-              clearcoat={1}
-              clearcoatRoughness={0.1}
-              reflectivity={1}
-              emissive={color}
-              emissiveIntensity={0.3}
-            />
-          )}
-        </mesh>
-      </Float>
+      <OrbScene color={color} type={type} />
     </Canvas>
   );
 }
