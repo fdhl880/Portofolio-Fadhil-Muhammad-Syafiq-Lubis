@@ -57,6 +57,7 @@ function WarpEngine() {
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       z: Math.random() * 2 + 0.5,
+      z: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
     
