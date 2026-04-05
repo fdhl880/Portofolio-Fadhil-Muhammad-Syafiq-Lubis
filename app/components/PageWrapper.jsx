@@ -26,6 +26,7 @@ import AudioVisualizer from './ui/AudioVisualizer';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 import CinematicRoom from './three/CinematicRoom';
+import FluidCursor from './ui/FluidCursor';
 
 
 // Global Scanline Effect
@@ -330,6 +331,7 @@ export default function PageWrapper() {
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
         <CinematicRoom />
+        <FluidCursor />
         <WarpEngine />
         <AudioVisualizer />
         <Scanline />

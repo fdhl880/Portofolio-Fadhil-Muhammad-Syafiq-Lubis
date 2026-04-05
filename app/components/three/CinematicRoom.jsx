@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera, Stars } from '@react-three/drei';
+import { PerspectiveCamera, Stars, MeshTransmissionMaterial } from '@react-three/drei';
 import { useScroll } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -17,7 +17,7 @@ const asteroidData = Array.from({ length: asteroidCount }, () => ({
   pos: [
     (Math.random() - 0.5) * 150, 
     (Math.random() - 0.5) * 150, 
-    (Math.random() - 1) * 250 // Distributed deep into Z
+    (Math.random() - 1) * 250
   ],
   rot: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
   scale: Math.random() * 2 + 0.5,
@@ -27,17 +27,28 @@ const asteroidData = Array.from({ length: asteroidCount }, () => ({
 function SpaceScene({ scrollYProgress }) {
   const cameraRef = useRef();
   const asteroidRef = useRef();
+  const lensRef = useRef();
+  const mouse = useRef({ x: 0, y: 0 });
   const [warpSpeed, setWarpSpeed] = useState(false);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  // Listen for Warp Jump command from Navbar
+  // Listen for Warp Jump command from Navbar and Mouse for Black Hole
   useEffect(() => {
     const triggerWarp = () => {
        setWarpSpeed(true);
        setTimeout(() => setWarpSpeed(false), 800);
     };
+    const handleMouse = (e) => {
+      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+    
     window.addEventListener('WARP_JUMP', triggerWarp);
-    return () => window.removeEventListener('WARP_JUMP', triggerWarp);
+    window.addEventListener('mousemove', handleMouse);
+    return () => {
+      window.removeEventListener('WARP_JUMP', triggerWarp);
+      window.removeEventListener('mousemove', handleMouse);
+    };
   }, []);
 
   useFrame((state, delta) => {
@@ -54,11 +65,19 @@ function SpaceScene({ scrollYProgress }) {
     cameraRef.current.rotation.z = THREE.MathUtils.damp(cameraRef.current.rotation.z, targetRotZ, 4, delta);
     cameraRef.current.rotation.y = THREE.MathUtils.damp(cameraRef.current.rotation.y, targetRotY, 4, delta);
 
-    // Warp Jump stretch effect (FOV & Z-push)
+    // Warp Jump stretch effect
     const targetFov = warpSpeed ? 140 : 70;
     cameraRef.current.fov = THREE.MathUtils.damp(cameraRef.current.fov, targetFov, 10, delta);
-    if (warpSpeed) cameraRef.current.position.z -= 2; // Extra punch forward
+    if (warpSpeed) cameraRef.current.position.z -= 3;
     cameraRef.current.updateProjectionMatrix();
+
+    // Gravitational Lens logic (Follow mouse smoothly)
+    if (lensRef.current) {
+      lensRef.current.position.x = THREE.MathUtils.lerp(lensRef.current.position.x, mouse.current.x * 25, delta * 3);
+      lensRef.current.position.y = THREE.MathUtils.lerp(lensRef.current.position.y, mouse.current.y * 15, delta * 3);
+      // Keep it floating right in front of the moving camera
+      lensRef.current.position.z = cameraRef.current.position.z - 20;
+    }
 
     // Rotate Asteroids
     if (asteroidRef.current) {
@@ -77,9 +96,26 @@ function SpaceScene({ scrollYProgress }) {
 
   return (
     <>
-      <fog attach="fog" args={['#020208', 50, 200]} /> {/* Cosmic Nebula Depth */}
+      <fog attach="fog" args={['#020208', 30, 180]} />
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 0]} fov={70} />
       
+      {/* Gravitational Lens (Interstellar Black Hole Anomaly) */}
+      <mesh ref={lensRef}>
+        <sphereGeometry args={[4, 32, 32]} />
+        <MeshTransmissionMaterial 
+          backside 
+          samples={3} 
+          resolution={256}
+          thickness={15} 
+          chromaticAberration={2.5} 
+          anisotropy={0.5} 
+          distortion={1.5} 
+          distortionScale={0.3} 
+          temporalDistortion={0.05} 
+          color="#00f0ff"
+        />
+      </mesh>
+
       <ambientLight intensity={0.5} />
       
       {/* Exoplanets */}
