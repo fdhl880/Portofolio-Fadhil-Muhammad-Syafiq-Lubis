@@ -4,15 +4,25 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import GlitchText from '../ui/GlitchText';
 
+import ParallaxContainer from '../ui/ParallaxContainer';
+import MagneticButton from '../ui/MagneticButton';
+
 const HeroScene = dynamic(() => import('../three/HeroScene'), {
   ssr: false,
   loading: () => <div className="absolute inset-0 bg-dark" />,
 });
 
 export default function HeroSection({ isMobile }) {
+  // Fire warp jump event for testing or nav
+  const handleWarp = (targetId) => {
+    window.dispatchEvent(new Event('WARP_JUMP'));
+    setTimeout(() => {
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+    }, 400); // Wait for warp stretch to peak
+  };
+
   return (
     <section id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* 3D Background */}
       {/* 3D Background */}
       <HeroScene />
 
@@ -25,8 +35,8 @@ export default function HeroSection({ isMobile }) {
         }}
       />
 
-      {/* Content overlay */}
-      <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+      {/* Holographic Parallax Content Overlay */}
+      <ParallaxContainer className="relative z-10 text-center flex flex-col items-center justify-center px-4 max-w-4xl mx-auto" depth={25}>
         {/* Photo card */}
         <motion.div
           initial={{ opacity: 0, y: 40, rotateY: -15 }}
@@ -54,7 +64,7 @@ export default function HeroSection({ isMobile }) {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="font-display text-[1.75rem] sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
         >
-          <span className="text-gradient">
+          <span className="text-gradient hover:drop-shadow-[0_0_15px_#00f0ff] transition-all">
             <GlitchText text="Fadhil Muhammad Syafiq Lubis" />
           </span>
         </motion.h1>
@@ -63,7 +73,7 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="text-xl md:text-2xl text-muted mb-2 font-display"
+          className="text-xl md:text-2xl text-muted mb-2 font-display pointer-events-none"
         >
           <GlitchText text="Student Innovator" />
         </motion.div>
@@ -72,7 +82,7 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.1 }}
-          className="text-[10px] md:text-base text-muted/70 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-8"
+          className="text-[10px] md:text-base text-muted/70 tracking-[0.2em] md:tracking-[0.3em] uppercase mb-8 pointer-events-none"
         >
           Engineering • Finance • Entrepreneurship
         </motion.p>
@@ -81,22 +91,22 @@ export default function HeroSection({ isMobile }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.3 }}
-          className="flex flex-wrap items-center justify-center gap-4"
+          className="flex flex-wrap items-center justify-center gap-4 relative z-50 pointer-events-auto"
         >
-          <button
-            onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-neon/20 to-violet/20 border border-neon/30 text-neon font-semibold hover:from-neon/30 hover:to-violet/30 transition-all duration-300 cursor-pointer hover:scale-105"
+          <MagneticButton
+            onClick={() => handleWarp('projects')}
+            className="w-full sm:w-auto px-8 py-3 rounded-xl bg-gradient-to-r from-neon/20 to-violet/20 border border-neon/30 text-neon font-semibold hover:from-neon/30 hover:to-violet/30 transition-colors shadow-lg shadow-neon/10"
           >
-            View Portfolio
-          </button>
-          <button
-            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="w-full sm:w-auto px-8 py-3 rounded-xl glass text-white font-semibold hover:bg-white/10 transition-all duration-300 cursor-pointer hover:scale-105"
+            Initiate Warp
+          </MagneticButton>
+          <MagneticButton
+            onClick={() => handleWarp('contact')}
+            className="w-full sm:w-auto px-8 py-3 rounded-xl glass text-white font-semibold hover:bg-white/10 transition-colors shadow-lg"
           >
-            Contact Me
-          </button>
+            Contact
+          </MagneticButton>
         </motion.div>
-      </div>
+      </ParallaxContainer>
 
       {/* System Status Indicator */}
       <motion.div
