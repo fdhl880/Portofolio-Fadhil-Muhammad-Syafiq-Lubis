@@ -152,109 +152,136 @@ function HologramAsset({ type, color }) {
   );
 }
 
+import { useMotionValue, useSpring as framerUseSpring, useTransform as framerUseTransform } from 'framer-motion';
+
 function ProjectCard({ project, index, onClick }) {
   const cardRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [hovered, setHovered] = useState(false);
+  
+  // High-performance Framer Motion values for 3D tilt
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  
+  const springConfig = { damping: 20, stiffness: 150, mass: 0.5 };
+  const rotateX = framerUseSpring(framerUseTransform(mouseY, [0, 1], [15, -15]), springConfig);
+  const rotateY = framerUseSpring(framerUseTransform(mouseX, [0, 1], [-15, 15]), springConfig);
+  
+  // Glare position
+  const glareX = framerUseSpring(framerUseTransform(mouseX, [0, 1], [100, 0]), springConfig);
+  const glareY = framerUseSpring(framerUseTransform(mouseY, [0, 1], [100, 0]), springConfig);
+  const glareOpacity = framerUseSpring(framerUseTransform(mouseX, [0, 0.5, 1], [0.1, 0.5, 0.1]), springConfig);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: y * -10, y: x * 10 });
+    mouseX.set((e.clientX - rect.left) / rect.width);
+    mouseY.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const handleMouseLeave = () => {
+    setHovered(false);
+    mouseX.set(0.5);
+    mouseY.set(0.5);
   };
 
   return (
     <motion.div
       ref={cardRef}
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-30px' }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true, margin: '-50px' }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+      onMouseLeave={handleMouseLeave}
       onClick={() => onClick(project)}
-      className="group cursor-pointer"
-      style={{ perspective: '1000px' }}
+      className="group cursor-pointer perspective-1000 w-full"
     >
-      <div
-        className="glass rounded-2xl p-6 md:p-8 h-full transition-all duration-200 relative overflow-hidden"
+      <motion.div
         style={{
-          transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-          boxShadow: hovered ? `0 10px 40px ${project.color}15, 0 0 60px ${project.color}08` : 'none',
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+          boxShadow: hovered ? `0 20px 40px ${project.color}30, 0 0 80px ${project.color}15` : '0 10px 30px rgba(0,0,0,0.5)',
         }}
+        className="glass rounded-2xl p-6 md:p-8 h-full transition-all duration-300 relative border border-white/5"
       >
+        {/* Iridescent Holographic Glare */}
+        <motion.div
+          className="absolute inset-0 pointer-events-none rounded-2xl z-50 overflow-hidden mix-blend-color-dodge opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: `radial-gradient(circle at calc(100% - ${glareX}%) calc(100% - ${glareY}%), rgba(255,255,255,0.8) 0%, ${project.color}80 20%, transparent 60%)`,
+            opacity: glareOpacity
+          }}
+        />
+
         {/* Top accent line */}
         <div
-          className="absolute top-0 left-0 right-0 h-px"
+          className="absolute top-0 left-0 right-0 h-[2px]"
           style={{ background: `linear-gradient(90deg, transparent, ${project.color}, transparent)` }}
         />
 
-        <div className="text-4xl mb-4">{project.icon}</div>
-        <h3
-          className="font-display text-xl font-bold mb-3 transition-colors"
-          style={{ color: hovered ? project.color : '#ffffff' }}
-        >
-          {project.title}
-        </h3>
-        <p className="text-muted text-sm leading-relaxed mb-4">{project.desc}</p>
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map(tag => (
-            <span
-              key={tag}
-              className="text-xs px-3 py-1 rounded-full border"
-              style={{
-                borderColor: `${project.color}30`,
-                color: `${project.color}cc`,
-                background: `${project.color}08`,
-              }}
-            >
-              {tag}
-            </span>
-          ))}
+        {/* 3D Popping Content wrapper */}
+        <div style={{ transform: 'translateZ(30px)' }} className="relative z-20 pointer-events-none">
+          <div className="text-5xl mb-6 shadow-sm">{project.icon}</div>
+          <h3
+            className="font-display text-2xl font-bold mb-3 transition-colors drop-shadow-md"
+            style={{ color: hovered ? project.color : '#ffffff' }}
+          >
+            {project.title}
+          </h3>
+          <p className="text-muted/90 leading-relaxed mb-6 font-medium text-sm md:text-base">
+            {project.desc}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map(tag => (
+              <span
+                key={tag}
+                className="text-[10px] sm:text-xs px-3 py-1.5 rounded-full border tracking-wider font-semibold backdrop-blur-sm"
+                style={{
+                  borderColor: `${project.color}40`,
+                  color: `${hovered ? '#ffffff' : project.color}`,
+                  background: `${project.color}${hovered ? '40' : '10'}`,
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
         </div>
 
-        {/* Technical Reveal Overlay */}
+        {/* Cyberpunk Technical Reveal Overlay Background */}
         <AnimatePresence>
           {hovered && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 pointer-events-none z-20 flex flex-col justify-end p-6 bg-dark/40 backdrop-blur-[2px]"
+              className="absolute inset-0 pointer-events-none z-10 flex flex-col justify-end p-6 bg-dark/60 backdrop-blur-[4px] rounded-2xl"
+              style={{ transform: 'translateZ(-10px)' }}
             >
-              <div className="absolute inset-0 border border-cyan-500/30 m-2 rounded-xl pointer-events-none" />
+              <div className="absolute inset-0 border border-white/10 m-2 rounded-xl pointer-events-none" style={{ borderColor: `${project.color}30` }} />
+              
               {/* Scanning line */}
               <motion.div 
-                animate={{ y: [0, 200, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: 'linear' }}
-                className="absolute top-0 left-2 right-2 h-px bg-cyan-400/30 blur-sm"
+                animate={{ y: [0, 300, 0] }}
+                transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+                className="absolute top-0 left-0 right-0 h-1 blur-sm"
+                style={{ background: `linear-gradient(90deg, transparent, ${project.color}, transparent)` }}
               />
               
-              <div className="relative font-mono text-[8px] text-cyan-400/80 leading-tight space-y-1">
-                <div>{"// OBJECT_ANALYSIS: COMPLETED"}</div>
+              <div className="relative font-mono text-[9px] leading-tight space-y-1" style={{ color: `${project.color}cc` }}>
+                <div>{"// HOLOGRAPHIC_LINK: ESTABLISHED"}</div>
                 <div>{"// DATA_STREAM: ACTIVE"}</div>
                 <div>{"// SECTOR_READ: 0x"}{index}{"F4A"}</div>
-                <div className="text-[10px] text-white font-bold tracking-widest mt-2">
-                  {"PERMISSION: GRANTED_ >"}
+                <div className="text-xs text-white font-bold tracking-[0.3em] mt-3">
+                  {"[ CLICK_TO_INITIATE ]"}
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* Hover glow overlay */}
-        {hovered && (
-          <div
-            className="absolute inset-0 pointer-events-none rounded-2xl z-10"
-            style={{
-              background: `radial-gradient(circle at 50% 0%, ${project.color}10, transparent 60%)`,
-            }}
-          />
-        )}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
