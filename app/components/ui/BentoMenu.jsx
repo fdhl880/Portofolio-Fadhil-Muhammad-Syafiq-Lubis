@@ -11,17 +11,8 @@ const navLinks = [
   { name: 'Connect', target: 'contact', icon: '✉️' },
 ];
 
-const quotes = [
-  { text: "The cosmos is within us. We are made of star-stuff. We are a way for the cosmos to know itself.", author: "Carl Sagan" },
-  { text: "The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.", author: "Stephen Hawking" },
-  { text: "The people who are crazy enough to think they can change the world are the ones who do.", author: "Steve Jobs" },
-  { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-  { text: "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.", author: "Albert Einstein" },
-];
-
 export default function BentoMenu({ isOpen, onClose }) {
   const [time, setTime] = useState(new Date().toLocaleTimeString());
-  const [quoteIndex, setQuoteIndex] = useState(0);
   const { playPip } = useSound();
 
   useEffect(() => {
@@ -35,11 +26,6 @@ export default function BentoMenu({ isOpen, onClose }) {
     try { playPip(1320, 0.05, 0.03); } catch(e) {}
     onClose();
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const nextQuote = () => {
-    try { playPip(880, 0.1, 0.05); } catch(e) {}
-    setQuoteIndex((prev) => (prev + 1) % quotes.length);
   };
 
   return (
@@ -133,43 +119,6 @@ export default function BentoMenu({ isOpen, onClose }) {
                     className="w-1/4 h-full bg-cyan-400" 
                   />
                </div>
-            </motion.div>
-
-            {/* Quote / Mission (2x1) - Deep Space Redesign */}
-            <motion.div 
-               initial={{ opacity: 0, y: 30 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.6 }}
-               className="md:col-span-2 md:row-span-1 border border-cyan-500/30 bg-cyan-500/5 rounded-3xl p-10 flex flex-col justify-center relative overflow-hidden group"
-            >
-               <AnimatePresence mode="wait">
-                 <motion.div
-                    key={quoteIndex}
-                    initial={{ opacity: 0, filter: 'blur(10px)', x: 10 }}
-                    animate={{ opacity: 1, filter: 'blur(0px)', x: 0 }}
-                    exit={{ opacity: 0, filter: 'blur(10px)', x: -10 }}
-                    transition={{ duration: 0.5 }}
-                    className="relative z-10"
-                 >
-                    <div className="font-display text-xl md:text-2xl font-bold leading-tight italic text-cyan-100">
-                       &quot;{quotes[quoteIndex].text}&quot;
-                    </div>
-                    <div className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400/60">
-                       {`- ${quotes[quoteIndex].author} // Deep_Space_Core`}
-                    </div>
-                 </motion.div>
-               </AnimatePresence>
-
-               {/* Mechanical Switch Trigger */}
-               <button 
-                 onClick={nextQuote}
-                 className="absolute bottom-6 right-6 w-10 h-10 rounded-full border border-cyan-500/30 flex items-center justify-center hover:bg-cyan-500/20 hover:scale-110 active:scale-95 transition-all text-cyan-400 text-xs"
-               >
-                 ↺
-               </button>
-
-               {/* Glow Gradient */}
-               <div className="absolute top-[-20%] left-[-10%] w-40 h-40 bg-cyan-500/10 blur-[80px] rounded-full" />
             </motion.div>
 
           </div>

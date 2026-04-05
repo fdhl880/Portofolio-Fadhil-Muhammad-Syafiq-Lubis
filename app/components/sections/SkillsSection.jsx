@@ -1,6 +1,8 @@
 'use client';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { useSound } from '../../context/SoundContext';
 
 const skillGroups = [
   {
@@ -41,6 +43,14 @@ const skillGroups = [
   },
 ];
 
+const quotes = [
+  { text: "The cosmos is within us. We are made of star-stuff. We are a way for the cosmos to know itself.", author: "Carl Sagan" },
+  { text: "The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.", author: "Stephen Hawking" },
+  { text: "The people who are crazy enough to think they can change the world are the ones who do.", author: "Steve Jobs" },
+  { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+  { text: "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.", author: "Albert Einstein" },
+];
+
 function SkillBentoCard({ group, index }) {
   return (
     <motion.div
@@ -60,7 +70,7 @@ function SkillBentoCard({ group, index }) {
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-center justify-between mb-8">
            <div className="text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 origin-left">
-             {group.icon}
+              {group.icon}
            </div>
            <div className="text-[9px] font-mono text-white/20 uppercase tracking-[0.4em]">Lab_Module_{group.id}</div>
         </div>
@@ -94,6 +104,14 @@ function SkillBentoCard({ group, index }) {
 }
 
 export default function SkillsSection() {
+  const [quoteIndex, setQuoteIndex] = useState(0);
+  const { playPip } = useSound();
+
+  const nextQuote = () => {
+    try { playPip(880, 0.1, 0.05); } catch(e) {}
+    setQuoteIndex((prev) => (prev + 1) % quotes.length);
+  };
+
   return (
     <section id="skills" className="relative py-24 md:py-48 w-full max-w-7xl mx-auto px-6 md:px-12">
       
@@ -125,17 +143,43 @@ export default function SkillsSection() {
            <SkillBentoCard key={group.id} group={group} index={i} />
          ))}
 
-         {/* Meta Stat Tile */}
+         {/* Interactive Quote Bento Card */}
          <motion.div 
-           initial={{ opacity: 0 }}
-           whileInView={{ opacity: 1 }}
+           initial={{ opacity: 0, y: 30 }}
+           whileInView={{ opacity: 1, y: 0 }}
            viewport={{ once: true }}
-           className="md:col-span-2 border border-white/5 bg-[#0a0a1a] rounded-3xl p-10 flex flex-col items-center justify-center text-center space-y-4"
+           className="md:col-span-2 border border-cyan-500/20 bg-cyan-500/5 rounded-3xl p-10 flex flex-col justify-center relative overflow-hidden group min-h-[250px]"
          >
-            <div className="text-cyan-400 font-mono text-[9px] uppercase tracking-[0.4em]">Continuous_Optimization</div>
-            <div className="text-3xl md:text-5xl font-display font-bold text-white/90 leading-tight italic">
-               Never stop questioning.<br />Never stop building.
-            </div>
+            <div className="absolute top-8 left-10 font-mono text-[9px] text-cyan-400 uppercase tracking-[0.4em]">Core_Philosophy</div>
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                 key={quoteIndex}
+                 initial={{ opacity: 0, filter: 'blur(10px)', y: 10 }}
+                 whileInView={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+                 exit={{ opacity: 0, filter: 'blur(10px)', y: -10 }}
+                 transition={{ duration: 0.5 }}
+                 className="relative z-10 pr-12"
+              >
+                 <div className="font-display text-xl md:text-2xl font-bold leading-tight italic text-cyan-100">
+                    &quot;{quotes[quoteIndex].text}&quot;
+                 </div>
+                 <div className="mt-4 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400/60">
+                    {`- ${quotes[quoteIndex].author} // Nexus_Core`}
+                 </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Mechanical Switch Trigger */}
+            <button 
+              onClick={nextQuote}
+              className="absolute bottom-8 right-8 w-10 h-10 rounded-full border border-cyan-500/30 flex items-center justify-center hover:bg-cyan-500/20 hover:rotate-180 transition-all duration-500 text-cyan-400 text-xs"
+            >
+              ↺
+            </button>
+
+            {/* Atmospheric Glow */}
+            <div className="absolute top-[-20%] right-[-10%] w-40 h-40 bg-cyan-500/10 blur-[80px] rounded-full" />
          </motion.div>
       </div>
 
