@@ -273,9 +273,9 @@ export default function NeuralCore() {
 
       <button 
         onClick={toggleCore}
-        className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto"
+        className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto audio-reactive-scale"
       >
-        <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500" />
+        <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500 audio-reactive-glow" />
         <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
           <Canvas camera={{ position: [0, 0, 4] }}>
             <ambientLight intensity={0.5} />

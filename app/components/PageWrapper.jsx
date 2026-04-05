@@ -18,6 +18,7 @@ import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
+import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
 import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
@@ -313,6 +314,7 @@ export default function PageWrapper() {
 
   return (
     <PerformanceProvider>
+      <AudioReactor />
       <div className="noise-overlay" />
       <CustomCursor />
       <WarpPortal />

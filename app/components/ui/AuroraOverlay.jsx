@@ -16,7 +16,7 @@ export default function AuroraOverlay() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-cyan-500/10 blur-[120px]"
+        className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-cyan-500/10 blur-[120px] audio-reactive-scale audio-reactive-opacity"
       />
 
       {/* Violet Aurora */}
@@ -31,7 +31,7 @@ export default function AuroraOverlay() {
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-violet-600/10 blur-[140px]"
+        className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-violet-600/10 blur-[140px] audio-reactive-scale audio-reactive-opacity"
       />
 
       {/* Golden Highlight (Sunlight Leak) */}
@@ -44,7 +44,7 @@ export default function AuroraOverlay() {
           repeat: Infinity,
           ease: "linear"
         }}
-        className="absolute top-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-gold/5 blur-[160px]"
+        className="absolute top-[20%] right-[10%] w-[40%] h-[40%] rounded-full bg-gold/5 blur-[160px] audio-reactive-opacity"
       />
     </div>
   );
