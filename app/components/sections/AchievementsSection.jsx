@@ -1,17 +1,24 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial, Float, PerspectiveCamera } from '@react-three/drei';
 
 function CelestialOrb({ color, type = 'planet' }) {
   const meshRef = useRef();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.5;
     }
   });
+
+  if (!mounted) return <div className="w-full h-full bg-white/[0.02] rounded-full animate-pulse transition-opacity" />;
 
   return (
     <Canvas camera={{ position: [0, 0, 2] }} gl={{ alpha: true }}>
