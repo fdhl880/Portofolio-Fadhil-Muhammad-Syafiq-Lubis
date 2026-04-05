@@ -332,7 +332,7 @@ export default function PageWrapper() {
           y: [0, 5, -5, 5, -5, 0]
         } : {}}
         transition={{ duration: 0.5 }}
-        className="relative overflow-x-hidden min-h-screen font-sans" 
+        className="relative min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
         <CinematicRoom />
@@ -348,7 +348,7 @@ export default function PageWrapper() {
         <SoundToggle />
         <NeuralCore />
         
-        <main className="relative z-10 overflow-x-hidden">
+        <main className="relative z-10">
           <motion.section 
             initial={{ opacity: 0, clipPath: 'inset(10% 0 10% 0)' }}
             whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}

@@ -1,150 +1,150 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useRef } from 'react';
-import GlitchText from '../ui/GlitchText';
-import { Canvas } from '@react-three/fiber';
-import { Float, MeshDistortMaterial } from '@react-three/drei';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 const projects = [
   {
     id: 1,
     title: 'IPITEx Gold Medalist',
-    desc: 'Scientific research and innovation at Thailand International Expo.',
-    icon: '🥇',
-    color: '#00f0ff',
-    tags: ['Research', 'Science'],
-    size: 'col-span-2 row-span-2', // Large highlight
+    subtitle: 'INTERNATIONAL INNOVATION',
+    desc: 'Scientific research and award-winning innovation presented at the Thailand International Expo. Recognized for pioneering sustainable technology in front of global delegates.',
+    number: '01',
+    color: 'from-cyan-500/20 to-transparent',
+    borderColor: 'border-cyan-500/30',
+    tags: ['Research', 'Global', 'Science'],
   },
   {
     id: 2,
     title: 'Neural Strategy',
-    desc: 'Market analysis models & trading strategies.',
-    icon: '📈',
-    color: '#8b5cf6',
-    tags: ['Finance', 'AI'],
-    size: 'col-span-2 row-span-1', // Wide
+    subtitle: 'AI FINANCIAL MODELING',
+    desc: 'Advanced market analysis models and algorithmic trading strategies bridging the gap between machine learning and decentralized finance networks.',
+    number: '02',
+    color: 'from-violet-500/20 to-transparent',
+    borderColor: 'border-violet-500/30',
+    tags: ['Finance', 'AI', 'Quant'],
   },
   {
     id: 3,
     title: 'Engineering Hub',
-    desc: 'Advanced technical solutions & robotics.',
-    icon: '⚙️',
-    color: '#ffd700',
-    tags: ['Tech', 'Robots'],
-    size: 'col-span-1 row-span-1', // Small
+    subtitle: 'HARDWARE & ROBOTICS',
+    desc: 'Cutting-edge technical solutions and physical robotics infrastructure pushing the boundaries of mechanical design and automation efficiency.',
+    number: '03',
+    color: 'from-gold/20 to-transparent',
+    borderColor: 'border-gold/30',
+    tags: ['Hardware', 'Robotics', 'Systems'],
   },
   {
     id: 4,
     title: 'Venture Lab',
-    desc: 'Start-up incubation & business modeling.',
-    icon: '💡',
-    color: '#ff6b9d',
-    tags: ['Startup', 'Brand'],
-    size: 'col-span-1 row-span-1', // Small
+    subtitle: 'STARTUP INCUBATION',
+    desc: 'Business modeling and startup incubation focusing on high-impact scalable technology solutions and disruptive brand identities.',
+    number: '04',
+    color: 'from-rose-500/20 to-transparent',
+    borderColor: 'border-rose-500/30',
+    tags: ['Startup', 'Business', 'Growth'],
   },
 ];
 
-function ProjectBentoCard({ project, index }) {
+const HorizontalCard = ({ project }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -5 }}
-      className={`${project.size} relative group cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a1a]/40 backdrop-blur-3xl p-8 flex flex-col justify-between shadow-2xl`}
-    >
-      {/* Subtle Background Glow */}
-      <div 
-        className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[100px] opacity-0 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none"
-        style={{ backgroundColor: project.color }}
-      />
-      
-      {/* Content */}
-      <div className="relative z-10">
-        <div className="text-4xl md:text-5xl mb-6 grayscale group-hover:grayscale-0 transition-all duration-500 scale-100 group-hover:scale-110 origin-left">
-          {project.icon}
+    <div className="w-[85vw] md:w-[60vw] h-[65vh] flex-shrink-0 flex items-center justify-center p-4">
+      <motion.div 
+        whileHover={{ scale: 0.98 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className={`w-full h-full relative rounded-3xl overflow-hidden glass border ${project.borderColor} group cursor-pointer`}
+      >
+        {/* Background Gradient & Image Placeholder */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-40 group-hover:opacity-100 transition-opacity duration-700`} />
+        
+        {/* Image / Textural Mask Effect */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
+        
+        <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-between">
+          <div className="flex justify-between items-start">
+            <span className="font-mono text-xs md:text-sm text-white/40 tracking-[0.3em] font-bold">
+              {project.subtitle}
+            </span>
+            <span className="font-display text-4xl md:text-6xl text-white/10 font-bold tracking-tighter">
+              {project.number}
+            </span>
+          </div>
+          
+          <div className="max-w-xl">
+            <motion.h3 
+              className="font-display text-4xl md:text-7xl font-bold text-white mb-6 tracking-tight leading-[0.9]"
+            >
+              {project.title}
+            </motion.h3>
+            <p className="text-white/60 text-lg md:text-xl font-body leading-relaxed mb-8">
+              {project.desc}
+            </p>
+            
+            <div className="flex gap-3">
+              {project.tags.map((tag, i) => (
+                <span key={i} className="px-4 py-2 rounded-full border border-white/10 bg-white/5 text-white/70 text-xs uppercase tracking-widest font-mono backdrop-blur-md">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
-        <h3 className="font-display text-xl md:text-2xl font-bold mb-3 tracking-tight text-white/90 group-hover:text-white">
-          {project.title}
-        </h3>
-        <p className="text-white/40 text-sm md:text-base leading-relaxed max-w-xs font-medium">
-          {project.desc}
-        </p>
-      </div>
 
-      <div className="relative z-10 flex flex-wrap gap-2 mt-auto pt-8">
-        {project.tags.map(tag => (
-          <span key={tag} className="text-[10px] uppercase tracking-widest font-bold px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-white/40 group-hover:text-white/70 transition-colors">
-            {tag}
-          </span>
-        ))}
-      </div>
-
-      {/* Decorative Corner Arrow */}
-      <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
-            <line x1="7" y1="17" x2="17" y2="7"></line>
-            <polyline points="7 7 17 7 17 17"></polyline>
+        {/* Hover Reveal Arrow */}
+        <div className="absolute bottom-16 right-16 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 bg-white/5 backdrop-blur-xl">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
-      </div>
-    </motion.div>
+        </div>
+      </motion.div>
+    </div>
   );
-}
+};
 
 export default function ProjectsSection() {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    // Start tracking when the top of the container hits the top of the viewport
+    // End when the bottom of the container hits the bottom of the viewport
+  });
+
+  // Transform scroll progress (0 to 1) to horizontal movement (0% to -X%)
+  // We have 4 cards + padding, we want to scroll left so the last card aligns right
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-65%"]);
+
   return (
-    <section id="projects" className="relative py-24 md:py-48 w-full max-w-7xl mx-auto px-6 md:px-12">
-      
-      <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <motion.div
-           initial={{ opacity: 0, x: -30 }}
-           whileInView={{ opacity: 1, x: 0 }}
-           viewport={{ once: true }}
-        >
-          <span className="font-mono text-[9px] uppercase tracking-[0.6em] text-cyan-400 block mb-6">Execution_Archive</span>
-          <h2 className="font-display text-5xl md:text-8xl font-bold tracking-tighter text-white">
-             PROJECTS<span className="text-cyan-400 text-3xl">.</span>
+    <section id="projects" ref={targetRef} className="relative h-[400vh] bg-[#050510]">
+      {/* Sticky container that stays in view while scrolling */}
+      <div className="sticky top-0 h-screen overflow-hidden flex items-center">
+        
+        {/* Section Header Fixed inside Sticky Container */}
+        <div className="absolute top-12 md:top-24 left-6 md:left-24 z-10">
+          <span className="font-mono text-cyan-400 text-[10px] uppercase tracking-[0.4em] mb-2 pl-1 block">
+             Selected Works // 2025
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tight text-white/90">
+             INNOVATION GALLERY
           </h2>
-        </motion.div>
-        
-        <motion.p 
-          initial={{ opacity: 0, x: 30 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          className="text-white/40 max-w-sm text-sm md:text-lg leading-relaxed font-medium"
-        >
-          Building scalable solutions where cutting-edge engineering meets strategic financial modeling.
-        </motion.p>
-      </div>
+        </div>
 
-      {/* Bento Grid Layout */}
-      <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-auto md:grid-rows-2 gap-6 h-full min-h-[700px]">
-        {projects.map((project, i) => (
-          <ProjectBentoCard key={project.id} project={project} index={i} />
-        ))}
-        
-        {/* Placeholder Bento Tile for Stats/Cta */}
+        {/* Horizontal Scroll Track */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="col-span-1 md:col-span-2 row-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-10 flex flex-col justify-center items-center text-center group"
+          style={{ x }} 
+          className="flex gap-4 md:gap-16 px-6 md:px-24 w-max mt-20"
         >
-           <div className="font-mono text-[10px] text-white/20 uppercase tracking-[0.4em] mb-4">Project_Metrics_2025</div>
-           <div className="flex gap-12">
-              <div className="flex flex-col">
-                 <span className="text-4xl md:text-5xl font-display font-bold text-white mb-2">12+</span>
-                 <span className="text-[10px] text-white/30 uppercase tracking-[0.2em]">Deployments</span>
-              </div>
-              <div className="flex flex-col">
-                 <span className="text-4xl md:text-5xl font-display font-bold text-cyan-400 mb-2">99%</span>
-                 <span className="text-[10px] text-white/30 uppercase tracking-[0.2em]">Uptime</span>
-              </div>
-           </div>
+          {projects.map((project) => (
+            <HorizontalCard key={project.id} project={project} />
+          ))}
+          
+          {/* End cap message */}
+          <div className="w-[30vw] flex items-center justify-center">
+            <p className="font-mono text-white/20 text-xs uppercase tracking-widest text-center whitespace-nowrap">
+              End of Gallery<br/>Scroll Down To Continue
+            </p>
+          </div>
         </motion.div>
       </div>
-
     </section>
   );
 }
