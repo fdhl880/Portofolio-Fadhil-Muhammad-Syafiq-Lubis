@@ -57,7 +57,11 @@ export default function GlobeSection() {
           viewport={{ once: true }}
           className="h-[300px] sm:h-[400px] md:h-[600px] w-full order-1 lg:order-2 cursor-grab active:cursor-grabbing"
         >
-          <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+          <Canvas 
+            camera={{ position: [0, 0, 5], fov: 50 }}
+            gl={{ antialias: false, powerPreference: "high-performance", alpha: true }}
+            dpr={[1, 1.5]} // Limit pixel ratio for performance
+          >
             <HolographicGlobe />
           </Canvas>
           

@@ -18,7 +18,7 @@ import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import SoundToggle from './ui/SoundToggle';
-import { PerformanceProvider } from '../context/PerformanceContext';
+import { PerformanceProvider, usePerformance } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
@@ -52,18 +52,19 @@ function WarpEngine() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
-    const stars = Array.from({ length: 150 }, () => ({
+    const stars = Array.from({ length: 80 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      z: Math.random() * 2 + 0.5,
       z: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
     
-    // Quantum Liquid Trail State
+    // Quantum Liquid Trail State (Optimized)
     const trails = [];
     const handleMouseMove = (e) => {
-      trails.push({ x: e.clientX, y: e.clientY, age: 0 });
+      if (trails.length < 15) {
+        trails.push({ x: e.clientX, y: e.clientY, age: 0 });
+      }
     };
 
     const resize = () => {
@@ -76,12 +77,10 @@ function WarpEngine() {
 
     const animate = () => {
       const v = smoothVelocity.get();
-      // Update Audio Pitch based on scroll speed
       setEngineDrive(v); 
 
-      // Clear canvas with trail effect for lightspeed blur
-      ctx.fillStyle = 'rgba(5, 5, 16, 0.3)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // Use clearRect for max performance
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       const speedFactor = v * 0.05;
       const stretchFactor = Math.abs(speedFactor) * 2;
@@ -89,16 +88,14 @@ function WarpEngine() {
       stars.forEach(s => {
         s.y -= speedFactor * s.z;
         
-        // Wrap around screen
         if (s.y < -100) s.y = canvas.height + 50;
         if (s.y > canvas.height + 100) s.y = -50;
 
         ctx.fillStyle = `rgba(0, 240, 255, ${s.opacity})`;
-        // Stretch star vertically based on scroll velocity
         ctx.fillRect(s.x, s.y, s.z, Math.max(s.z, stretchFactor));
       });
 
-      // Render Quantum Liquid Cursor Trail
+      // Render Quantum Liquid Cursor Trail (Optimized: No ShadowBlur)
       if (trails.length > 1) {
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -114,27 +111,20 @@ function WarpEngine() {
           pt.age += 1;
         }
         
-        // Final line to exact cursor
         const last = trails[trails.length - 1];
         ctx.quadraticCurveTo(last.x, last.y, last.x, last.y);
 
-        // Fluid gradient trail
         if (trails.length > 5) {
             const first = trails[0];
             const grad = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
             grad.addColorStop(0, 'rgba(0, 240, 255, 0)');
-            grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.3)');
-            grad.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
-            
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 20;
+            grad.addColorStop(1, 'rgba(0, 240, 255, 0.5)');
             ctx.strokeStyle = grad;
-            ctx.lineWidth = 12;
+            ctx.lineWidth = 4;
             ctx.stroke();
-            ctx.shadowBlur = 0; // reset
         }
 
-        while (trails.length && trails[0].age > 15) {
+        while (trails.length && trails[0].age > 10) {
           trails.shift();
         }
       }
@@ -151,7 +141,10 @@ function WarpEngine() {
     };
   }, [smoothVelocity, setEngineDrive]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen" />;
+  const { isCinematic } = usePerformance();
+  if (!isCinematic) return null;
+
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-40 mix-blend-screen" />;
 }
 
 // Sector Glitch Wipe Effect
@@ -256,8 +249,8 @@ export default function PageWrapper() {
   const introFinished = useRef(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!mounted) setMounted(true);
+  }, [mounted]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -330,7 +323,7 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        <CinematicRoom />
+        <PerformanceAwareRoom />
         <WarpEngine />
         <AudioVisualizer />
         <Scanline />
@@ -360,9 +353,14 @@ export default function PageWrapper() {
         </main>
         <HolographicFooter />
         <BackToTop />
-
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
     </PerformanceProvider>
   );
+}
+
+// Helper to handle context-aware rendering inside the provider
+function PerformanceAwareRoom() {
+  const { isCinematic } = usePerformance();
+  return isCinematic ? <CinematicRoom /> : null;
 }
