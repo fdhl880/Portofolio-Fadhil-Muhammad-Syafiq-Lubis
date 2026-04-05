@@ -25,6 +25,7 @@ import HolographicFooter from './ui/HolographicFooter';
 import AudioVisualizer from './ui/AudioVisualizer';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
+import CinematicRoom from './three/CinematicRoom';
 
 // Global Scanline Effect
 function Scanline() {
@@ -327,6 +328,7 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
+        <CinematicRoom />
         <WarpEngine />
         <AudioVisualizer />
         <Scanline />
