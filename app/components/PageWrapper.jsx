@@ -25,6 +25,7 @@ import HolographicFooter from './ui/HolographicFooter';
 import AudioVisualizer from './ui/AudioVisualizer';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
+import CinematicRoom from './three/CinematicRoom';
 
 
 // Global Scanline Effect
