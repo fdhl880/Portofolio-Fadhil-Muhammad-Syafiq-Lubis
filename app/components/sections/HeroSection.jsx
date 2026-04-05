@@ -91,7 +91,7 @@ export default function HeroSection({ isMobile }) {
                 transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className="font-display text-6xl md:text-[10rem] lg:text-[12rem] font-bold leading-[0.85] tracking-tighter text-white select-none whitespace-pre"
               >
-                FADHIL<br />MS<br /><span className="text-transparent border-t border-white/10" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.2)' }}>LBS</span>
+                FADHIL<br />MUHAMMAD<br /><span className="text-transparent border-t border-white/10" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.2)' }}>SYAFIQ</span>
               </motion.h1>
               
               <motion.div 
@@ -150,7 +150,7 @@ export default function HeroSection({ isMobile }) {
               <div className="relative z-10 w-full h-full overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000">
                  <Image 
                    src="/images/photo1.jpg" 
-                   alt="Fadhil MS Lbs" 
+                   alt="Fadhil Muhammad Syafiq Lubis" 
                    fill 
                    priority 
                    className="object-cover scale-110 group-hover:scale-100 transition-transform duration-[2s] ease-out"

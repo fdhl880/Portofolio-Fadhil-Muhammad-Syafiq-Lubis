@@ -38,7 +38,7 @@ export default function EducationSection() {
             <div className="relative w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 rounded-2xl overflow-hidden glass glow-purple animate-float">
               <Image
                 src="/images/photo2.jpg"
-                alt="Fadhil MS Lbs at Malaysia Technology Expo 2025"
+                alt="Fadhil at Malaysia Technology Expo 2025"
                 fill
                 sizes="(max-width: 768px) 224px, 256px"
                 className="object-cover"

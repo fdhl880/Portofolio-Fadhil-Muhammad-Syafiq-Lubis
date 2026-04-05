@@ -156,7 +156,7 @@ export default function NeuralCore() {
           res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
           document.documentElement.classList.toggle('nexus-breach');
         }
-        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MS LBS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
+        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
         else {
           try {
             // Map internal history to API format (sys -> model)

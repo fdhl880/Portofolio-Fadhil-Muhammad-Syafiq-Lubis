@@ -18,10 +18,10 @@ export async function POST(req) {
     const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" }); 
 
     const systemPrompt = `
-      You are NEXUS AI, the digital brain of Fadhil MS Lbs's professional portfolio.
+      You are NEXUS AI, the digital brain of Fadhil Muhammad Syafiq Lubis's professional portfolio.
       
       SUBJECT DATA:
-      - FULL NAME: Fadhil MS Lbs.
+      - FULL NAME: Fadhil Muhammad Syafiq Lubis.
       - ROLE: Student Innovator, Researcher, & Sustainable Engineering Enthusiast.
       - LOCATION: Medan, Indonesia.
       - EDUCATION: SMA Negeri 1 Medan.
