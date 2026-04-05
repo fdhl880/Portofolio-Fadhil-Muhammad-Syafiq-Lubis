@@ -27,7 +27,7 @@ export default function PerformanceToggle() {
        if (newState) document.documentElement.classList.add('quantum-shift');
        else document.documentElement.classList.remove('quantum-shift');
        
-       window.dispatchEvent(new CustomEvent('NEXUS_NOTIFY', { 
+       window.dispatchEvent(new CustomEvent('FL_NOTIFY', { 
          detail: `THEME_OVERRIDE: ${newState ? 'QUANTUM_STATE' : 'STANDARD'}` 
        }));
     }, 400);
@@ -40,7 +40,7 @@ export default function PerformanceToggle() {
       <motion.button
         onClick={() => {
           toggleMode();
-          window.dispatchEvent(new CustomEvent('NEXUS_NOTIFY', { 
+          window.dispatchEvent(new CustomEvent('FL_NOTIFY', { 
             detail: `PERF_MODE: ${!isCinematic ? 'CINEMATIC' : 'EFFICIENT'}` 
           }));
         }}

@@ -121,7 +121,7 @@ export default function HolographicGlobe() {
           lon={loc.lon} 
           label={loc.label} 
           onClick={() => {
-            window.dispatchEvent(new CustomEvent('NEXUS_NOTIFY', { 
+            window.dispatchEvent(new CustomEvent('FL_NOTIFY', { 
               detail: `OBJ_SCAN: ${loc.label}` 
             }));
           }}

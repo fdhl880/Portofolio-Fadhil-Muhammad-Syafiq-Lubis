@@ -100,7 +100,7 @@ function CoreModel() {
 export default function NeuralCore() {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([
-    { role: 'sys', text: 'NEXUS_CORE_v4.0.1_ENCRYPTED' },
+    { role: 'sys', text: 'FL_CORE_v4.0.1_ENCRYPTED' },
     { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_SECURED' }
   ]);
   const [input, setInput] = useState('');
@@ -151,17 +151,17 @@ export default function NeuralCore() {
         let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
         
         if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear. OR: Engage in natural linguistic exchange.';
-        else if (cmd === '/status') res = 'NEXUS_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
+        else if (cmd === '/status') res = 'FL_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
         else if (cmd === '/override') {
           res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
-          document.documentElement.classList.toggle('nexus-breach');
+          document.documentElement.classList.toggle('fl-breach');
         }
         else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
         else {
           try {
             // Map internal history to API format (sys -> model)
             const chatHistory = history
-              .filter(h => h.role !== 'sys' || h.text !== 'NEXUS_CORE_v4.0.1_ENCRYPTED')
+              .filter(h => h.role !== 'sys' || h.text !== 'FL_CORE_v4.0.1_ENCRYPTED')
               .map(h => ({ 
                 role: h.role === 'sys' ? 'model' : 'user', 
                 text: h.text 
@@ -173,10 +173,10 @@ export default function NeuralCore() {
               body: JSON.stringify({ message: userText, history: chatHistory }),
             });
             const data = await response.json();
-            res = data.text || data.error || 'NEXUS_SYSTEM_LINK_FAILURE';
+            res = data.text || data.error || 'FL_SYSTEM_LINK_FAILURE';
           } catch (error) {
-            console.error("Nexus AI Error:", error);
-            res = 'NEXUS_CORE_TIMEOUT: RECONNECT_PROTOCOL_REQUIRED.';
+            console.error("FL AI Error:", error);
+            res = 'FL_CORE_TIMEOUT: RECONNECT_PROTOCOL_REQUIRED.';
           }
         }
 
@@ -201,7 +201,7 @@ export default function NeuralCore() {
             <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex justify-between items-center relative z-10">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-                <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-bold">Nexus_Console_v4_CONNECTED</span>
+                <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-bold">FL_Console_v4_CONNECTED</span>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}
@@ -298,7 +298,7 @@ export default function NeuralCore() {
         
         <div className="absolute top-0 right-0 flex items-center gap-2 glass px-2 py-0.5 rounded-full border-cyan-500/20">
           <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-pulse shadow-[0_0_8px_#00f0ff]" />
-          <span className="text-white text-[8px] font-black uppercase tracking-tighter">Nexus_01</span>
+          <span className="text-white text-[8px] font-black uppercase tracking-tighter">FL_01</span>
         </div>
       </button>
 

@@ -145,7 +145,7 @@ body {
 ------------------------------------- */
 
 /* Task 10: Nexus Breach Protocol (Emergency Red) */
-html.nexus-breach {
+html.fl-breach {
   --color-neon: #ff0f4a;
   --color-dark: #120002;
   --color-dark-2: #1a0004;
@@ -154,7 +154,7 @@ html.nexus-breach {
   --color-gold: #ff0000;
   --color-rose: #ff3333;
 }
-html.nexus-breach body {
+html.fl-breach body {
   background: var(--color-dark);
 }
 

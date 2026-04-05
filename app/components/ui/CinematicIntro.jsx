@@ -80,7 +80,7 @@ export default function CinematicIntro({ onComplete }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mb-12 relative w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border border-white/10 p-4 bg-white/5 backdrop-blur-xl"
                 >
-                  <Image src="/icon.png" alt="Nexus Boot" fill priority className="object-contain p-4" />
+                  <Image src="/icon.png" alt="FL Boot" fill priority className="object-contain p-4" />
                 </motion.div>
 
                 <div className="w-64 h-20 relative flex flex-col items-center">
@@ -107,7 +107,7 @@ export default function CinematicIntro({ onComplete }) {
                       onClick={handleReveal}
                       className="px-10 py-3 border border-white/20 text-white font-mono text-[10px] tracking-[0.4em] uppercase bg-white/5 backdrop-blur-md transition-all rounded-sm shadow-2xl"
                     >
-                      ENTER_NEXUS
+                      ENTER_FL
                     </motion.button>
                   )}
                 </div>

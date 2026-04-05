@@ -171,7 +171,7 @@ function SidebarHUD() {
   
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'nexus-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
+      const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'fl-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
       for (const id of sections.reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 300) {
@@ -200,7 +200,7 @@ function SidebarHUD() {
       <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] hidden xl:flex flex-col gap-8 pointer-events-none">
         <div className="h-32 w-px bg-white/10 mx-auto" />
         <div className="text-[10px] font-mono text-white/20 vertical-text font-bold tracking-[0.5em] uppercase whitespace-nowrap">
-          NEXUS_OS_v4.0.2 // STABLE
+          FL_OS_v4.0.2 // STABLE
         </div>
         <div className="h-32 w-px bg-white/10 mx-auto" />
       </div>
@@ -224,8 +224,8 @@ function NotificationSystem() {
       setNotif(e.detail);
       setTimeout(() => setNotif(null), 3000);
     };
-    window.addEventListener('NEXUS_NOTIFY', handleNotif);
-    return () => window.removeEventListener('NEXUS_NOTIFY', handleNotif);
+    window.addEventListener('FL_NOTIFY', handleNotif);
+    return () => window.removeEventListener('FL_NOTIFY', handleNotif);
   }, []);
 
   return (
@@ -280,7 +280,7 @@ export default function PageWrapper() {
     try {
       playBootSequence();
     } catch (e) {
-      console.warn("Nexus Audio Engine: Boot Sequence Suppressed");
+      console.warn("FL Audio Engine: Boot Sequence Suppressed");
     }
 
     setIsShaking(true);
@@ -295,7 +295,7 @@ export default function PageWrapper() {
       // Secondary FAIL-SAFE Timer: Force reveal after 6.5 seconds no matter what
       const failsafe = setTimeout(() => {
          if (!introFinished.current) {
-            console.warn("Nexus Runtime: Intro hanging. Firing Force Reveal Protocol.");
+            console.warn("FL Runtime: Intro hanging. Firing Force Reveal Protocol.");
             handleIntroComplete();
          }
       }, 6500);
@@ -413,7 +413,7 @@ export default function PageWrapper() {
             whileInView={{ opacity: 1, filter: 'blur(0px)' }}
             viewport={{ once: true }}
             transition={{ duration: 1.2 }}
-            id="nexus-globe" aria-label="Global Impact Map"
+            id="fl-globe" aria-label="Global Impact Map"
           >
             <GlobeSection />
           </motion.section>

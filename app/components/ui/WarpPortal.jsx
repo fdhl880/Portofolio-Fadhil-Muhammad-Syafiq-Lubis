@@ -24,8 +24,8 @@ export default function WarpPortal() {
       }, 800);
     };
 
-    window.addEventListener('NEXUS_WARP_INIT', handleWarp);
-    return () => window.removeEventListener('NEXUS_WARP_INIT', handleWarp);
+    window.addEventListener('FL_WARP_INIT', handleWarp);
+    return () => window.removeEventListener('FL_WARP_INIT', handleWarp);
   }, [playSweep]);
 
   return (

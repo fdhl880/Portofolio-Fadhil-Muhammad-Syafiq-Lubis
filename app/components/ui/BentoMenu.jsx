@@ -107,7 +107,7 @@ export default function BentoMenu({ isOpen, onClose }) {
                transition={{ delay: 0.5 }}
                className="md:col-span-1 md:row-span-1 border border-white/5 bg-white/[0.02] rounded-3xl p-8 flex flex-col justify-between"
             >
-               <span className="font-mono text-[9px] text-white/20 uppercase tracking-[0.4em]">Nexus_Ping</span>
+               <span className="font-mono text-[9px] text-white/20 uppercase tracking-[0.4em]">FL_Ping</span>
                <div>
                   <div className="text-white/80 font-bold text-xs mb-1">Medan, Indonesia</div>
                   <div className="text-[9px] text-white/20 font-mono">LAT: 3.5952° N<br />LNG: 98.6722° E</div>

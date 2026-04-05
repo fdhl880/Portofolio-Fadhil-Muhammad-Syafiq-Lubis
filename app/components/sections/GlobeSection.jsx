@@ -9,10 +9,10 @@ const HolographicGlobe = dynamic(() => import('../three/HolographicGlobe'), {
 
 export default function GlobeSection() {
   return (
-    <section id="nexus-globe" className="relative h-auto md:h-screen w-full flex items-center justify-center overflow-hidden py-16 md:py-24 px-6 bg-dark/30 border-y border-white/5">
+    <section id="fl-globe" className="relative h-auto md:h-screen w-full flex items-center justify-center overflow-hidden py-16 md:py-24 px-6 bg-dark/30 border-y border-white/5">
       {/* Background HUD Layers */}
       <div className="absolute inset-x-0 top-12 flex justify-between px-12 opacity-20 hidden md:flex">
-        <div className="text-[10px] font-mono font-bold tracking-[0.5em] vertical-text">NEXUS_CORE_v6 // ESTABLISHED</div>
+        <div className="text-[10px] font-mono font-bold tracking-[0.5em] vertical-text">FL_CORE_v6 // ESTABLISHED</div>
         <div className="text-[10px] font-mono font-bold tracking-[0.5em] vertical-text">GLOBAL_REACH // ACTIVE</div>
       </div>
 
@@ -32,7 +32,7 @@ export default function GlobeSection() {
           </div>
           
           <p className="text-muted/80 text-lg leading-relaxed max-w-xl font-display">
-            The Nexus Project traverses international boundaries, participating in premier global innovation arenas from **Yogyakarta to Bangkok**.
+            The FL Project traverses international boundaries, participating in premier global innovation arenas from **Yogyakarta to Bangkok**.
           </p>
 
           <div className="grid grid-cols-2 gap-4">

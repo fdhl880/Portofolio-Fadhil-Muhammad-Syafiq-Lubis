@@ -9,7 +9,7 @@ export default function SoundToggle() {
     <motion.button
       onClick={() => {
         toggleAudio();
-        window.dispatchEvent(new CustomEvent('NEXUS_NOTIFY', { 
+        window.dispatchEvent(new CustomEvent('FL_NOTIFY', { 
           detail: `AUDIO_COMMS: ${!isAudioEnabled ? 'ENABLED' : 'DISABLED'}` 
         }));
       }}

@@ -10,7 +10,7 @@ export default function HolographicFooter() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-            <span className="font-mono text-[10px] text-cyan-400 font-bold tracking-[0.3em] uppercase">Nexus_System_Active</span>
+            <span className="font-mono text-[10px] text-cyan-400 font-bold tracking-[0.3em] uppercase">FL_SYSTEM_Active</span>
           </div>
           <p className="text-muted/60 text-xs font-mono lowercase">
             &copy; {year} Fadhil Muhammad Syafiq Lubis // Port_v5.0.0

@@ -36,10 +36,10 @@ export default function Navbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/10 p-1 bg-white/5 group-hover:border-cyan-400/50 transition-all">
-              <Image src="/logo-initials.png" alt="Nexus" fill className="object-contain p-1" />
+              <Image src="/logo-initials.png" alt="FL" fill className="object-contain p-1" />
             </div>
             <div className="flex flex-col">
-              <span className="font-display font-bold text-white text-xs tracking-widest uppercase">Nexus_Grid</span>
+              <span className="font-display font-bold text-white text-xs tracking-widest uppercase">FL_Grid</span>
               <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">Fadhil_Portfolio_V2</span>
             </div>
           </motion.div>
