@@ -49,14 +49,22 @@ const achievements = [
   },
 ];
 
-function BlueprintPart({ data, exploded, activeId, setActiveId }) {
+function BlueprintPart({ data, exploded, activeId, setActiveId, isMobile }) {
   const ref = useRef();
   const htmlRef = useRef();
 
   useFrame((state, delta) => {
     if (!ref.current) return;
     
-    const target = exploded ? new THREE.Vector3(...data.targetPos) : new THREE.Vector3(...data.basePos);
+    // Scale target distance for mobile
+    const multiplier = isMobile ? 0.6 : 1;
+    const finalTarget = [
+      data.targetPos[0] * multiplier,
+      data.targetPos[1] * multiplier,
+      data.targetPos[2] * multiplier
+    ];
+
+    const target = exploded ? new THREE.Vector3(...finalTarget) : new THREE.Vector3(...data.basePos);
     ref.current.position.lerp(target, delta * 3);
     
     // Slow rotation
@@ -79,6 +87,7 @@ function BlueprintPart({ data, exploded, activeId, setActiveId }) {
       <mesh 
         onPointerOver={() => { document.body.style.cursor = 'pointer'; setActiveId(data.id); }}
         onPointerOut={() => { document.body.style.cursor = 'auto'; if(isActive) setActiveId(null); }}
+        onClick={(e) => { e.stopPropagation(); setActiveId(isActive ? null : data.id); }}
       >
         {/* Abstract Geometry based on ID */}
         {data.id === 0 && <boxGeometry args={[1, 1, 1]} />}
@@ -113,10 +122,10 @@ function BlueprintPart({ data, exploded, activeId, setActiveId }) {
       >
         <div className={`relative ${isActive ? 'z-50' : 'z-0'} group`}>
           {/* Leader Line to center */}
-          <div className="absolute top-1/2 right-full w-24 h-px bg-gradient-to-l from-white/50 to-transparent -translate-y-1/2 pointer-events-none" />
+          <div className="absolute top-1/2 right-full w-12 md:w-24 h-px bg-gradient-to-l from-white/50 to-transparent -translate-y-1/2 pointer-events-none" />
           
           <div 
-            className="w-64 glass p-4 rounded-xl border border-white/10 backdrop-blur-md transition-all duration-300 relative overflow-hidden"
+            className="w-48 md:w-64 glass p-3 md:p-4 rounded-xl border border-white/10 backdrop-blur-md transition-all duration-300 relative overflow-hidden"
             style={{ 
               boxShadow: isActive ? `0 0 30px ${data.color}40` : 'none',
               borderColor: isActive ? `${data.color}80` : 'rgba(255,255,255,0.1)'
@@ -179,6 +188,14 @@ function MeasurementGrid() {
 export default function DiscoverySection() {
   const [exploded, setExploded] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Auto trigger explosion when scrolled into view
   useEffect(() => {
@@ -259,6 +276,7 @@ export default function DiscoverySection() {
                   exploded={exploded} 
                   activeId={activeId}
                   setActiveId={setActiveId}
+                  isMobile={isMobile}
                 />
               ))}
             </group>
@@ -271,8 +289,9 @@ export default function DiscoverySection() {
             enablePan={false}
             maxPolarAngle={Math.PI / 1.5}
             minPolarAngle={Math.PI / 3}
-            autoRotate={!activeId}
+            autoRotate={!activeId && !isMobile}
             autoRotateSpeed={0.5}
+            enableDamping={true}
           />
         </Canvas>
       </div>

@@ -44,7 +44,7 @@ export default function TelemetryBar() {
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 2, duration: 0.8 }}
-      className="fixed bottom-0 left-0 right-0 z-[900] h-8 bg-[#020208]/90 backdrop-blur-xl border-t border-white/5 flex items-center justify-between px-6 font-mono text-[9px] text-white/30 uppercase tracking-[0.15em] select-none pointer-events-none"
+      className="fixed bottom-0 left-0 right-0 z-[900] h-8 bg-[#020208]/90 backdrop-blur-xl border-t border-white/5 flex items-center justify-between px-4 md:px-6 font-mono text-[8px] md:text-[9px] text-white/30 uppercase tracking-[0.15em] select-none pointer-events-none"
     >
       <div className="flex items-center gap-6">
         <span className="flex items-center gap-2">

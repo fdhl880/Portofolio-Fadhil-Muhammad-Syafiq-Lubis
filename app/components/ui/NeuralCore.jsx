@@ -187,7 +187,7 @@ export default function NeuralCore() {
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
+    <div className="fixed bottom-12 right-4 md:bottom-8 md:right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
       <AnimatePresence>
         {isOpen && (
           <motion.div
