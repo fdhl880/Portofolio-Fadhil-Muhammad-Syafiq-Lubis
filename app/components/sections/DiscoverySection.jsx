@@ -5,6 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, Float, Environment, Edges, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import Image from 'next/image';
+import { usePerformance } from '../../context/PerformanceContext';
 
 const achievements = [
   {
@@ -179,6 +180,7 @@ function MeasurementGrid() {
 export default function DiscoverySection() {
   const [exploded, setExploded] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const { isCinematic } = usePerformance();
 
   // Auto trigger explosion when scrolled into view
   useEffect(() => {
@@ -237,44 +239,71 @@ export default function DiscoverySection() {
         <span>{exploded ? 'ENGAGED' : 'STANDBY'}</span>
       </div>
 
-      {/* 3D Canvas Layout */}
-      <div className="w-full h-[100vh]">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-          <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
-          
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-            <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
-              {/* Central Core (Remains static) */}
-              <mesh>
-                <octahedronGeometry args={[0.5, 0]} />
-                <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
-              </mesh>
+      {/* 3D Canvas Layout or 2D Mobile Fallback */}
+      <div className="w-full min-h-[80vh] flex items-center justify-center">
+        {isCinematic ? (
+          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+            <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
+            
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+              <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
+                <mesh>
+                  <octahedronGeometry args={[0.5, 0]} />
+                  <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
+                </mesh>
 
-              {achievements.map((item) => (
-                <BlueprintPart 
-                  key={item.id} 
-                  data={item} 
-                  exploded={exploded} 
-                  activeId={activeId}
-                  setActiveId={setActiveId}
-                />
-              ))}
-            </group>
-          </Float>
+                {achievements.map((item) => (
+                  <BlueprintPart 
+                    key={item.id} 
+                    data={item} 
+                    exploded={exploded} 
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                  />
+                ))}
+              </group>
+            </Float>
 
-          <MeasurementGrid />
-          
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false}
-            maxPolarAngle={Math.PI / 1.5}
-            minPolarAngle={Math.PI / 3}
-            autoRotate={!activeId}
-            autoRotateSpeed={0.5}
-          />
-        </Canvas>
+            <MeasurementGrid />
+            
+            <OrbitControls 
+              enableZoom={false} 
+              enablePan={false}
+              maxPolarAngle={Math.PI / 1.5}
+              minPolarAngle={Math.PI / 3}
+              autoRotate={!activeId}
+              autoRotateSpeed={0.5}
+            />
+          </Canvas>
+        ) : (
+          <div className="container px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+            {achievements.map((item) => (
+              <motion.div 
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="glass p-6 rounded-2xl border border-white/10 flex flex-col gap-4"
+                style={{ borderColor: `${item.color}30` }}
+              >
+                <div className="relative w-full h-48 rounded-xl overflow-hidden">
+                  <Image src={item.image} alt={item.title} fill className="object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#020208] to-transparent opacity-60" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-[10px] font-mono uppercase text-white/40 tracking-widest">{item.category}</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-sm text-white/60 leading-relaxed">{item.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

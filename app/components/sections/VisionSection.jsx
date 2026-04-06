@@ -9,12 +9,64 @@ const visionLines = [
   'Through science, engineering, and innovation,',
   'I aim to create solutions that matter.',
   '',
-  'My vision is to bridge the gap',
-  'between academic excellence and real-world impact.',
-  '',
   'From Medan to the world stage —',
   'the journey has only just begun.',
 ];
+
+const leadershipQuotes = [
+  { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
+  { text: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", author: "Bill Gates" },
+  { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" },
+  { text: "The biggest risk is not taking any risk.", author: "Mark Zuckerberg" },
+  { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" }
+];
+
+function Quoteshifter() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % leadershipQuotes.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="min-h-[120px] flex flex-col items-center justify-center text-center mt-12 px-4">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 1.05, y: -10 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="max-w-2xl"
+        >
+          <p className="font-display text-lg md:text-xl italic text-white/90 mb-4 leading-relaxed">
+            "{leadershipQuotes[index].text}"
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <div className="h-px w-8 bg-neon/30" />
+            <span className="text-xs uppercase tracking-[0.3em] text-neon font-bold">
+              {leadershipQuotes[index].author}
+            </span>
+            <div className="h-px w-8 bg-neon/30" />
+          </div>
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Indicator dots */}
+      <div className="flex gap-2 mt-8">
+        {leadershipQuotes.map((_, i) => (
+          <div 
+            key={i} 
+            className={`h-1 rounded-full transition-all duration-500 ${i === index ? 'w-4 bg-neon' : 'w-1 bg-white/10'}`} 
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function VisionSection() {
   const containerRef = useRef(null);
@@ -96,6 +148,8 @@ export default function VisionSection() {
             </motion.p>
           ))}
         </div>
+
+        <Quoteshifter />
       </div>
     </section>
   );
