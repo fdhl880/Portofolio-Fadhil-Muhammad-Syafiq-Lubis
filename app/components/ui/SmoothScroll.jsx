@@ -1,15 +1,11 @@
 'use client';
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import { usePerformance } from '../../context/PerformanceContext';
 
 export default function SmoothScroll({ children }) {
   const lenisRef = useRef(null);
-  const { isMobile } = usePerformance();
 
   useEffect(() => {
-    if (isMobile) return; // Use native scroll on mobile for performance
-
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

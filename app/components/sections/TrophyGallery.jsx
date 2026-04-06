@@ -131,48 +131,31 @@ export default function TrophyGallery() {
               `} 
             />
             
-            {isCinematic ? (
-              <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
-                
-                <PresentationControls
-                  global
-                  config={{ mass: 2, tension: 500 }}
-                  snap={{ mass: 4, tension: 1500 }}
-                  rotation={[0, 0, 0]}
-                  polar={[-Math.PI / 4, Math.PI / 4]}
-                  azimuth={[-Math.PI / 2, Math.PI / 2]}
-                >
-                  <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                    <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
-                      <MedalModel 
-                        color={trophy.color} 
-                        ribbonColor={trophy.ribbonColor} 
-                        isActive={activeId === trophy.id}
-                      />
-                    </group>
-                  </Float>
-                </PresentationControls>
-                <Environment preset="city" />
-              </Canvas>
-            ) : (
-              <div 
-                className="w-full h-full flex flex-col items-center justify-center cursor-pointer"
-                onClick={() => handleSelect(trophy.id)}
+            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
+              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
+              
+              <PresentationControls
+                global
+                config={{ mass: 2, tension: 500 }}
+                snap={{ mass: 4, tension: 1500 }}
+                rotation={[0, 0, 0]}
+                polar={[-Math.PI / 4, Math.PI / 4]}
+                azimuth={[-Math.PI / 2, Math.PI / 2]}
               >
-                <div 
-                  className="w-32 h-32 rounded-full border-8 shadow-xl animate-float relative"
-                  style={{ borderColor: trophy.color, backgroundColor: `${trophy.color}20` }}
-                >
-                  <div className="absolute inset-4 rounded-full border-4 border-dashed border-white/20" />
-                </div>
-                <div className="mt-8 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-mono font-bold text-white tracking-widest uppercase">
-                  Select_Archive
-                </div>
-              </div>
-            )}
+                <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+                  <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
+                    <MedalModel 
+                      color={trophy.color} 
+                      ribbonColor={trophy.ribbonColor} 
+                      isActive={activeId === trophy.id}
+                    />
+                  </group>
+                </Float>
+              </PresentationControls>
+              <Environment preset="city" />
+            </Canvas>
 
             {/* Scanning HUD Overlay */}
             <div className="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -202,10 +185,10 @@ export default function TrophyGallery() {
       <AnimatePresence>
         {activeId && activeTrophy && (
           <motion.div
-            initial={{ opacity: 0, y: isMobile ? 100 : 0, x: isMobile ? 0 : 100, scale: isMobile ? 1 : 0.9 }}
-            animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
-            exit={{ opacity: 0, y: isMobile ? 100 : 0, x: isMobile ? 0 : 100, scale: isMobile ? 1 : 1.1 }}
-            className="fixed bottom-0 md:top-1/2 right-0 md:right-12 w-full md:w-80 glass rounded-t-[3rem] md:rounded-3xl border-t md:border border-white/20 p-8 z-[200] shadow-2xl overflow-hidden max-h-[80vh] md:max-h-[600px] md:-translate-y-1/2 flex flex-col"
+            initial={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
+            animate={{ opacity: 1, y: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : -window.innerHeight/2 + 250, x: 0 }}
+            exit={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
+            className="fixed bottom-0 md:top-1/2 right-0 md:right-12 w-full md:w-80 glass rounded-t-[3rem] md:rounded-3xl border-t md:border border-white/20 p-8 z-[200] shadow-2xl overflow-hidden max-h-[80vh] md:max-h-none overflow-y-auto"
           >
             <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/10 rounded-full md:hidden" />
             
