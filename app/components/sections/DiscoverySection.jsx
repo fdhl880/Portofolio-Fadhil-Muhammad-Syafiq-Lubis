@@ -5,9 +5,6 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, Float, Environment, Edges, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import Image from 'next/image';
-import { Suspense } from 'react';
-import HolographicLoader from '../ui/HolographicLoader';
-import { usePerformance } from '../../context/PerformanceContext';
 
 const achievements = [
   {
@@ -259,49 +256,43 @@ export default function DiscoverySection() {
 
       {/* 3D Canvas Layout */}
       <div className="w-full h-[100vh]">
-        <Canvas 
-          camera={{ position: [0, 0, 8], fov: 45 }}
-          dpr={[1, isMobile ? 1 : 2]}
-          gl={{ powerPreference: "high-performance" }}
-        >
-          <Suspense fallback={<Html center><HolographicLoader text="MAPPING_VOLUMETRIC_DATA..." /></Html>}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-            <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
-            
-            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-              <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
-                {/* Central Core (Remains static) */}
-                <mesh>
-                  <octahedronGeometry args={[0.5, 0]} />
-                  <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
-                </mesh>
+        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+          <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
+          
+          <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+            <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
+              {/* Central Core (Remains static) */}
+              <mesh>
+                <octahedronGeometry args={[0.5, 0]} />
+                <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
+              </mesh>
 
-                {achievements.map((item) => (
-                  <BlueprintPart 
-                    key={item.id} 
-                    data={item} 
-                    exploded={exploded} 
-                    activeId={activeId}
-                    setActiveId={setActiveId}
-                    isMobile={isMobile}
-                  />
-                ))}
-              </group>
-            </Float>
+              {achievements.map((item) => (
+                <BlueprintPart 
+                  key={item.id} 
+                  data={item} 
+                  exploded={exploded} 
+                  activeId={activeId}
+                  setActiveId={setActiveId}
+                  isMobile={isMobile}
+                />
+              ))}
+            </group>
+          </Float>
 
-            <MeasurementGrid />
-            
-            <OrbitControls 
-              enableZoom={false} 
-              enablePan={false}
-              maxPolarAngle={Math.PI / 1.5}
-              minPolarAngle={Math.PI / 3}
-              autoRotate={!activeId && !isMobile}
-              autoRotateSpeed={0.5}
-              enableDamping={true}
-            />
-          </Suspense>
+          <MeasurementGrid />
+          
+          <OrbitControls 
+            enableZoom={false} 
+            enablePan={false}
+            maxPolarAngle={Math.PI / 1.5}
+            minPolarAngle={Math.PI / 3}
+            autoRotate={!activeId && !isMobile}
+            autoRotateSpeed={0.5}
+            enableDamping={true}
+          />
         </Canvas>
       </div>
     </section>

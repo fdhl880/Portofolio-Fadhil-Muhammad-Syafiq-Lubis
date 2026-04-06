@@ -20,7 +20,7 @@ import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
-import { PerformanceProvider } from '../context/PerformanceContext';
+import { usePerformance } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
@@ -30,18 +30,6 @@ import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 import CinematicRoom from './three/CinematicRoom';
 
-// Lazy Load Wrapper for heavy sections
-function LazySection({ children, id, margin = "200px" }) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false, margin });
-  const { isCinematic } = usePerformance();
-
-  return (
-    <section ref={ref} id={id} className="relative min-h-[50vh]">
-      {isInView || !isCinematic ? children : <div className="h-full w-full" />}
-    </section>
-  );
-}
 
 // Global Scanline Effect
 function Scanline() {
@@ -265,8 +253,8 @@ function NotificationSystem() {
 export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const { isCinematic, isMobile } = usePerformance();
   const { playBootSequence } = useSound();
   const introFinished = useRef(false);
 
@@ -274,23 +262,11 @@ export default function PageWrapper() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      const isSmallScreen = window.innerWidth < 768;
-      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-      setIsMobile(isSmallScreen || isLowPerf);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   const handleIntroComplete = useCallback(() => {
     if (introFinished.current) return;
     introFinished.current = true;
     setShowIntro(false);
     
-    // Attempt audio boot sequence safely
     try {
       playBootSequence();
     } catch (e) {
@@ -303,17 +279,12 @@ export default function PageWrapper() {
 
   useEffect(() => {
     if (showIntro) {
-      // Primary Cinematic Timer
       const timer = setTimeout(handleIntroComplete, 4500);
-      
-      // Secondary FAIL-SAFE Timer: Force reveal after 6.5 seconds no matter what
       const failsafe = setTimeout(() => {
          if (!introFinished.current) {
-            console.warn("FL Runtime: Intro hanging. Firing Force Reveal Protocol.");
             handleIntroComplete();
          }
       }, 6500);
-
       return () => {
         clearTimeout(timer);
         clearTimeout(failsafe);
@@ -321,18 +292,24 @@ export default function PageWrapper() {
     }
   }, [showIntro, handleIntroComplete]);
 
-  // Prevent Hydration Errors by delaying DOM assembly until client mounts
   if (!mounted) return null;
 
   return (
-    <PerformanceProvider>
+    <div className="relative">
       <AudioReactor />
       <div className="noise-overlay" />
       <CustomCursor />
       <WarpPortal />
-      <AuroraOverlay />
       
-      <AnimatePresence>
+      {isCinematic && !isMobile && (
+        <>
+          <AuroraOverlay />
+          <Scanline />
+          <WarpEngine />
+        </>
+      )}
+
+      <AnimatePresence mode="wait">
         {showIntro && (
           <CinematicIntro onComplete={handleIntroComplete} />
         )}
@@ -347,69 +324,109 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        <CinematicRoom />
-        <WarpEngine />
+        {!isMobile && <CinematicRoom />}
         <AudioVisualizer />
-        <Scanline />
         <SidebarHUD />
         <NotificationSystem />
-        
         <ScrollProgress />
         <Navbar />
         <PerformanceToggle />
         <SoundToggle />
         <NeuralCore />
         
-        <main className="relative z-10 pb-24 md:pb-16">
-          <LazySection id="hero" margin="0px">
+        <main className="relative z-10 overflow-x-hidden">
+          <motion.section 
+            initial={{ opacity: 0, clipPath: 'inset(10% 0 10% 0)' }}
+            whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            id="hero" aria-label="Introduction"
+          >
             <HeroSection isMobile={isMobile} />
-          </LazySection>
+          </motion.section>
 
           <MissionStats />
 
-          <LazySection id="skills">
+          <motion.section 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            id="skills" aria-label="Professional Skills Overview"
+          >
             <SkillsSection />
-          </LazySection>
+          </motion.section>
 
-          <LazySection id="education">
+          <motion.section 
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 1 }}
+            id="education" aria-label="Academic Background"
+          >
             <EducationSection />
-          </LazySection>
+          </motion.section>
 
-          <LazySection id="trophy">
+          <motion.section 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            id="trophy" aria-label="Awards and Trophies Gallery"
+          >
             <TrophyGallery />
-          </LazySection>
+          </motion.section>
 
           <div className="bg-[#020208]/80 backdrop-blur-3xl border-y border-white/5">
-             <LazySection id="projects">
+             <motion.section 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1 }}
+               id="projects" aria-label="Selected Projects"
+             >
                <ProjectsSection />
-             </LazySection>
+             </motion.section>
              
-             <LazySection id="achievements">
+             <motion.section 
+               initial={{ opacity: 0 }}
+               whileInView={{ opacity: 1 }}
+               viewport={{ once: true }}
+               transition={{ duration: 1 }}
+               id="achievements" aria-label="Key Achievements"
+             >
                <AchievementsSection />
-             </LazySection>
+             </motion.section>
           </div>
 
-          <LazySection id="fl-globe">
+          <motion.section 
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            whileInView={{ opacity: 1, filter: 'blur(0px)' }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.2 }}
+            id="fl-globe" aria-label="Global Impact Map"
+          >
             <GlobeSection />
-          </LazySection>
+          </motion.section>
 
-          <RoadmapSection />
-          
-          <LazySection id="discovery">
-            <DiscoverySection />
-          </LazySection>
-          
-          <VisionSection />
-
-          <LazySection id="contact">
+          <section id="roadmap" aria-label="Future Roadmap"><RoadmapSection /></section>
+          <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
+          <section id="vision" aria-label="Vision and Philosophy"><VisionSection /></section>
+          <motion.section 
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: "circOut" }}
+            id="contact" aria-label="Contact and Collaboration"
+          >
             <ContactSection />
-          </LazySection>
+          </motion.section>
         </main>
         <HolographicFooter />
         <BackToTop />
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
-    </PerformanceProvider>
+    </div>
   );
 }

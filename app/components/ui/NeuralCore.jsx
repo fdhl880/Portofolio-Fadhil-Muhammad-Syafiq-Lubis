@@ -2,9 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, MeshDistortMaterial, Float, Environment, Html } from '@react-three/drei';
-import { Suspense } from 'react';
-import HolographicLoader from './HolographicLoader';
+import { Sphere, MeshDistortMaterial, Float, Environment } from '@react-three/drei';
 import { useSound } from '../../context/SoundContext';
 import { usePerformance } from '../../context/PerformanceContext';
 
@@ -58,11 +56,11 @@ function CoreModel() {
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
       <group>
         {/* Central Core */}
-        <Sphere ref={meshRef} args={[1, 64, 64]}>
+        <Sphere ref={meshRef} args={[1, isMobile ? 32 : 64, isMobile ? 32 : 64]}>
           <MeshDistortMaterial
             color="#00f0ff"
-            speed={isCinematic ? 3 : 0}
-            distort={0.4}
+            speed={isCinematic && !isMobile ? 3 : 0}
+            distort={isMobile ? 0 : 0.4}
             radius={1}
             metalness={0.9}
             roughness={0.1}
@@ -72,7 +70,7 @@ function CoreModel() {
         </Sphere>
         
         {/* Wireframe Shell */}
-        <Sphere ref={wireRef} args={[1.2, 32, 32]}>
+        <Sphere ref={wireRef} args={[1.2, isMobile ? 16 : 32, isMobile ? 16 : 32]}>
           <meshPhongMaterial 
             color="#00f0ff" 
             wireframe 
@@ -281,14 +279,13 @@ export default function NeuralCore() {
         <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
           <Canvas 
             camera={{ position: [0, 0, 4] }}
-            dpr={[1, isCinematic ? 2 : 1]}
+            gl={{ antialias: !isMobile, powerPreference: "high-performance" }}
+            dpr={isMobile ? [1, 1.5] : [1, 2]}
           >
-            <Suspense fallback={<Html center><HolographicLoader text="LINKING..." /></Html>}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-              <CoreModel />
-              <Environment preset="city" />
-            </Suspense>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+            <CoreModel isMobile={isMobile} />
+            <Environment preset="city" />
           </Canvas>
         </div>
         

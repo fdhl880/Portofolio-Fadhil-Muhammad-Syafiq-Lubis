@@ -1,10 +1,13 @@
 import PageWrapper from './components/PageWrapper';
 import { SoundProvider } from './context/SoundContext';
+import { PerformanceProvider } from './context/PerformanceContext';
 
 export default function Home() {
   return (
-    <SoundProvider>
-      <PageWrapper />
-    </SoundProvider>
+    <PerformanceProvider>
+      <SoundProvider>
+        <PageWrapper />
+      </SoundProvider>
+    </PerformanceProvider>
   );
 }

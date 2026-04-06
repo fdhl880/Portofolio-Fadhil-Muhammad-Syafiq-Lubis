@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, Suspense, useEffect } from 'react';
+import { useState, useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   Float, 
@@ -14,7 +14,6 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePerformance } from '../../context/PerformanceContext';
 import { useSound } from '../../context/SoundContext';
-import HolographicLoader from '../ui/HolographicLoader';
 
 // Procedural Medal Component
 function MedalModel({ color, ribbonColor, title, isActive }) {
@@ -107,7 +106,7 @@ export default function TrophyGallery() {
   };
 
   return (
-    <section id="trophy" className="relative py-32 px-6 min-h-screen bg-dark flex flex-col items-center">
+    <section className="relative py-32 px-6 min-h-screen bg-dark flex flex-col items-center">
       <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
       <div className="text-center mb-20 max-w-4xl">
@@ -132,36 +131,30 @@ export default function TrophyGallery() {
               `} 
             />
             
-            <Canvas 
-              camera={{ position: [0, 0, 4.5], fov: 45 }}
-              dpr={[1, isCinematic ? 2 : 1]} // Reduce dpr for low-perf mode
-              gl={{ antialias: isCinematic }}
-            >
-              <Suspense fallback={<Html center><HolographicLoader text="LINKING_SENSORS..." /></Html>}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
-                
-                <PresentationControls
-                  global
-                  config={{ mass: 2, tension: 500 }}
-                  snap={{ mass: 4, tension: 1500 }}
-                  rotation={[0, 0, 0]}
-                  polar={[-Math.PI / 4, Math.PI / 4]}
-                  azimuth={[-Math.PI / 2, Math.PI / 2]}
-                >
-                  <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                    <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
-                      <MedalModel 
-                        color={trophy.color} 
-                        ribbonColor={trophy.ribbonColor} 
-                        isActive={activeId === trophy.id}
-                      />
-                    </group>
-                  </Float>
-                </PresentationControls>
-                <Environment preset="city" />
-              </Suspense>
+            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
+              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
+              
+              <PresentationControls
+                global
+                config={{ mass: 2, tension: 500 }}
+                snap={{ mass: 4, tension: 1500 }}
+                rotation={[0, 0, 0]}
+                polar={[-Math.PI / 4, Math.PI / 4]}
+                azimuth={[-Math.PI / 2, Math.PI / 2]}
+              >
+                <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+                  <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
+                    <MedalModel 
+                      color={trophy.color} 
+                      ribbonColor={trophy.ribbonColor} 
+                      isActive={activeId === trophy.id}
+                    />
+                  </group>
+                </Float>
+              </PresentationControls>
+              <Environment preset="city" />
             </Canvas>
 
             {/* Scanning HUD Overlay */}

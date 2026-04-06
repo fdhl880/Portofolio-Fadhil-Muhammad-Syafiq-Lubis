@@ -4,17 +4,31 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const PerformanceContext = createContext();
 
 export function PerformanceProvider({ children }) {
-  const [isCinematic, setIsCinematic] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('portfolio-cinematic-mode');
-      if (saved !== null) return saved === 'true';
-      // Auto-detect low-end devices
-      if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 8) return false;
-    }
-    return true; 
-  });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isCinematic, setIsCinematic] = useState(true);
 
-  const [activeSection, setActiveSection] = useState('HERO');
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const checkMobile = () => {
+        const mobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+        const lowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+        setIsMobile(mobile || lowPerf);
+        
+        // Auto-optimize default mode
+        const saved = localStorage.getItem('portfolio-cinematic-mode');
+        if (saved !== null) {
+           setIsCinematic(saved === 'true');
+        } else {
+           // Default to non-cinematic for mobile/low-end
+           setIsCinematic(!(mobile || lowPerf));
+        }
+      };
+      
+      checkMobile();
+      window.addEventListener('resize', checkMobile);
+      return () => window.removeEventListener('resize', checkMobile);
+    }
+  }, []);
 
   const toggleMode = () => {
     setIsCinematic((prev) => {
@@ -25,7 +39,7 @@ export function PerformanceProvider({ children }) {
   };
 
   return (
-    <PerformanceContext.Provider value={{ isCinematic, toggleMode, activeSection, setActiveSection }}>
+    <PerformanceContext.Provider value={{ isCinematic, isMobile, toggleMode }}>
       {children}
     </PerformanceContext.Provider>
   );
