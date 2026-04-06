@@ -42,6 +42,7 @@ function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
         position={position} 
         scale={scale}
         onPointerEnter={handleSmash}
+        frustumCulled={true}
       >
         {geometry}
         <meshStandardMaterial
@@ -94,7 +95,7 @@ function Particles({ count = 80 }) {
   });
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, count]}>
+    <instancedMesh ref={mesh} args={[null, null, count]} frustumCulled={true}>
       <sphereGeometry args={[0.025, 4, 4]} />
       <meshBasicMaterial color="#00f0ff" transparent opacity={0.5} />
     </instancedMesh>
@@ -109,7 +110,7 @@ function GlowRing({ radius, color, speed = 0.3 }) {
     ref.current.rotation.y = t * speed * 0.5;
   });
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} frustumCulled={true}>
       <torusGeometry args={[radius, 0.015, 8, 48]} />
       <meshBasicMaterial color={color} transparent opacity={0.35} />
     </mesh>
@@ -124,7 +125,7 @@ function LightBeams() {
   return (
     <group ref={ref}>
       {[0, 1, 2].map(i => (
-        <mesh key={i} rotation={[0, 0, (i * Math.PI * 2) / 3]}>
+        <mesh key={i} rotation={[0, 0, (i * Math.PI * 2) / 3]} frustumCulled={true}>
           <planeGeometry args={[0.03, 12]} />
           <meshBasicMaterial color="#8b5cf6" transparent opacity={0.06} side={THREE.DoubleSide} />
         </mesh>

@@ -20,7 +20,7 @@ import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
-import { PerformanceProvider } from '../context/PerformanceContext';
+import { usePerformance } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
@@ -253,24 +253,14 @@ function NotificationSystem() {
 export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  
+  const { isCinematic, isMobile, isInitialized } = usePerformance();
   const { playBootSequence } = useSound();
   const introFinished = useRef(false);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      const isSmallScreen = window.innerWidth < 768;
-      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-      setIsMobile(isSmallScreen || isLowPerf);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleIntroComplete = useCallback(() => {
@@ -313,11 +303,11 @@ export default function PageWrapper() {
   if (!mounted) return null;
 
   return (
-    <PerformanceProvider>
+    <>
       <AudioReactor />
       <div className="noise-overlay" />
-      <CustomCursor />
-      <WarpPortal />
+      {isCinematic && <CustomCursor />}
+      {isCinematic && <WarpPortal />}
       <AuroraOverlay />
       
       <AnimatePresence>
@@ -327,16 +317,13 @@ export default function PageWrapper() {
       </AnimatePresence>
 
       <motion.div 
-        animate={isShaking ? { 
-          x: [0, -10, 10, -10, 10, 0],
-          y: [0, 5, -5, 5, -5, 0]
-        } : {}}
+        animate={isShaking ? { x: [-10, 10, -10, 10, 0], y: [-5, 5, -5, 5, 0] } : {}}
         transition={{ duration: 0.5 }}
-        className="relative overflow-x-hidden min-h-screen font-sans" 
+        className={`relative overflow-x-hidden min-h-screen font-sans ${!showIntro ? (isCinematic ? 'is-cinematic' : 'is-standard') : ''}`}
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        <CinematicRoom />
-        <WarpEngine />
+        {isCinematic && <CinematicRoom />}
+        {isCinematic && <WarpEngine />}
         <AudioVisualizer />
         <Scanline />
         <SidebarHUD />
@@ -441,6 +428,6 @@ export default function PageWrapper() {
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
-    </PerformanceProvider>
+    </>
   );
 }

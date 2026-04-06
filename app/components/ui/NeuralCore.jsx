@@ -56,7 +56,7 @@ function CoreModel() {
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
       <group>
         {/* Central Core */}
-        <Sphere ref={meshRef} args={[1, 64, 64]}>
+        <Sphere ref={meshRef} args={[1, 32, 32]} frustumCulled={true}>
           <MeshDistortMaterial
             color="#00f0ff"
             speed={isCinematic ? 3 : 0}
@@ -276,13 +276,17 @@ export default function NeuralCore() {
         className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto audio-reactive-scale"
       >
         <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500 audio-reactive-glow" />
-        <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
-          <Canvas camera={{ position: [0, 0, 4] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-            <CoreModel />
-            <Environment preset="city" />
-          </Canvas>
+        <div className="relative w-full h-full justify-center items-center flex opacity-90 group-hover:opacity-100 transition-opacity">
+          {isCinematic ? (
+            <Canvas camera={{ position: [0, 0, 4] }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+              <CoreModel />
+              <Environment preset="city" />
+            </Canvas>
+          ) : (
+            <div className="w-12 h-12 rounded-full bg-cyan-500 shadow-[0_0_30px_#00f0ff] animate-pulse-glow" />
+          )}
         </div>
         
         <motion.div 

@@ -18,17 +18,17 @@ function Marker({ lat, lon, label, onClick }) {
   }, [lat, lon]);
 
   return (
-    <group position={pos}>
-      <mesh onClick={onClick} className="cursor-pointer">
+    <group position={pos} frustumCulled={true}>
+      <mesh onClick={onClick} className="cursor-pointer" frustumCulled={true}>
         <sphereGeometry args={[0.05, 16, 16]} />
         <meshBasicMaterial color="#00f0ff" />
       </mesh>
-      <mesh position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]} frustumCulled={true}>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshBasicMaterial color="#00f0ff" transparent opacity={0.3} />
       </mesh>
       {/* Pulse ring */}
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
+      <mesh rotation={[Math.PI / 2, 0, 0]} frustumCulled={true}>
         <ringGeometry args={[0.06, 0.08, 32]} />
         <meshBasicMaterial color="#00f0ff" transparent opacity={0.6} side={THREE.DoubleSide} />
       </mesh>
@@ -84,9 +84,9 @@ export default function HolographicGlobe() {
   ];
 
   return (
-    <group ref={globeRef}>
+    <group ref={globeRef} frustumCulled={true}>
       {/* Main Realistic Globe Mesh */}
-      <Sphere args={[2, 64, 64]}>
+      <Sphere args={[2, 48, 48]} frustumCulled={true}>
         <meshPhongMaterial
            map={colorMap}
            bumpMap={bumpMap}
@@ -97,12 +97,12 @@ export default function HolographicGlobe() {
       </Sphere>
 
       {/* Atmospheric Glow */}
-      <Sphere args={[2.02, 64, 64]}>
+      <Sphere args={[2.02, 48, 48]} frustumCulled={true}>
         <meshBasicMaterial color="#00f0ff" transparent opacity={0.1} side={THREE.BackSide} />
       </Sphere>
 
       {/* Points shell */}
-      <Points positions={points}>
+      <Points positions={points} frustumCulled={true}>
         <PointMaterial 
           transparent 
           color="#00f0ff" 

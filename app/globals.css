@@ -32,15 +32,28 @@ html {
   scroll-behavior: smooth;
   max-width: 100vw;
   overflow-x: hidden;
+  overscroll-behavior-x: none;
 }
 
 body {
   background: #050510;
   color: #ffffff;
   font-family: var(--font-sans), system-ui, sans-serif;
-  overflow-x: hidden;
   max-width: 100vw;
+  overflow-x: hidden;
   position: relative;
+  overscroll-behavior-x: none;
+}
+
+/* Portrait & Mobile Sizing Safety */
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Performance Mode UI */
+.is-standard {
+  background: radial-gradient(circle at 50% 0%, #0a0a20 0%, #050510 60%);
+  transition: background 1s ease-in-out;
 }
 
 ::-webkit-scrollbar { 

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, Float, Environment, Edges, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
+import { usePerformance } from '../../context/PerformanceContext';
 import Image from 'next/image';
 
 const achievements = [
@@ -179,6 +180,7 @@ function MeasurementGrid() {
 export default function DiscoverySection() {
   const [exploded, setExploded] = useState(false);
   const [activeId, setActiveId] = useState(null);
+  const { isCinematic } = usePerformance();
 
   // Auto trigger explosion when scrolled into view
   useEffect(() => {
@@ -237,44 +239,92 @@ export default function DiscoverySection() {
         <span>{exploded ? 'ENGAGED' : 'STANDBY'}</span>
       </div>
 
-      {/* 3D Canvas Layout */}
+      {/* 3D Canvas or 2D Fallback */}
       <div className="w-full h-[100vh]">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-          <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
-          
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-            <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
-              {/* Central Core (Remains static) */}
-              <mesh>
-                <octahedronGeometry args={[0.5, 0]} />
-                <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
-              </mesh>
+        {isCinematic ? (
+          <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+            <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
+            
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+              <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
+                {/* Central Core */}
+                <mesh frustumCulled={true}>
+                  <octahedronGeometry args={[0.5, 0]} />
+                  <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
+                </mesh>
 
+                {achievements.map((item) => (
+                  <BlueprintPart 
+                    key={item.id} 
+                    data={item} 
+                    exploded={exploded} 
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                  />
+                ))}
+              </group>
+            </Float>
+
+            <MeasurementGrid />
+            
+            <OrbitControls 
+              enableZoom={false} 
+              enablePan={false}
+              maxPolarAngle={Math.PI / 1.5}
+              minPolarAngle={Math.PI / 3}
+              autoRotate={!activeId}
+              autoRotateSpeed={0.5}
+            />
+          </Canvas>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center pt-24 px-6 md:px-0 relative z-20 pointer-events-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-5xl">
               {achievements.map((item) => (
-                <BlueprintPart 
-                  key={item.id} 
-                  data={item} 
-                  exploded={exploded} 
-                  activeId={activeId}
-                  setActiveId={setActiveId}
-                />
+                <div 
+                  key={item.id}
+                  onClick={() => setActiveId(activeId === item.id ? null : item.id)}
+                  className={`relative cursor-pointer transition-all duration-300 rounded-xl overflow-hidden glass border 
+                    ${activeId === item.id ? 'border-cyan-400 scale-[1.02] shadow-[0_0_20px_rgba(0,240,255,0.3)]' : 'border-white/10 hover:border-white/30'}
+                  `}
+                >
+                  <div className="relative aspect-square md:aspect-[4/3]">
+                    {item.image && (
+                      <Image 
+                        src={item.image} 
+                        alt={item.title} 
+                        fill 
+                        className="object-cover opacity-80 group-hover:opacity-100 transition-opacity" 
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#020208] via-black/40 to-transparent" />
+                    
+                    <div className="absolute inset-x-0 bottom-0 p-4">
+                      <div className="w-6 h-1 mb-2" style={{ backgroundColor: item.color }} />
+                      <div className="text-[10px] font-mono tracking-widest uppercase mb-1" style={{ color: item.color }}>
+                        {item.category}
+                      </div>
+                      <h3 className="text-sm md:text-base font-display font-bold text-white leading-tight">
+                        {item.title}
+                      </h3>
+                      
+                      {activeId === item.id && (
+                        <motion.div 
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-2 text-xs text-white/70"
+                        >
+                          {item.description}
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                </div>
               ))}
-            </group>
-          </Float>
-
-          <MeasurementGrid />
-          
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false}
-            maxPolarAngle={Math.PI / 1.5}
-            minPolarAngle={Math.PI / 3}
-            autoRotate={!activeId}
-            autoRotateSpeed={0.5}
-          />
-        </Canvas>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

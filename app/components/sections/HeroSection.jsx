@@ -12,6 +12,8 @@ const HeroScene = dynamic(() => import('../three/HeroScene'), {
   loading: () => <div className="absolute inset-0 bg-[#020208]" />,
 });
 
+import { usePerformance } from '../../context/PerformanceContext';
+
 function LiquidImage({ src }) {
   const meshRef = useRef();
   const [hovered, setHovered] = useState(false);
@@ -49,6 +51,7 @@ function LiquidImage({ src }) {
 export default function HeroSection({ isMobile }) {
   const containerRef = useRef(null);
   const { scrollY } = useScroll();
+  const { isCinematic } = usePerformance();
   const y1 = useTransform(scrollY, [0, 500], [0, 200]);
   const y2 = useTransform(scrollY, [0, 500], [0, -100]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -66,7 +69,26 @@ export default function HeroSection({ isMobile }) {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#020208] pt-20"
     >
-      <HeroScene />
+      {isCinematic && <HeroScene />}
+      
+      {/* Mobile/Standard Mode Banner Reminder */}
+      {!isCinematic && (
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2, duration: 1 }}
+          className="absolute top-24 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-sm"
+        >
+           <div className="glass px-4 py-3 rounded-xl border border-cyan-500/30 text-center shadow-[0_0_20px_rgba(0,240,255,0.1)]">
+             <span className="font-mono text-[9px] uppercase tracking-widest text-cyan-400 font-bold block mb-1">
+                SYSTEM_NOTICE
+             </span>
+             <span className="text-white/80 text-xs font-display">
+                For maximum immersive 3D experience, please access via Desktop/Laptop.
+             </span>
+           </div>
+        </motion.div>
+      )}
       
       {/* Editorial Content Layer */}
       <div className="relative z-10 w-full max-w-[1440px] px-6 md:px-20 grid grid-cols-1 md:grid-cols-12 gap-12 items-center h-full">
