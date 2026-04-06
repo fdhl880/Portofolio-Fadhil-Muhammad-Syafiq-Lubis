@@ -167,7 +167,7 @@ export default function HeroSection({ isMobile }) {
 
               {/* Tag Label */}
               <div className="absolute -bottom-6 -left-6 z-20 bg-cyan-500 text-black font-mono text-[9px] font-bold px-4 py-2 tracking-widest uppercase">
-                 REF: NEXUS_IDENTITY_2025
+                 REF: FL_IDENTITY_2025
               </div>
            </motion.div>
         </div>

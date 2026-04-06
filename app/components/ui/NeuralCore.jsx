@@ -124,7 +124,7 @@ export default function NeuralCore() {
       setTimeout(() => {
         setHistory(prev => [...prev, { 
           role: 'sys', 
-          text: 'GREETINGS VISITOR. I AM NEXUS, THE COGNITIVE INTERFACE OF THIS DOMAIN. HOW CAN I ASSIST? TYPE /HELP FOR SUB-ROUTINES.', 
+          text: 'GREETINGS VISITOR. I AM FL, THE COGNITIVE INTERFACE OF THIS DOMAIN. HOW CAN I ASSIST? TYPE /HELP FOR SUB-ROUTINES.', 
           isNew: true 
         }]);
         playPip(1200, 0.1);
