@@ -185,9 +185,13 @@ export default function TrophyGallery() {
       <AnimatePresence>
         {activeId && activeTrophy && (
           <motion.div
-            initial={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
-            animate={{ opacity: 1, y: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : -window.innerHeight/2 + 250, x: 0 }}
-            exit={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
+            initial={{ opacity: 0, y: 100, x: (typeof window !== 'undefined' && window.innerWidth < 768) ? 0 : 100 }}
+            animate={{ 
+              opacity: 1, 
+              y: (typeof window !== 'undefined' && window.innerWidth < 768) ? 0 : (typeof window !== 'undefined' ? -window.innerHeight/2 + 250 : 0), 
+              x: 0 
+            }}
+            exit={{ opacity: 0, y: 100, x: (typeof window !== 'undefined' && window.innerWidth < 768) ? 0 : 100 }}
             className="fixed bottom-0 md:top-1/2 right-0 md:right-12 w-full md:w-80 glass rounded-t-[3rem] md:rounded-3xl border-t md:border border-white/20 p-8 z-[200] shadow-2xl overflow-hidden max-h-[80vh] md:max-h-none overflow-y-auto"
           >
             <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/10 rounded-full md:hidden" />

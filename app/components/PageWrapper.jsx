@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
@@ -17,19 +18,19 @@ import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
-import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
 import { usePerformance } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
-import AudioVisualizer from './ui/AudioVisualizer';
-import AuroraOverlay from './ui/AuroraOverlay';
-import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
-import CinematicRoom from './three/CinematicRoom';
 
+const CinematicRoom = dynamic(() => import('./three/CinematicRoom'), { ssr: false });
+const AudioVisualizer = dynamic(() => import('./ui/AudioVisualizer'), { ssr: false });
+const AuroraOverlay = dynamic(() => import('./ui/AuroraOverlay'), { ssr: false });
+const WarpPortal = dynamic(() => import('./ui/WarpPortal'), { ssr: false });
+const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 // Global Scanline Effect
 function Scanline() {

@@ -1,0 +1,8 @@
+﻿
+> portfolio@0.1.0 build
+> next build
+
+   Γû▓ Next.js 15.1.5
+   - Environments: .env.local
+
+   Creating an optimized production build ...
