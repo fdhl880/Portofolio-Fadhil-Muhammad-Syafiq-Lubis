@@ -4,6 +4,7 @@ import SmoothScroll from "./components/ui/SmoothScroll";
 import TelemetryBar from "./components/ui/TelemetryBar";
 import { PerformanceProvider } from './context/PerformanceContext';
 import { SoundProvider } from './context/SoundContext';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -133,6 +134,7 @@ export default function RootLayout({ children }) {
             </SmoothScroll>
           </SoundProvider>
         </PerformanceProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
