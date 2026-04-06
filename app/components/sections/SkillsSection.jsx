@@ -44,11 +44,12 @@ const skillGroups = [
 ];
 
 const quotes = [
-  { text: "The cosmos is within us. We are made of star-stuff. We are a way for the cosmos to know itself.", author: "Carl Sagan" },
-  { text: "The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge.", author: "Stephen Hawking" },
-  { text: "The people who are crazy enough to think they can change the world are the ones who do.", author: "Steve Jobs" },
+  { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
+  { text: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", author: "Bill Gates" },
+  { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" },
+  { text: "The biggest risk is not taking any risk.", author: "Mark Zuckerberg" },
   { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-  { text: "Imagination is more important than knowledge. Knowledge is limited. Imagination encircles the world.", author: "Albert Einstein" },
+  { text: "The cosmos is within us. We are made of star-stuff.", author: "Carl Sagan" }
 ];
 
 function SkillBentoCard({ group, index }) {
@@ -106,6 +107,13 @@ function SkillBentoCard({ group, index }) {
 export default function SkillsSection() {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const { playPip } = useSound();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % quotes.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, []);
 
   const nextQuote = () => {
     try { playPip(880, 0.1, 0.05); } catch(e) {}

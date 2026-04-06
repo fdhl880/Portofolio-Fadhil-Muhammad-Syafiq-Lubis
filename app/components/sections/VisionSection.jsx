@@ -2,24 +2,22 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const quotes = [
-  { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
-  { text: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", author: "Bill Gates" },
-  { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" },
-  { text: "The biggest risk is not taking any risk.", author: "Mark Zuckerberg" },
-  { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" }
+const visionLines = [
+  'I believe in the power of knowledge',
+  'to transform lives and shape the future.',
+  '',
+  'Through science, engineering, and innovation,',
+  'I aim to create solutions that matter.',
+  '',
+  'My vision is to bridge the gap',
+  'between academic excellence and real-world impact.',
+  '',
+  'From Medan to the world stage —',
+  'the journey has only just begun.',
 ];
 
 export default function VisionSection() {
   const containerRef = useRef(null);
-  const [quoteIndex, setQuoteIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % quotes.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Pre-compute particle positions to avoid hydration mismatch from Math.random() in render
   const particles = useMemo(() =>
@@ -80,26 +78,23 @@ export default function VisionSection() {
             <span className="text-gradient">My Vision</span>
           </h2>
         </motion.div>
-        <div className="relative pt-8 pb-12 w-full">
-           <AnimatePresence mode="wait">
-             <motion.div
-               key={quoteIndex}
-               initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-               exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
-               transition={{ duration: 0.8, ease: "circOut" }}
-               className="text-center space-y-8"
-             >
-                <p className="font-display text-xl md:text-4xl font-medium text-white/90 leading-tight md:leading-tight max-w-3xl mx-auto">
-                  "{quotes[quoteIndex].text}"
-                </p>
-                <div className="flex items-center justify-center gap-4 text-cyan-400 pt-4">
-                  <div className="w-12 h-px bg-cyan-400/50" />
-                  <span className="font-mono text-[10px] md:text-sm uppercase tracking-[0.2em]">{quotes[quoteIndex].author}</span>
-                  <div className="w-12 h-px bg-cyan-400/50" />
-                </div>
-             </motion.div>
-           </AnimatePresence>
+
+        <div className="space-y-1">
+          {visionLines.map((line, i) => (
+            <motion.p
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-20px' }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className={`font-display text-base sm:text-lg md:text-2xl leading-relaxed ${
+                line === '' ? 'h-4' : i >= visionLines.length - 2 ? 'text-neon font-semibold' : 'text-white/80'
+              }`}
+              style={{ textAlign: 'center' }}
+            >
+              {line}
+            </motion.p>
+          ))}
         </div>
       </div>
     </section>
