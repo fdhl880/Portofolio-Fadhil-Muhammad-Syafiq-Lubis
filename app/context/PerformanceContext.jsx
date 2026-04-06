@@ -8,9 +8,13 @@ export function PerformanceProvider({ children }) {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('portfolio-cinematic-mode');
       if (saved !== null) return saved === 'true';
+      // Auto-detect low-end devices
+      if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 8) return false;
     }
-    return true; // default
+    return true; 
   });
+
+  const [activeSection, setActiveSection] = useState('HERO');
 
   const toggleMode = () => {
     setIsCinematic((prev) => {
@@ -21,7 +25,7 @@ export function PerformanceProvider({ children }) {
   };
 
   return (
-    <PerformanceContext.Provider value={{ isCinematic, toggleMode }}>
+    <PerformanceContext.Provider value={{ isCinematic, toggleMode, activeSection, setActiveSection }}>
       {children}
     </PerformanceContext.Provider>
   );

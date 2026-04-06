@@ -6,20 +6,33 @@ export default function TelemetryBar() {
   const [scrollDepth, setScrollDepth] = useState(0);
   const [currentSection, setCurrentSection] = useState('HERO');
   const [sessionTime, setSessionTime] = useState('00:00');
-  const startTime = useRef(Date.now());
+  const startTime = useRef(null);
+  const lastScrollTime = useRef(0);
+
+  useEffect(() => {
+    startTime.current = Date.now();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
+      const now = Date.now();
+      if (now - lastScrollTime.current < 100) return; // Throttle to 10hz
+      lastScrollTime.current = now;
+
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const depth = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+      const depth = docHeight > 0 ? Math.min(Math.round((scrollTop / docHeight) * 100), 100) : 0;
       setScrollDepth(depth);
 
+      // Throttled Section Detection
       const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'fl-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
       for (let i = sections.length - 1; i >= 0; i--) {
         const el = document.getElementById(sections[i]);
-        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.5) {
-          setCurrentSection(sections[i].replace('fl-', '').toUpperCase());
+        if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) {
+          const sectionLabel = sections[i].replace('fl-', '').toUpperCase();
+          if (currentSection !== sectionLabel) {
+            setCurrentSection(sectionLabel);
+          }
           break;
         }
       }
@@ -27,7 +40,7 @@ export default function TelemetryBar() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [currentSection]); // Included currentSection to avoid lint warning; logic is safe here.
 
   useEffect(() => {
     const interval = setInterval(() => {

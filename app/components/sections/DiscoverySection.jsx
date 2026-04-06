@@ -5,6 +5,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Html, Float, Environment, Edges, OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import Image from 'next/image';
+import { Suspense } from 'react';
+import HolographicLoader from '../ui/HolographicLoader';
+import { usePerformance } from '../../context/PerformanceContext';
 
 const achievements = [
   {
@@ -15,9 +18,7 @@ const achievements = [
     description: 'Highest honor at I2ASPO 2025, pioneering student innovation.',
     color: '#00f0ff',
     targetPos: [-3, 1.5, 1], // Exploded position
-    targetRot: [0.5, -0.5, 0.2],
-    basePos: [0, 0, 0],
-    baseRot: [Math.PI / 2, 0, 0] // Cylinder faces forward/up depending on camera
+    basePos: [0, 0, 0]
   },
   {
     id: 1,
@@ -27,9 +28,7 @@ const achievements = [
     description: 'Representing Indonesia at IPITEx Thailand for global impact.',
     color: '#ffd700',
     targetPos: [3, 1.5, 1],
-    targetRot: [0.2, 0.5, -0.2],
-    basePos: [1.6, 0, 0],
-    baseRot: [0, 0, 0]
+    basePos: [0, 0, 0]
   },
   {
     id: 2,
@@ -39,9 +38,7 @@ const achievements = [
     description: 'IPITEx Thailand Silver Prize & MTE Malaysia Bronze Award.',
     color: '#c0c0c0',
     targetPos: [-2, -2, 2],
-    targetRot: [-0.4, 0.2, 0.5],
-    basePos: [-1.6, 0, 0],
-    baseRot: [0, 0, 0]
+    basePos: [0, 0, 0]
   },
   {
     id: 3,
@@ -51,9 +48,7 @@ const achievements = [
     description: 'Sustainable engineering solutions and financial technology.',
     color: '#8b5cf6',
     targetPos: [2, -2, 2],
-    targetRot: [0.6, -0.4, 0.8],
-    basePos: [0, 1.2, 0],
-    baseRot: [Math.PI / 6, 0, 0]
+    basePos: [0, 0, 0]
   },
 ];
 
@@ -75,12 +70,9 @@ function BlueprintPart({ data, exploded, activeId, setActiveId, isMobile }) {
     const target = exploded ? new THREE.Vector3(...finalTarget) : new THREE.Vector3(...data.basePos);
     ref.current.position.lerp(target, delta * 3);
     
-    const rotTarget = exploded ? new THREE.Vector3(...data.targetRot) : new THREE.Vector3(...data.baseRot);
-    
-    // Lerp rotation smoothly
-    ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, rotTarget.x, delta * 3);
-    ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, rotTarget.y, delta * 3);
-    ref.current.rotation.z = THREE.MathUtils.lerp(ref.current.rotation.z, rotTarget.z, delta * 3);
+    // Slow rotation
+    ref.current.rotation.x += delta * 0.2;
+    ref.current.rotation.y += delta * 0.3;
 
     // Pulse active node
     if (activeId === data.id) {
@@ -100,11 +92,11 @@ function BlueprintPart({ data, exploded, activeId, setActiveId, isMobile }) {
         onPointerOut={() => { document.body.style.cursor = 'auto'; if(isActive) setActiveId(null); }}
         onClick={(e) => { e.stopPropagation(); setActiveId(isActive ? null : data.id); }}
       >
-        {/* Satellite Architectures based on ID */}
-        {data.id === 0 && <cylinderGeometry args={[0.4, 0.4, 2, 32]} />} {/* Main Hull */}
-        {data.id === 1 && <boxGeometry args={[2.5, 0.05, 0.8]} />} {/* Right Solar Panel */}
-        {data.id === 2 && <boxGeometry args={[2.5, 0.05, 0.8]} />} {/* Left Solar Panel */}
-        {data.id === 3 && <sphereGeometry args={[0.6, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2]} />} {/* Dish Antenna */}
+        {/* Abstract Geometry based on ID */}
+        {data.id === 0 && <boxGeometry args={[1, 1, 1]} />}
+        {data.id === 1 && <icosahedronGeometry args={[0.8, 1]} />}
+        {data.id === 2 && <cylinderGeometry args={[0.6, 0.6, 1.5, 16]} />}
+        {data.id === 3 && <torusKnotGeometry args={[0.5, 0.15, 100, 16]} />}
         
         <meshPhysicalMaterial 
           color="#0a0a1a"
@@ -267,43 +259,49 @@ export default function DiscoverySection() {
 
       {/* 3D Canvas Layout */}
       <div className="w-full h-[100vh]">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-          <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
-          
-          <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-            <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
-              {/* Central Core (Remains static) */}
-              <mesh>
-                <octahedronGeometry args={[0.5, 0]} />
-                <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
-              </mesh>
+        <Canvas 
+          camera={{ position: [0, 0, 8], fov: 45 }}
+          dpr={[1, isMobile ? 1 : 2]}
+          gl={{ powerPreference: "high-performance" }}
+        >
+          <Suspense fallback={<Html center><HolographicLoader text="MAPPING_VOLUMETRIC_DATA..." /></Html>}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+            <pointLight position={[-10, -10, -10]} intensity={1} color="#8b5cf6" />
+            
+            <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
+              <group rotation={[Math.PI / 8, -Math.PI / 4, 0]}>
+                {/* Central Core (Remains static) */}
+                <mesh>
+                  <octahedronGeometry args={[0.5, 0]} />
+                  <meshStandardMaterial color="#00f0ff" emissive="#00f0ff" emissiveIntensity={2} wireframe />
+                </mesh>
 
-              {achievements.map((item) => (
-                <BlueprintPart 
-                  key={item.id} 
-                  data={item} 
-                  exploded={exploded} 
-                  activeId={activeId}
-                  setActiveId={setActiveId}
-                  isMobile={isMobile}
-                />
-              ))}
-            </group>
-          </Float>
+                {achievements.map((item) => (
+                  <BlueprintPart 
+                    key={item.id} 
+                    data={item} 
+                    exploded={exploded} 
+                    activeId={activeId}
+                    setActiveId={setActiveId}
+                    isMobile={isMobile}
+                  />
+                ))}
+              </group>
+            </Float>
 
-          <MeasurementGrid />
-          
-          <OrbitControls 
-            enableZoom={false} 
-            enablePan={false}
-            maxPolarAngle={Math.PI / 1.5}
-            minPolarAngle={Math.PI / 3}
-            autoRotate={!activeId && !isMobile}
-            autoRotateSpeed={0.5}
-            enableDamping={true}
-          />
+            <MeasurementGrid />
+            
+            <OrbitControls 
+              enableZoom={false} 
+              enablePan={false}
+              maxPolarAngle={Math.PI / 1.5}
+              minPolarAngle={Math.PI / 3}
+              autoRotate={!activeId && !isMobile}
+              autoRotateSpeed={0.5}
+              enableDamping={true}
+            />
+          </Suspense>
         </Canvas>
       </div>
     </section>

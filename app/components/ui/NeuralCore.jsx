@@ -2,7 +2,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Sphere, MeshDistortMaterial, Float, Environment } from '@react-three/drei';
+import { Sphere, MeshDistortMaterial, Float, Environment, Html } from '@react-three/drei';
+import { Suspense } from 'react';
+import HolographicLoader from './HolographicLoader';
 import { useSound } from '../../context/SoundContext';
 import { usePerformance } from '../../context/PerformanceContext';
 
@@ -277,11 +279,16 @@ export default function NeuralCore() {
       >
         <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500 audio-reactive-glow" />
         <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
-          <Canvas camera={{ position: [0, 0, 4] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-            <CoreModel />
-            <Environment preset="city" />
+          <Canvas 
+            camera={{ position: [0, 0, 4] }}
+            dpr={[1, isCinematic ? 2 : 1]}
+          >
+            <Suspense fallback={<Html center><HolographicLoader text="LINKING..." /></Html>}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
+              <CoreModel />
+              <Environment preset="city" />
+            </Suspense>
           </Canvas>
         </div>
         

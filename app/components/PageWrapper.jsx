@@ -30,6 +30,18 @@ import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
 import CinematicRoom from './three/CinematicRoom';
 
+// Lazy Load Wrapper for heavy sections
+function LazySection({ children, id, margin = "200px" }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: false, margin });
+  const { isCinematic } = usePerformance();
+
+  return (
+    <section ref={ref} id={id} className="relative min-h-[50vh]">
+      {isInView || !isCinematic ? children : <div className="h-full w-full" />}
+    </section>
+  );
+}
 
 // Global Scanline Effect
 function Scanline() {
@@ -348,93 +360,50 @@ export default function PageWrapper() {
         <SoundToggle />
         <NeuralCore />
         
-        <main className="relative z-10 overflow-x-hidden">
-          <motion.section 
-            initial={{ opacity: 0, clipPath: 'inset(10% 0 10% 0)' }}
-            whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            id="hero" aria-label="Introduction"
-          >
+        <main className="relative z-10 pb-24 md:pb-16">
+          <LazySection id="hero" margin="0px">
             <HeroSection isMobile={isMobile} />
-          </motion.section>
+          </LazySection>
 
           <MissionStats />
 
-          <motion.section 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            id="skills" aria-label="Professional Skills Overview"
-          >
+          <LazySection id="skills">
             <SkillsSection />
-          </motion.section>
+          </LazySection>
 
-          <motion.section 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1 }}
-            id="education" aria-label="Academic Background"
-          >
+          <LazySection id="education">
             <EducationSection />
-          </motion.section>
+          </LazySection>
 
-          <motion.section 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            id="trophy" aria-label="Awards and Trophies Gallery"
-          >
+          <LazySection id="trophy">
             <TrophyGallery />
-          </motion.section>
+          </LazySection>
 
           <div className="bg-[#020208]/80 backdrop-blur-3xl border-y border-white/5">
-             <motion.section 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ duration: 1 }}
-               id="projects" aria-label="Selected Projects"
-             >
+             <LazySection id="projects">
                <ProjectsSection />
-             </motion.section>
+             </LazySection>
              
-             <motion.section 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ duration: 1 }}
-               id="achievements" aria-label="Key Achievements"
-             >
+             <LazySection id="achievements">
                <AchievementsSection />
-             </motion.section>
+             </LazySection>
           </div>
 
-          <motion.section 
-            initial={{ opacity: 0, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2 }}
-            id="fl-globe" aria-label="Global Impact Map"
-          >
+          <LazySection id="fl-globe">
             <GlobeSection />
-          </motion.section>
+          </LazySection>
 
-          <section id="roadmap" aria-label="Future Roadmap"><RoadmapSection /></section>
-          <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
-          <section id="vision" aria-label="Vision and Philosophy"><VisionSection /></section>
-          <motion.section 
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: "circOut" }}
-            id="contact" aria-label="Contact and Collaboration"
-          >
+          <RoadmapSection />
+          
+          <LazySection id="discovery">
+            <DiscoverySection />
+          </LazySection>
+          
+          <VisionSection />
+
+          <LazySection id="contact">
             <ContactSection />
-          </motion.section>
+          </LazySection>
         </main>
         <HolographicFooter />
         <BackToTop />
