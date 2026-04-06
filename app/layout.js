@@ -2,6 +2,8 @@ import { Inter, Outfit, Sora } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/ui/SmoothScroll";
 import TelemetryBar from "./components/ui/TelemetryBar";
+import { PerformanceProvider } from './context/PerformanceContext';
+import { SoundProvider } from './context/SoundContext';
 
 const inter = Inter({
   variable: "--font-inter",
@@ -123,10 +125,14 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen">
-        <SmoothScroll>
-          {children}
-          <TelemetryBar />
-        </SmoothScroll>
+        <PerformanceProvider>
+          <SoundProvider>
+            <SmoothScroll>
+              {children}
+              <TelemetryBar />
+            </SmoothScroll>
+          </SoundProvider>
+        </PerformanceProvider>
       </body>
     </html>
   );
