@@ -131,51 +131,31 @@ export default function TrophyGallery() {
               `} 
             />
             
-            {isCinematic ? (
-              <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
-                <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
-                
-                <PresentationControls
-                  global
-                  config={{ mass: 2, tension: 500 }}
-                  snap={{ mass: 4, tension: 1500 }}
-                  rotation={[0, 0, 0]}
-                  polar={[-Math.PI / 4, Math.PI / 4]}
-                  azimuth={[-Math.PI / 2, Math.PI / 2]}
-                >
-                  <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                    <group onClick={() => handleSelect(trophy.id)} cursor="pointer" frustumCulled={true}>
-                      <MedalModel 
-                        color={trophy.color} 
-                        ribbonColor={trophy.ribbonColor} 
-                        isActive={activeId === trophy.id}
-                      />
-                    </group>
-                  </Float>
-                </PresentationControls>
-                <Environment preset="city" />
-              </Canvas>
-            ) : (
-              <div 
-                className="absolute inset-0 flex flex-col items-center justify-center p-8 group-hover:scale-105 transition-transform duration-500 cursor-pointer"
-                onClick={() => handleSelect(trophy.id)}
+            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
+              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
+              
+              <PresentationControls
+                global
+                config={{ mass: 2, tension: 500 }}
+                snap={{ mass: 4, tension: 1500 }}
+                rotation={[0, 0, 0]}
+                polar={[-Math.PI / 4, Math.PI / 4]}
+                azimuth={[-Math.PI / 2, Math.PI / 2]}
               >
-                <div 
-                  className={`w-32 h-32 rounded-full border-4 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex items-center justify-center mb-6`}
-                  style={{ borderColor: trophy.color, boxShadow: `0 0 30px ${trophy.color}40`, background: `linear-gradient(135deg, ${trophy.color}20, transparent)` }}
-                >
-                   <div 
-                     className="w-20 h-20 rounded-full animate-pulse-glow"
-                     style={{ backgroundColor: trophy.color }}
-                   />
-                </div>
-                <div className="text-xl font-display font-medium text-white/90 text-center uppercase tracking-widest" style={{ textShadow: `0 0 10px ${trophy.color}` }}>
-                  {trophy.title}
-                </div>
-              </div>
-            )}
+                <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
+                  <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
+                    <MedalModel 
+                      color={trophy.color} 
+                      ribbonColor={trophy.ribbonColor} 
+                      isActive={activeId === trophy.id}
+                    />
+                  </group>
+                </Float>
+              </PresentationControls>
+              <Environment preset="city" />
+            </Canvas>
 
             {/* Scanning HUD Overlay */}
             <div className="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">

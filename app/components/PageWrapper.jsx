@@ -20,7 +20,7 @@ import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
-import { usePerformance } from '../context/PerformanceContext';
+import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
@@ -59,7 +59,7 @@ function WarpEngine() {
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
       z: Math.random() * 2 + 0.5,
-      size: Math.random() * 2 + 0.5,
+      z: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
     
@@ -253,14 +253,24 @@ function NotificationSystem() {
 export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-  
-  const { isCinematic, isMobile, isInitialized } = usePerformance();
   const { playBootSequence } = useSound();
   const introFinished = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      const isSmallScreen = window.innerWidth < 768;
+      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      setIsMobile(isSmallScreen || isLowPerf);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const handleIntroComplete = useCallback(() => {
@@ -303,11 +313,11 @@ export default function PageWrapper() {
   if (!mounted) return null;
 
   return (
-    <>
+    <PerformanceProvider>
       <AudioReactor />
       <div className="noise-overlay" />
-      {isCinematic && <CustomCursor />}
-      {isCinematic && <WarpPortal />}
+      <CustomCursor />
+      <WarpPortal />
       <AuroraOverlay />
       
       <AnimatePresence>
@@ -317,13 +327,16 @@ export default function PageWrapper() {
       </AnimatePresence>
 
       <motion.div 
-        animate={isShaking ? { x: [-10, 10, -10, 10, 0], y: [-5, 5, -5, 5, 0] } : {}}
+        animate={isShaking ? { 
+          x: [0, -10, 10, -10, 10, 0],
+          y: [0, 5, -5, 5, -5, 0]
+        } : {}}
         transition={{ duration: 0.5 }}
-        className={`relative overflow-x-hidden min-h-screen font-sans ${!showIntro ? (isCinematic ? 'is-cinematic' : 'is-standard') : ''}`}
+        className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        {isCinematic && <CinematicRoom />}
-        {isCinematic && <WarpEngine />}
+        <CinematicRoom />
+        <WarpEngine />
         <AudioVisualizer />
         <Scanline />
         <SidebarHUD />
@@ -428,6 +441,6 @@ export default function PageWrapper() {
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
-    </>
+    </PerformanceProvider>
   );
 }
