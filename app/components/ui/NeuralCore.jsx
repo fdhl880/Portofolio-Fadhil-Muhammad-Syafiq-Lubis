@@ -56,11 +56,11 @@ function CoreModel() {
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
       <group>
         {/* Central Core */}
-        <Sphere ref={meshRef} args={[1, isMobile ? 32 : 64, isMobile ? 32 : 64]}>
+        <Sphere ref={meshRef} args={[1, 64, 64]}>
           <MeshDistortMaterial
             color="#00f0ff"
-            speed={isCinematic && !isMobile ? 3 : 0}
-            distort={isMobile ? 0 : 0.4}
+            speed={isCinematic ? 3 : 0}
+            distort={0.4}
             radius={1}
             metalness={0.9}
             roughness={0.1}
@@ -70,7 +70,7 @@ function CoreModel() {
         </Sphere>
         
         {/* Wireframe Shell */}
-        <Sphere ref={wireRef} args={[1.2, isMobile ? 16 : 32, isMobile ? 16 : 32]}>
+        <Sphere ref={wireRef} args={[1.2, 32, 32]}>
           <meshPhongMaterial 
             color="#00f0ff" 
             wireframe 
@@ -187,7 +187,7 @@ export default function NeuralCore() {
   };
 
   return (
-    <div className="fixed bottom-12 right-4 md:bottom-8 md:right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
+    <div className="fixed bottom-8 right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -277,14 +277,10 @@ export default function NeuralCore() {
       >
         <div className="absolute inset-0 bg-cyan-400/20 rounded-full blur-2xl group-hover:bg-cyan-400/40 transition-colors duration-500 audio-reactive-glow" />
         <div className="relative w-full h-full opacity-90 group-hover:opacity-100 transition-opacity">
-          <Canvas 
-            camera={{ position: [0, 0, 4] }}
-            gl={{ antialias: !isMobile, powerPreference: "high-performance" }}
-            dpr={isMobile ? [1, 1.5] : [1, 2]}
-          >
+          <Canvas camera={{ position: [0, 0, 4] }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} intensity={1.5} color="#00f0ff" />
-            <CoreModel isMobile={isMobile} />
+            <CoreModel />
             <Environment preset="city" />
           </Canvas>
         </div>

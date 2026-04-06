@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
@@ -18,19 +17,19 @@ import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
 import GlobeSection from './sections/GlobeSection';
+import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
-import { usePerformance } from '../context/PerformanceContext';
+import { PerformanceProvider } from '../context/PerformanceContext';
 import CustomCursor from './ui/CustomCursor';
 import PerformanceToggle from './ui/PerformanceToggle';
 import HolographicFooter from './ui/HolographicFooter';
+import AudioVisualizer from './ui/AudioVisualizer';
+import AuroraOverlay from './ui/AuroraOverlay';
+import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
+import CinematicRoom from './three/CinematicRoom';
 
-const CinematicRoom = dynamic(() => import('./three/CinematicRoom'), { ssr: false });
-const AudioVisualizer = dynamic(() => import('./ui/AudioVisualizer'), { ssr: false });
-const AuroraOverlay = dynamic(() => import('./ui/AuroraOverlay'), { ssr: false });
-const WarpPortal = dynamic(() => import('./ui/WarpPortal'), { ssr: false });
-const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 // Global Scanline Effect
 function Scanline() {
@@ -254,8 +253,8 @@ function NotificationSystem() {
 export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
-  const { isCinematic, isMobile } = usePerformance();
   const { playBootSequence } = useSound();
   const introFinished = useRef(false);
 
@@ -263,11 +262,23 @@ export default function PageWrapper() {
     setMounted(true);
   }, []);
 
+  useEffect(() => {
+    const checkMobile = () => {
+      const isSmallScreen = window.innerWidth < 768;
+      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+      setIsMobile(isSmallScreen || isLowPerf);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile, { passive: true });
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const handleIntroComplete = useCallback(() => {
     if (introFinished.current) return;
     introFinished.current = true;
     setShowIntro(false);
     
+    // Attempt audio boot sequence safely
     try {
       playBootSequence();
     } catch (e) {
@@ -280,12 +291,17 @@ export default function PageWrapper() {
 
   useEffect(() => {
     if (showIntro) {
+      // Primary Cinematic Timer
       const timer = setTimeout(handleIntroComplete, 4500);
+      
+      // Secondary FAIL-SAFE Timer: Force reveal after 6.5 seconds no matter what
       const failsafe = setTimeout(() => {
          if (!introFinished.current) {
+            console.warn("FL Runtime: Intro hanging. Firing Force Reveal Protocol.");
             handleIntroComplete();
          }
       }, 6500);
+
       return () => {
         clearTimeout(timer);
         clearTimeout(failsafe);
@@ -293,24 +309,18 @@ export default function PageWrapper() {
     }
   }, [showIntro, handleIntroComplete]);
 
+  // Prevent Hydration Errors by delaying DOM assembly until client mounts
   if (!mounted) return null;
 
   return (
-    <div className="relative">
+    <PerformanceProvider>
       <AudioReactor />
       <div className="noise-overlay" />
       <CustomCursor />
       <WarpPortal />
+      <AuroraOverlay />
       
-      {isCinematic && !isMobile && (
-        <>
-          <AuroraOverlay />
-          <Scanline />
-          <WarpEngine />
-        </>
-      )}
-
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         {showIntro && (
           <CinematicIntro onComplete={handleIntroComplete} />
         )}
@@ -325,10 +335,13 @@ export default function PageWrapper() {
         className="relative overflow-x-hidden min-h-screen font-sans" 
         style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
       >
-        {!isMobile && <CinematicRoom />}
+        <CinematicRoom />
+        <WarpEngine />
         <AudioVisualizer />
+        <Scanline />
         <SidebarHUD />
         <NotificationSystem />
+        
         <ScrollProgress />
         <Navbar />
         <PerformanceToggle />
@@ -428,6 +441,6 @@ export default function PageWrapper() {
 
         <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
       </motion.div>
-    </div>
+    </PerformanceProvider>
   );
 }

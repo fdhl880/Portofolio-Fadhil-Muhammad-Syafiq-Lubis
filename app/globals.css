@@ -30,10 +30,8 @@
 
 html {
   scroll-behavior: smooth;
-  width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
 }
 
 body {
@@ -41,11 +39,8 @@ body {
   color: #ffffff;
   font-family: var(--font-sans), system-ui, sans-serif;
   overflow-x: hidden;
-  width: 100%;
-  max-width: 100%;
+  max-width: 100vw;
   position: relative;
-  min-height: 100vh;
-  min-height: 100dvh;
 }
 
 ::-webkit-scrollbar { 

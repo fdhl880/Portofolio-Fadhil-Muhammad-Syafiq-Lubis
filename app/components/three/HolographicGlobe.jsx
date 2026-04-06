@@ -3,7 +3,6 @@ import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Sphere, Float, Points, PointMaterial, useTexture, Html } from '@react-three/drei';
 import * as THREE from 'three';
-import { usePerformance } from '../../context/PerformanceContext';
 
 function Marker({ lat, lon, label, onClick }) {
   // Convert lat/lon to 3D coordinates on a sphere of radius 2
@@ -60,7 +59,6 @@ function generateGlobePoints(count = 3000) {
 
 export default function HolographicGlobe() {
   const globeRef = useRef();
-  const { isMobile } = usePerformance();
 
   // Load realistic Earth textures from reliable open-source CDC (three-globe examples)
   const [colorMap, bumpMap, specularMap] = useTexture([
@@ -69,8 +67,8 @@ export default function HolographicGlobe() {
     'https://unpkg.com/three-globe/example/img/earth-water.png'
   ]);
   
-  // Static points for the "stars" shell - Reduced for mobile
-  const points = useMemo(() => generateGlobePoints(isMobile ? 1000 : 3000), [isMobile]);
+  // Static points for the "stars" shell
+  const points = useMemo(() => generateGlobePoints(3000), []);
 
   useFrame((state) => {
     if (globeRef.current) {
@@ -88,18 +86,18 @@ export default function HolographicGlobe() {
   return (
     <group ref={globeRef}>
       {/* Main Realistic Globe Mesh */}
-      <Sphere args={[2, isMobile ? 32 : 64, isMobile ? 32 : 64]}>
+      <Sphere args={[2, 64, 64]}>
         <meshPhongMaterial
            map={colorMap}
-           bumpMap={!isMobile ? bumpMap : null}
+           bumpMap={bumpMap}
            bumpScale={0.015}
-           specularMap={!isMobile ? specularMap : null}
+           specularMap={specularMap}
            specular={new THREE.Color('grey')}
         />
       </Sphere>
 
       {/* Atmospheric Glow */}
-      <Sphere args={[2.02, isMobile ? 16 : 64, isMobile ? 16 : 64]}>
+      <Sphere args={[2.02, 64, 64]}>
         <meshBasicMaterial color="#00f0ff" transparent opacity={0.1} side={THREE.BackSide} />
       </Sphere>
 
