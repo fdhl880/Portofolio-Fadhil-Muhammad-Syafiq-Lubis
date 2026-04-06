@@ -47,9 +47,8 @@ const quotes = [
   { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
   { text: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", author: "Bill Gates" },
   { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" },
-  { text: "The biggest risk is not taking any risk.", author: "Mark Zuckerberg" },
-  { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
-  { text: "The cosmos is within us. We are made of star-stuff.", author: "Carl Sagan" }
+  { text: "Risk comes from not knowing what you're doing.", author: "Warren Buffett" },
+  { text: "Your most unhappy customers are your greatest source of learning.", author: "Bill Gates" },
 ];
 
 function SkillBentoCard({ group, index }) {
@@ -107,13 +106,6 @@ function SkillBentoCard({ group, index }) {
 export default function SkillsSection() {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const { playPip } = useSound();
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % quotes.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
 
   const nextQuote = () => {
     try { playPip(880, 0.1, 0.05); } catch(e) {}

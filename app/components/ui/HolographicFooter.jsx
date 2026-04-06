@@ -18,7 +18,7 @@ export default function HolographicFooter() {
         </div>
 
         <div className="flex flex-col items-center md:items-end gap-2">
-          <div className="flex gap-4 text-[10px] font-mono text-muted/40 uppercase tracking-widest">
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-1 text-[10px] font-mono text-muted/40 uppercase tracking-widest">
             <span>Uptime: 99.9%</span>
             <span>Latency: 24ms</span>
             <span>Packet_Status: OK</span>

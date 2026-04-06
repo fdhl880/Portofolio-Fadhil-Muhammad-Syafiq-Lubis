@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import CinematicIntro from './ui/CinematicIntro';
 import Navbar from './ui/Navbar';
 import ScrollProgress from './ui/ScrollProgress';
@@ -9,14 +10,10 @@ import HeroSection from './sections/HeroSection';
 import MissionStats from './sections/MissionStats';
 import SkillsSection from './sections/SkillsSection';
 import EducationSection from './sections/EducationSection';
-import TrophyGallery from './sections/TrophyGallery';
 import RoadmapSection from './sections/RoadmapSection';
-import AchievementsSection from './sections/AchievementsSection';
-import DiscoverySection from './sections/DiscoverySection';
 import ProjectsSection from './sections/ProjectsSection';
 import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
-import GlobeSection from './sections/GlobeSection';
 import NeuralCore from './ui/NeuralCore';
 import AudioReactor from './ui/AudioReactor';
 import SoundToggle from './ui/SoundToggle';
@@ -28,7 +25,13 @@ import AudioVisualizer from './ui/AudioVisualizer';
 import AuroraOverlay from './ui/AuroraOverlay';
 import WarpPortal from './ui/WarpPortal';
 import { useSound } from '../context/SoundContext';
-import CinematicRoom from './three/CinematicRoom';
+
+// Lazy-loaded heavy 3D sections
+const TrophyGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
+const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
+const DiscoverySection = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
+const GlobeSection = dynamic(() => import('./sections/GlobeSection'), { ssr: false });
+const CinematicRoom = dynamic(() => import('./three/CinematicRoom'), { ssr: false });
 
 
 // Global Scanline Effect
@@ -55,11 +58,10 @@ function WarpEngine() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let animId;
-    const stars = Array.from({ length: 150 }, () => ({
+    const stars = Array.from({ length: 60 }, () => ({
       x: Math.random() * window.innerWidth,
       y: Math.random() * window.innerHeight,
-      z: Math.random() * 2 + 0.5,
-      z: Math.random() * 2 + 0.5,
+      size: Math.random() * 2 + 0.5,
       opacity: Math.random() * 0.5 + 0.1
     }));
     
@@ -90,7 +92,7 @@ function WarpEngine() {
       const stretchFactor = Math.abs(speedFactor) * 2;
 
       stars.forEach(s => {
-        s.y -= speedFactor * s.z;
+        s.y -= speedFactor * s.size;
         
         // Wrap around screen
         if (s.y < -100) s.y = canvas.height + 50;
@@ -98,7 +100,7 @@ function WarpEngine() {
 
         ctx.fillStyle = `rgba(0, 240, 255, ${s.opacity})`;
         // Stretch star vertically based on scroll velocity
-        ctx.fillRect(s.x, s.y, s.z, Math.max(s.z, stretchFactor));
+        ctx.fillRect(s.x, s.y, s.size, Math.max(s.size, stretchFactor));
       });
 
       // Render Quantum Liquid Cursor Trail
