@@ -1,10 +1,14 @@
 'use client';
 import { motion } from 'framer-motion';
+import WarpPortal from '../ui/WarpPortal';
 
 export default function VisionSection() {
   return (
     <section id="vision" className="relative py-48 px-6 md:px-12 bg-black text-white overflow-hidden">
-      <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-12">
+      {/* Background Effect */}
+      <WarpPortal />
+
+      <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-12 relative z-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}

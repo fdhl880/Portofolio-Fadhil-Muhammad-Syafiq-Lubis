@@ -61,7 +61,7 @@ export default function CinematicIntro({ onComplete }) {
                     ease: [0.22, 1, 0.36, 1] 
                   }
                 }}
-                className={`bg-[#050510] border-[0.5px] border-white/5 ${phase === 3 ? 'pointer-events-none' : ''}`}
+                className={`bg-black border-[0.5px] border-white/5 ${phase === 3 ? 'pointer-events-none' : ''}`}
                 style={{ display: phase === 3 ? 'block' : 'block' }}
               />
             ))}
@@ -78,38 +78,37 @@ export default function CinematicIntro({ onComplete }) {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mb-12 relative w-20 h-20 rounded-2xl overflow-hidden shadow-2xl border border-white/10 p-4 bg-white/5 backdrop-blur-xl"
+                  className="mb-12 relative w-20 h-20 rounded-none overflow-hidden shadow-2xl border border-white/20 p-4 bg-black"
                 >
                   <Image src="/icon.png" alt="FL Boot" fill priority className="object-contain p-4" />
                 </motion.div>
 
                 <div className="w-64 h-20 relative flex flex-col items-center">
-                  {phase === 1 && (
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
-                      <div className="w-full text-[10px] font-mono text-white/40 uppercase tracking-[0.5em] mb-4 text-center">
-                        Initializing_System_{progress}%
+                      <div className="w-full text-[10px] font-sans text-white/40 uppercase tracking-[0.8em] mb-4 text-center">
+                        Curating Excellence
                       </div>
-                      <div className="w-full h-[1px] bg-white/10 relative overflow-hidden">
+                      <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">
                         <motion.div 
-                          className="absolute top-0 left-0 h-full bg-white/60" 
+                          className="absolute top-0 left-0 h-full bg-white/40" 
+                          transition={{ duration: 2, ease: "easeInOut" }}
                           animate={{ width: `${progress}%` }} 
                         />
                       </div>
                     </motion.div>
-                  )}
 
-                  {phase === 2 && (
-                    <motion.button
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.1)' }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={handleReveal}
-                      className="px-10 py-3 border border-white/20 text-white font-mono text-[10px] tracking-[0.4em] uppercase bg-white/5 backdrop-blur-md transition-all rounded-sm shadow-2xl"
-                    >
-                      ENTER_FL
-                    </motion.button>
-                  )}
+                    {phase === 2 && (
+                      <motion.button
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        whileHover={{ scale: 1.05, letterSpacing: '0.6em' }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={handleReveal}
+                        className="px-10 py-3 border border-white/20 text-white font-sans text-[10px] tracking-[0.4em] uppercase bg-black backdrop-blur-md transition-all rounded-none shadow-2xl"
+                      >
+                        Enter Atelier
+                      </motion.button>
+                    )}
                 </div>
               </motion.div>
             )}
