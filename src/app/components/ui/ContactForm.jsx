@@ -30,6 +30,12 @@ export default function ContactForm() {
     }
   };
 
+  const handleTextareaChange = (e) => {
+    setForm({ ...form, message: e.target.value });
+    e.target.style.height = 'auto';
+    e.target.style.height = e.target.scrollHeight + 'px';
+  };
+
   const inputClass = "w-full bg-transparent border-b border-white/10 py-6 text-xl md:text-2xl font-display text-white placeholder-white/20 focus:outline-none focus:border-white transition-all duration-700";
 
   return (
@@ -46,6 +52,7 @@ export default function ContactForm() {
           <input
             type="text"
             placeholder="Identity // Name"
+            aria-label="Your Name or Identity"
             value={form.name}
             onChange={e => setForm({ ...form, name: e.target.value })}
             className={inputClass}
@@ -55,6 +62,7 @@ export default function ContactForm() {
           <input
             type="email"
             placeholder="Digital Mail"
+            aria-label="Your Email Address"
             value={form.email}
             onChange={e => setForm({ ...form, email: e.target.value })}
             className={inputClass}
@@ -64,10 +72,11 @@ export default function ContactForm() {
         </div>
         <textarea
           placeholder="Brief Description of Inquiry"
+          aria-label="Your Message"
           value={form.message}
-          onChange={e => setForm({ ...form, message: e.target.value })}
+          onChange={handleTextareaChange}
           rows={1}
-          className={`${inputClass} resize-none overflow-hidden`}
+          className={`${inputClass} resize-none`}
           required
           id="contact-message"
         />
@@ -75,6 +84,7 @@ export default function ContactForm() {
 
       <motion.button
         type="submit"
+        aria-label={status === 'sending' ? 'Sending your message' : 'Submit your message'}
         disabled={status === 'sending'}
         className={`group relative flex items-center gap-6 py-4 uppercase text-[10px] tracking-[0.6em] font-sans transition-all duration-700 ${
           status === 'sent' ? 'text-green-400' : 'text-white/60 hover:text-white'

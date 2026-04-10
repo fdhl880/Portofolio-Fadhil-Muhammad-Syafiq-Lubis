@@ -1,32 +1,34 @@
 'use client';
 import { motion } from 'framer-motion';
 
+import AtelierSigil from './AtelierSigil';
+
 export default function DigitalSignature() {
   return (
-    <div className="w-full relative py-20 bg-black flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
+    <div className="w-full relative py-32 bg-black flex flex-col items-center justify-center overflow-hidden border-t border-white/5">
        {/* Background Glow */}
-       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-900/10 blur-[120px] rounded-full pointer-events-none" />
+       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-white/[0.02] blur-[120px] rounded-full pointer-events-none" />
 
-       <div className="relative z-10 flex flex-col items-center gap-12 text-center px-6">
+       <div className="relative z-10 flex flex-col items-center gap-16 text-center px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2 }}
-            className="flex flex-col items-center gap-4"
+            className="flex flex-col items-center gap-8"
           >
-             <span className="text-[10px] tracking-[0.8em] text-white/30 uppercase font-medium">Authentication</span>
+             <AtelierSigil className="w-16 h-16 text-white" />
              
              {/* Signature visual */}
-             <div className="relative group cursor-none">
-                <h4 className="text-6xl md:text-8xl font-thin text-white tracking-widest italic select-none">
-                   Fadhil <span className="text-cyan-400/80">Lubis</span>
+             <div className="relative group">
+                <h4 className="text-5xl md:text-8xl font-light text-white tracking-widest italic select-none">
+                   Fadhil <span className="opacity-20 font-serif">Lubis</span>
                 </h4>
                 {/* Underline animation */}
                 <motion.div 
-                  initial={{ width: 0 }}
-                  whileInView={{ width: "100%" }}
-                  transition={{ delay: 0.5, duration: 1.5, ease: "circOut" }}
-                  className="h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent mt-4"
+                   initial={{ width: 0 }}
+                   whileInView={{ width: "100%" }}
+                   transition={{ delay: 0.5, duration: 2, ease: [0.22, 1, 0.36, 1] }}
+                   className="h-[1px] bg-gradient-to-r from-transparent via-white/40 to-transparent mt-8"
                 />
              </div>
           </motion.div>

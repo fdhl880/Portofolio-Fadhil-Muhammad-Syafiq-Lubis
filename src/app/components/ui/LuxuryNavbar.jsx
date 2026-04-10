@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import BentoMenu from './BentoMenu';
 import AtelierSigil from './AtelierSigil';
+import Link from 'next/link';
 import { useSound } from '../../context/SoundContext';
 
 export default function LuxuryNavbar() {
@@ -46,12 +47,16 @@ export default function LuxuryNavbar() {
           {/* Atelier Brand Identity */}
           <div 
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="group flex items-center gap-4 cursor-pointer"
+            className="group flex items-center gap-6 cursor-pointer"
           >
-            <AtelierSigil className="w-8 h-8 text-white group-hover:text-[#D4AF37] transition-all duration-700" />
+            <AtelierSigil className="w-8 h-8 md:w-10 md:h-10 text-white" />
             <div className="flex flex-col">
-              <span className="font-display font-bold text-white text-xs tracking-[0.4em] uppercase">ATELIER_LUBIS</span>
-              <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">PRECISION_v2.5</span>
+              <span className="text-[12px] md:text-[14px] font-light tracking-[0.4em] text-white uppercase leading-none">
+                ATELIER <span className="opacity-40">LUBIS</span>
+              </span>
+              <span className="text-[7px] tracking-[0.8em] text-white/20 uppercase mt-2 font-bold">
+                NEXUS OF PRECISION
+              </span>
             </div>
           </div>
 

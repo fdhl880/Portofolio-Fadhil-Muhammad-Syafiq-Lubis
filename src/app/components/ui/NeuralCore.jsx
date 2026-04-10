@@ -154,7 +154,11 @@ export default function NeuralCore() {
         else if (cmd === '/status') res = 'FL_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
         else if (cmd === '/override') {
           res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
-          document.documentElement.classList.toggle('fl-breach');
+          // Optimized React-native approach: instead of direct DOM manipulation,
+          // we use the established body class pattern which is hydration-safe.
+          if (typeof document !== 'undefined') {
+            document.documentElement.classList.toggle('fl-breach');
+          }
         }
         else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
         else {

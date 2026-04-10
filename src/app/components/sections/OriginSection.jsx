@@ -12,6 +12,8 @@ export default function OriginSection() {
           alt="Medan, Indonesia" 
           fill
           className="object-cover opacity-40 grayscale"
+          priority
+          quality={90}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black" />
       </div>

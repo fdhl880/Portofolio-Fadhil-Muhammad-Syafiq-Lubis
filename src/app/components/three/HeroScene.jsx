@@ -163,7 +163,7 @@ export default function HeroScene() {
       dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: 'high-performance' }}
       style={{ position: 'absolute', inset: 0 }}
-      frameloop="always"
+      frameloop="demand"
     >
       <ambientLight intensity={0.15} />
       <pointLight position={[8, 8, 8]} intensity={0.6} color="#00f0ff" />
