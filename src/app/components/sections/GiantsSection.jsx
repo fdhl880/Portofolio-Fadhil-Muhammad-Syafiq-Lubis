@@ -104,7 +104,7 @@ export default function GiantsSection() {
 
                         {/* Top ID Number */}
                         <div className="absolute top-12 right-12 text-white/10 text-xs font-mono tracking-widest group-hover:text-white/30 transition-colors">
-                           NO. {i + 1} // ARCHIVE_ENTITY
+                           NO. {i + 1} {"//"} ARCHIVE_ENTITY
                         </div>
                     </div>
                 </motion.div>
