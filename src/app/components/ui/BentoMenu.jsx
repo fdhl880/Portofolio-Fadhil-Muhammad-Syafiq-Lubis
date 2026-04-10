@@ -53,7 +53,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Directory List */}
-          <div className="flex-grow flex flex-col justify-center gap-12 max-w-4xl mx-auto w-full">
+          <div className="flex-grow flex flex-col justify-start gap-8 md:gap-12 max-w-4xl mx-auto w-full pt-12 md:pt-0 md:justify-center">
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.name}
@@ -61,7 +61,7 @@ export default function BentoMenu({ isOpen, onClose }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 1 }}
                 onClick={() => handleNav(link.target)}
-                className="group flex items-baseline gap-8 text-4xl md:text-7xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
+                className="group flex items-baseline gap-8 text-3xl md:text-7xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
               >
                 <span className="text-lg md:text-2xl italic opacity-40">/0{i+1}</span>
                 <span className="group-hover:italic group-hover:translate-x-8 transition-all duration-700">
