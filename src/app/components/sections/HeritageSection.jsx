@@ -64,7 +64,7 @@ export default function HeritageSection() {
                   rigor were first established.
                </p>
                <p>
-                  It wasn't just about the competition; it was about the culture of precision. This heritage 
+                  It wasn&apos;t just about the competition; it was about the culture of precision. This heritage 
                   forms the foundation of every technical blueprint and every national achievement recorded today.
                </p>
             </div>

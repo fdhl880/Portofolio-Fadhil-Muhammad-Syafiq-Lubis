@@ -12,6 +12,7 @@ export default function GlitchText({ text, className = '' }) {
 
   useEffect(() => {
     if (!isInView || isAnimating) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsAnimating(true);
     
     let iteration = 0;

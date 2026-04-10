@@ -41,7 +41,7 @@ export default function GiantsSection() {
                         
                         <div className="opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
                            <p className="text-xl text-white font-serif italic leading-relaxed">
-                              "{giant.quote}"
+                              &quot;{giant.quote}&quot;
                            </p>
                         </div>
 

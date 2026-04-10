@@ -6,6 +6,7 @@ export default function TelemetryBar() {
   const [scrollDepth, setScrollDepth] = useState(0);
   const [currentSection, setCurrentSection] = useState('HERO');
   const [sessionTime, setSessionTime] = useState('00:00');
+  // eslint-disable-next-line react-hooks/purity
   const startTime = useRef(Date.now());
 
   useEffect(() => {

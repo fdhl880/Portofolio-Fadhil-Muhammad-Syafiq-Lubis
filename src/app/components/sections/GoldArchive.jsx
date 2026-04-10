@@ -153,7 +153,7 @@ export default function GoldArchive() {
                         {medal.title}
                     </h3>
                     <p className="text-sm text-white/40 italic font-serif max-w-[80%]">
-                       "{medal.tagline}"
+                       &quot;{medal.tagline}&quot;
                     </p>
                 </div>
 

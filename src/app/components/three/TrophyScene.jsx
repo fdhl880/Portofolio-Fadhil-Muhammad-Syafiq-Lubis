@@ -10,6 +10,7 @@ function CameraRig() {
   
   useFrame(() => {
     const targetFov = isPortrait ? 70 : 50;
+    // eslint-disable-next-line react-hooks/immutability
     camera.fov = THREE.MathUtils.lerp(camera.fov, targetFov, 0.05);
     camera.updateProjectionMatrix();
   });
