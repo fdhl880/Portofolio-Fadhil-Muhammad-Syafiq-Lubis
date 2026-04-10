@@ -109,12 +109,24 @@ export default function GoldArchive() {
       </div>
 
       <div className="relative h-[400px] md:h-[600px] cursor-grab active:cursor-grabbing">
+        {/* Interaction Guide */}
+        <div className="absolute top-0 left-0 w-full flex justify-center z-30 pointer-events-none select-none">
+            <motion.div 
+               animate={{ y: [0, 5, 0], opacity: [0.2, 0.5, 0.2] }}
+               transition={{ duration: 3, repeat: Infinity }}
+               className="flex flex-col items-center gap-2"
+            >
+                <span className="text-[8px] tracking-[1em] text-white/40 uppercase">Drag to Explore</span>
+                <div className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent" />
+            </motion.div>
+        </div>
+
         <motion.div 
           ref={scrollContentRef}
           drag="x"
           dragConstraints={constraints}
-          dragElastic={0.1}
-          dragTransition={{ power: 0.1, timeConstant: 200 }}
+          dragElastic={0.15}
+          dragTransition={{ power: 0.2, timeConstant: 300 }}
           className="flex gap-12 px-12 md:px-24 absolute left-0 h-full items-center"
         >
           {GOLD_MEDALS.map((medal, index) => (

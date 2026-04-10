@@ -12,41 +12,32 @@ export function PerformanceProvider({ children }) {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    // Client-side detection
+    // Client-side detection: Calculate EVERYTHING first
     const ua = navigator.userAgent.toLowerCase();
     const android = /android/.test(ua);
-    setIsAndroid(android);
-
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      return mobile;
-    };
-
-    const mobile = checkMobile();
-    
-    // Performance Tiering & DPR Optimization
-    // Android devices often have high resolution (DPR 3+) but limited GPU fill-rate.
-    // We cap mobile/Android to 1.0 - 1.2 to ensure "luxury" smoothness over raw resolution.
+    const mobile = window.innerWidth < 768;
     const rawDPR = window.devicePixelRatio || 1;
-    const isAndroidDevice = /android/.test(ua);
-    
-    // Luxury Optimization: Prioritize 60fps over sharpness on mobile
-    const optimizedDPR = isAndroidDevice ? 1 : (mobile ? Math.min(rawDPR, 1.2) : Math.min(rawDPR, 2));
-    setDpr(optimizedDPR);
+    const optimizedDPR = android ? 1 : (mobile ? Math.min(rawDPR, 1.2) : Math.min(rawDPR, 2));
 
-    if (mobile || isAndroidDevice) {
-      setPerformanceTier(isAndroidDevice ? 'low' : 'medium');
-      // On Android/Mobile, we disable cinematic mode by default to ensure first-load stability
+    // Update states in a single, safe way: suppressing lint for mount-only initialization
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsAndroid(android);
+    setIsMobile(mobile);
+    setDpr(optimizedDPR);
+    setIsInitialized(true);
+
+    if (mobile || android) {
+      setPerformanceTier(android ? 'low' : 'medium');
       setIsCinematic(false);
     }
 
-    setIsInitialized(true);
-
-    const handleResize = () => checkMobile();
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, []); // Run once on mount
 
   const toggleMode = () => {
     setIsCinematic((prev) => {

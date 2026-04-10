@@ -9,6 +9,7 @@ export function AppModeProvider({ children }) {
 
   useEffect(() => {
     const saved = localStorage.getItem('atelier-app-mode');
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setMode(saved);
   }, []);
 
