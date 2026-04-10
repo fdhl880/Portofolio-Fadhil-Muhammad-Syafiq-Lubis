@@ -5,6 +5,8 @@ import { PerspectiveCamera, Stars, MeshTransmissionMaterial } from '@react-three
 import { useScroll } from 'framer-motion';
 import * as THREE from 'three';
 
+npx -y netlify-cli login
+
 // Distant Exoplanets
 const planets = [
   { position: [-60, 20, -100], size: 10, color: '#00f0ff' },
@@ -12,7 +14,7 @@ const planets = [
 ];
 
 // Asteroid Field (InstancedMesh Data)
-const asteroidCount = 120;
+const asteroidCount = 300;
 const asteroidData = Array.from({ length: asteroidCount }, () => ({
   pos: [
     (Math.random() - 0.5) * 150, 
@@ -80,7 +82,7 @@ function SpaceScene({ scrollYProgress }) {
 
   return (
     <>
-      <fog attach="fog" args={['#020208', 30, 150]} />
+      <fog attach="fog" args={['#020208', 30, 180]} />
       <PerspectiveCamera ref={cameraRef} makeDefault position={[0, 0, 0]} fov={70} />
       
       <ambientLight intensity={0.5} />
@@ -99,7 +101,7 @@ function SpaceScene({ scrollYProgress }) {
         <meshBasicMaterial color="#1a1a2e" wireframe />
       </instancedMesh>
       
-      <Stars radius={100} depth={200} count={800} factor={6} saturation={1} fade speed={3} />
+      <Stars radius={100} depth={200} count={2000} factor={6} saturation={1} fade speed={3} />
     </>
   );
 }
