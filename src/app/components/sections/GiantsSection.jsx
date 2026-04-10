@@ -37,7 +37,7 @@ const GIANTS = [
     name: "Warren Buffett", 
     quote: "Price is what you pay. Value is what you get.", 
     role: "Value Architecture",
-    image: "/images/giants/buffett.jpg"
+    image: "/images/giants/buffett.png"
   }
 ];
 
