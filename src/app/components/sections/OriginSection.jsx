@@ -54,7 +54,7 @@ export default function OriginSection() {
 
                 <div className="md:col-span-2 mt-8">
                     <p className="text-sm text-white/50 font-light leading-relaxed max-w-2xl">
-                       Built in the cultural nexus of North Sumatra, Fadhil Muhammad Syafiq Lubis represents a convergence 
+                       Built in the cultural foundation of North Sumatra, Fadhil Muhammad Syafiq Lubis represents a convergence 
                        of historical heritage and futuristic engineering potential. The year 2011 marked the initialization 
                        of a trajectory defined by obsessive precision and a relentless pursuit of technical excellence.
                     </p>

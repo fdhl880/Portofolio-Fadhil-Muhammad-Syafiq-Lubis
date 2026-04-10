@@ -7,7 +7,7 @@ const photos = [
   { id: 1, src: '/images/photo1.jpg', title: 'The Visionary', subtitle: 'Atelier Portrait' },
   { id: 3, src: '/images/photo3.jpg', title: 'Presence', subtitle: 'Regional Stage' },
   { id: 4, src: '/images/photo4.jpg', title: 'Achievement', subtitle: 'Global Merit' },
-  { id: 2, src: '/images/photo2.jpg', title: 'Future', subtitle: 'Nexus Research' },
+  { id: 2, src: '/images/photo2.jpg', title: 'Future', subtitle: 'Atelier Research' },
 ];
 
 function ParallaxImage({ photo, index }) {

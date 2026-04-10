@@ -10,7 +10,7 @@ export default function AtelierSigil({ className = "w-12 h-12" }) {
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
       >
-        {/* The Nexus Monogram Construction (F + L) */}
+        {/* The Atelier Monogram Construction (F + L) */}
         
         {/* Main Vertical Axis (The Foundation) */}
         <motion.path
@@ -54,7 +54,7 @@ export default function AtelierSigil({ className = "w-12 h-12" }) {
           transition={{ duration: 1, delay: 1.2 }}
         />
 
-        {/* Geometric Accents (The Nexus Points) */}
+        {/* Geometric Accents (The Atelier Points) */}
         <motion.rect
           x="33.5"
           y="13.5"
@@ -88,7 +88,7 @@ export default function AtelierSigil({ className = "w-12 h-12" }) {
         />
       </svg>
       
-      {/* Subtle hover "Nexus" glow */}
+      {/* Subtle hover "Atelier" glow */}
       <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 blur-xl transition-all duration-700 rounded-full" />
     </div>
   );

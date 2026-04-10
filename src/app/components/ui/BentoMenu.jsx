@@ -41,7 +41,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           <div className="flex justify-between items-center mb-24">
             <div className="flex flex-col gap-2">
               <span className="font-display text-2xl tracking-[0.2em]">F_L</span>
-              <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">The Nexus of Precision</span>
+              <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Precision Archive</span>
             </div>
             <button 
               onClick={onClose}

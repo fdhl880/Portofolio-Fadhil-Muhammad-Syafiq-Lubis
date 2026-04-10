@@ -41,7 +41,7 @@ export default function LuxuryHero() {
           </span>
           
           <h1 className="font-display mb-6">
-            The Nexus of <br />
+            The Architecture of <br />
             <span className="opacity-40 italic">Precision.</span>
           </h1>
 

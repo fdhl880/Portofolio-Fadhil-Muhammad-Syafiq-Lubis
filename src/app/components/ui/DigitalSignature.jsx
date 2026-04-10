@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 import { motion } from 'framer-motion';
 
 import AtelierSigil from './AtelierSigil';
@@ -50,7 +50,7 @@ export default function DigitalSignature() {
           
           <div className="mt-12 opacity-5">
              <p className="text-[8px] tracking-[0.2em] max-w-sm mx-auto leading-relaxed uppercase">
-                This digital environment is a manifestation of the Fadhil Muhammad Syafiq Lubis architectural vision. 
+                This digital environment is a manifestation of the Atelier architectural vision. 
                 Unauthorized replication of logic or aesthetics is prohibited by the Atelier.
              </p>
           </div>

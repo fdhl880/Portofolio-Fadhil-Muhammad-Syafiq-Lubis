@@ -24,7 +24,7 @@ const roadmapData = [
   {
     year: 'Futurity',
     title: 'The Continuous Pursuit',
-    event: 'Nexus of Innovation',
+    event: 'Atelier Vision',
     desc: 'Merging quantitative strategy with advanced engineering to solve the challenges of the coming decade.'
   }
 ];

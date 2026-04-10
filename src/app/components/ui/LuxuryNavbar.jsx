@@ -52,10 +52,10 @@ export default function LuxuryNavbar() {
             <AtelierSigil className="w-8 h-8 md:w-10 md:h-10 text-white" />
             <div className="flex flex-col">
               <span className="text-[12px] md:text-[14px] font-light tracking-[0.4em] text-white uppercase leading-none">
-                ATELIER <span className="opacity-40">LUBIS</span>
+                ATELIER
               </span>
               <span className="text-[7px] tracking-[0.8em] text-white/20 uppercase mt-2 font-bold">
-                NEXUS OF PRECISION
+                PRECISION ARCHIVE
               </span>
             </div>
           </div>

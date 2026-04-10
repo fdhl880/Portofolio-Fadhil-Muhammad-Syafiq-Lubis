@@ -89,7 +89,7 @@ export default function VisionSection() {
           className="mt-12 group flex items-center gap-6 cursor-default"
         >
           <div className="w-16 h-px bg-white/5 group-hover:w-32 group-hover:bg-white/20 transition-all duration-1000" />
-          <span className="font-display text-3xl uppercase tracking-[0.3em] group-hover:tracking-[0.6em] transition-all duration-1000 opacity-60 italic">Fadhil Lubis</span>
+          <span className="font-display text-3xl uppercase tracking-[0.3em] group-hover:tracking-[0.6em] transition-all duration-1000 opacity-60 italic">Fadhil</span>
           <div className="w-16 h-px bg-white/5 group-hover:w-32 group-hover:bg-white/20 transition-all duration-1000" />
         </motion.div>
       </div>

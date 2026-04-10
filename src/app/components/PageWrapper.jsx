@@ -6,7 +6,6 @@ import LuxuryNavbar from './ui/LuxuryNavbar';
 import LuxuryHero from './sections/LuxuryHero';
 import GoldArchive from './sections/GoldArchive';
 import HeritageSection from './sections/HeritageSection';
-import PhilosophyUpgrade from './sections/PhilosophyUpgrade';
 import ProjectsSection from './sections/ProjectsSection';
 import ContactSection from './sections/ContactSection';
 import BackToTop from './ui/BackToTop';
@@ -18,6 +17,7 @@ import AmbientSound from './ui/AmbientSound';
 import AtelierSpec from './sections/AtelierSpec';
 import OriginSection from './sections/OriginSection';
 import GiantsSection from './sections/GiantsSection';
+import AtelierPhilosophy from './sections/AtelierPhilosophy';
 import AtelierLens from './ui/AtelierLens';
 import { useAppMode } from '../context/AppModeContext';
 
@@ -81,8 +81,8 @@ export default function PageWrapper() {
           {/* Foundation - The Heritage Path */}
           <HeritageSection />
 
-          {/* Core Values - Philosophy Upgrade */}
-          <PhilosophyUpgrade />
+          {/* New Personal Philosophy - Luxury, Tegas, Rich */}
+          <AtelierPhilosophy />
 
           {/* Modern Exhibitions (Integrated) */}
 

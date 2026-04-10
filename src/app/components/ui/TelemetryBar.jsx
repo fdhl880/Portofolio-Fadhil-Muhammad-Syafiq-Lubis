@@ -50,7 +50,7 @@ export default function TelemetryBar() {
       <div className="flex items-center gap-6">
         <span className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-          FL_CORE: ONLINE
+          ATELIER_CORE: ONLINE
         </span>
         <span className="hidden md:inline">
           SECTION: <span className="text-cyan-400/80">{currentSection}</span>

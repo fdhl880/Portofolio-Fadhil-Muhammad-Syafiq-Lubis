@@ -113,7 +113,7 @@ export default function GiantsSection() {
 
         {/* Closing Detail */}
         <div className="mt-32 pt-24 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8 opacity-30">
-            <p className="text-[9px] tracking-[0.4em] uppercase">Medan Origin // Archival Integration // Nexus v2.5</p>
+            <p className="text-[9px] tracking-[0.4em] uppercase">Medan Origin // Archival Integration // Atelier Platform</p>
             <div className="flex gap-12 items-center">
                 <span className="text-[9px] tracking-[0.4em] uppercase">System Verified</span>
                 <div className="w-24 h-[1px] bg-white/40" />
