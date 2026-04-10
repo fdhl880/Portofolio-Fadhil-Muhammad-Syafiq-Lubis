@@ -22,7 +22,6 @@ import AtelierLens from './ui/AtelierLens';
 import { useAppMode } from '../context/AppModeContext';
 
 // Lazy-loaded museum sections
-const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
 const MuseumGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
 const Capabilities = dynamic(() => import('./sections/SkillsSection'), { ssr: false });
 const Chronology = dynamic(() => import('./sections/RoadmapSection'), { ssr: false });
@@ -84,12 +83,7 @@ export default function PageWrapper() {
           {/* Core Values - Philosophy Upgrade */}
           <PhilosophyUpgrade />
 
-          {/* Modern Exhibitions */}
-          <section id="exhibitions" className="py-24 px-6 md:px-12 bg-black">
-            <div className="max-w-7xl mx-auto">
-                <AchievementsSection />
-            </div>
-          </section>
+          {/* Modern Exhibitions (Integrated) */}
 
           {/* Studio Gallery - The Personal Journey */}
           <StudioGallery />
