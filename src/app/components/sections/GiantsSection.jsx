@@ -7,37 +7,37 @@ const GIANTS = [
     name: "Isaac Newton", 
     quote: "If I have seen further, it is by standing on the shoulders of Giants.", 
     role: "Physical Mathematics",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Portrait_of_Sir_Isaac_Newton%2C_1689.jpg/800px-Portrait_of_Sir_Isaac_Newton%2C_1689.jpg"
+    image: "/images/giants/newton.jpg"
   },
   { 
     name: "Albert Einstein", 
     quote: "Imagination is more important than knowledge.", 
     role: "Theoretical Physics",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Einstein_1947.jpg/800px-Einstein_1947.jpg"
+    image: "/images/giants/einstein.jpg"
   },
   { 
     name: "Steve Jobs", 
     quote: "Innovation distinguishes between a leader and a follower.", 
     role: "Aesthetic Design",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Steve_Jobs_Headshot_2010.JPG/800px-Steve_Jobs_Headshot_2010.JPG"
+    image: "/images/giants/jobs.jpg"
   },
   { 
     name: "Elon Musk", 
     quote: "When something is important enough, you do it even if the odds are not in your favor.", 
     role: "Applied Engineering",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Elon_Musk_Royal_Society.jpg/800px-Elon_Musk_Royal_Society.jpg"
+    image: "/images/giants/musk.jpg"
   },
   { 
     name: "Bill Gates", 
     quote: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", 
     role: "Strategic Logic",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Bill_Gates_2013.jpg/800px-Bill_Gates_2013.jpg"
+    image: "/images/giants/gates.jpg"
   },
   { 
     name: "Warren Buffett", 
     quote: "Price is what you pay. Value is what you get.", 
     role: "Value Architecture",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/President_Barack_Obama_and_Warren_Buffett_in_the_Oval_Office%2C_July_14%2C_2010.jpg/800px-President_Barack_Obama_and_Warren_Buffett_in_the_Oval_Office%2C_July_14%2C_2010.jpg"
+    image: "/images/giants/buffett.jpg"
   }
 ];
 
