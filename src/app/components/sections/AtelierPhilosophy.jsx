@@ -113,7 +113,10 @@ export default function AtelierPhilosophy() {
 
             <div className="relative aspect-square bg-[#050505] border border-white/5 flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(-45deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px]" />
-                <AtelierSigil className="w-64 h-64 text-white/20" />
+                <AtelierSigil 
+                  className="w-64 h-64 text-white/20" 
+                  animateTrigger="whileInView"
+                />
                 <motion.div 
                   className="absolute inset-24 border border-white/5 rounded-full"
                   animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}

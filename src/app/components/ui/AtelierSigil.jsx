@@ -1,69 +1,104 @@
 'use client';
 import { motion } from 'framer-motion';
 
-export default function AtelierSigil({ className = "w-12 h-12" }) {
+export default function AtelierSigil({ className = "w-12 h-12", animateTrigger }) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.3,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const pathVariants = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (customDelay = 0) => ({
+      pathLength: 1,
+      opacity: 1,
+      transition: { 
+        pathLength: { duration: 1.5, ease: "easeInOut", delay: customDelay },
+        opacity: { duration: 0.2, delay: customDelay }
+      }
+    })
+  };
+
+  const pointVariants = {
+    hidden: { scale: 0, opacity: 0 },
+    visible: (customDelay = 0) => ({
+      scale: 1,
+      opacity: [0, 1, 0.5],
+      transition: { 
+        duration: 2, 
+        delay: customDelay 
+      }
+    })
+  };
+
   return (
-    <div className={`relative ${className} group`}>
+    <motion.div 
+      variants={containerVariants}
+      initial={animateTrigger ? "hidden" : "visible"}
+      animate={animateTrigger || "visible"}
+      whileInView={animateTrigger === "whileInView" ? "visible" : undefined}
+      viewport={{ once: true }}
+      className={`relative ${className} group`}
+    >
       <svg
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className="w-full h-full"
       >
-        {/* The Atelier Monogram Construction (F + L) */}
-        
-        {/* Main Vertical Axis (The Foundation) */}
+        {/* Main Vertical Axis */}
         <motion.path
           d="M35 15V85"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="square"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          variants={pathVariants}
+          custom={0}
         />
 
-        {/* The 'F' arms (Precision & Fact) */}
+        {/* The 'F' arms */}
         <motion.path
           d="M35 15H65"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="square"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
+          variants={pathVariants}
+          custom={0.5}
         />
         <motion.path
           d="M35 45H55"
           stroke="currentColor"
           strokeWidth="1"
           strokeLinecap="square"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1, delay: 0.8 }}
+          variants={pathVariants}
+          custom={0.8}
         />
 
-        {/* The 'L' base (Logic & Legacy) */}
+        {/* The 'L' base */}
         <motion.path
           d="M35 85H65"
           stroke="currentColor"
           strokeWidth="1.5"
           strokeLinecap="square"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
+          variants={pathVariants}
+          custom={1.2}
         />
 
-        {/* Geometric Accents (The Atelier Points) */}
+        {/* Geometric Points */}
         <motion.rect
           x="33.5"
           y="13.5"
           width="3"
           height="3"
           fill="currentColor"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 0.5] }}
-          transition={{ duration: 2, delay: 1.5 }}
+          variants={pointVariants}
+          custom={1.5}
         />
         <motion.rect
           x="63.5"
@@ -71,25 +106,22 @@ export default function AtelierSigil({ className = "w-12 h-12" }) {
           width="3"
           height="3"
           fill="currentColor"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0, 1, 0.5] }}
-          transition={{ duration: 2, delay: 1.8 }}
+          variants={pointVariants}
+          custom={1.8}
         />
 
-        {/* Decorative thin diagonal (Mathematics of intersection) */}
+        {/* Decorative thin diagonal */}
         <motion.path
           d="M35 45L65 15"
           stroke="currentColor"
           strokeWidth="0.5"
           opacity="0.2"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2, delay: 2 }}
+          variants={pathVariants}
+          custom={2}
         />
       </svg>
       
-      {/* Subtle hover "Atelier" glow */}
       <div className="absolute inset-0 bg-white/0 group-hover:bg-white/5 blur-xl transition-all duration-700 rounded-full" />
-    </div>
+    </motion.div>
   );
 }
