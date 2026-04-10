@@ -15,6 +15,8 @@ import ScrollProgress from './ui/ScrollProgress';
 import CinematicIntro from './ui/CinematicIntro';
 import StudioGallery from './sections/StudioGallery';
 import DigitalSignature from './ui/DigitalSignature';
+import MagneticCursor from './ui/MagneticCursor';
+import AmbientSound from './ui/AmbientSound';
 
 // Lazy-loaded museum sections
 const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
@@ -38,6 +40,8 @@ export default function PageWrapper() {
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90">
       <CustomCursor />
+      <MagneticCursor />
+      <AmbientSound />
       <ScrollProgress />
       
       <AnimatePresence>

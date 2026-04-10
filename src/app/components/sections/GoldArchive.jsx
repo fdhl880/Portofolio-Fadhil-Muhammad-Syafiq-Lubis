@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 const GOLD_MEDALS = [
@@ -61,15 +61,28 @@ const GOLD_MEDALS = [
 
 export default function GoldArchive() {
   const containerRef = useRef(null);
-  const { scrollXProgress } = useScroll({
-    target: containerRef,
-  });
+  const scrollContentRef = useRef(null);
+  const [constraints, setConstraints] = useState({ left: 0, right: 0 });
 
-  const x = useTransform(scrollXProgress, [0, 1], ["0%", "-50%"]);
-  const springX = useSpring(x, { stiffness: 100, damping: 30 });
+  useEffect(() => {
+    const handleResize = () => {
+      if (containerRef.current && scrollContentRef.current) {
+        const containerWidth = containerRef.current.offsetWidth;
+        const contentWidth = scrollContentRef.current.scrollWidth;
+        setConstraints({
+          left: -(contentWidth - containerWidth + 100), // extra padding for luxury bounce
+          right: 0
+        });
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
-    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5" id="gold-archive">
+    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5" id="gold-archive" ref={containerRef}>
       <div className="container mx-auto px-6 mb-24">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -97,8 +110,11 @@ export default function GoldArchive() {
 
       <div className="relative h-[400px] md:h-[600px] cursor-grab active:cursor-grabbing">
         <motion.div 
+          ref={scrollContentRef}
           drag="x"
-          dragConstraints={{ left: -1500, right: 0 }}
+          dragConstraints={constraints}
+          dragElastic={0.1}
+          dragTransition={{ power: 0.1, timeConstant: 200 }}
           className="flex gap-12 px-12 md:px-24 absolute left-0 h-full items-center"
         >
           {GOLD_MEDALS.map((medal, index) => (
@@ -152,14 +168,6 @@ export default function GoldArchive() {
             </div>
           </div>
         </motion.div>
-      </div>
-      
-      {/* Progress Bar Decor */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-32 h-[1px] bg-white/10 overflow-hidden">
-        <motion.div 
-          style={{ scaleX: scrollXProgress }}
-          className="h-full w-full bg-white origin-left"
-        />
       </div>
     </section>
   );

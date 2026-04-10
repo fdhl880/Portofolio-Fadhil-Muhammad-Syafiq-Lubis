@@ -1,34 +1,15 @@
 'use client';
-import { useRef, useMemo, useEffect, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { PerspectiveCamera, Stars, MeshTransmissionMaterial } from '@react-three/drei';
-import { useScroll } from 'framer-motion';
-import * as THREE from 'three';
-
-// Distant Exoplanets
-const planets = [
-  { position: [-60, 20, -100], size: 10, color: '#00f0ff' },
-  { position: [80, -30, -150], size: 25, color: '#8b5cf6' }
-];
-
-// Asteroid Field (InstancedMesh Data)
-const asteroidCount = 300;
-const asteroidData = Array.from({ length: asteroidCount }, () => ({
-  pos: [
-    (Math.random() - 0.5) * 150, 
-    (Math.random() - 0.5) * 150, 
-    (Math.random() - 1) * 250
-  ],
-  rot: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
-  scale: Math.random() * 2 + 0.5,
-  spinSpeed: (Math.random() - 0.5) * 0.05
-}));
+import { usePerformance } from '@/app/context/PerformanceContext';
 
 function SpaceScene({ scrollYProgress }) {
   const cameraRef = useRef();
   const asteroidRef = useRef();
+  const { performanceTier } = usePerformance();
   const [warpSpeed, setWarpSpeed] = useState(false);
   const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  // Performance-based limits
+  const currentAsteroids = performanceTier === 'low' ? 100 : asteroidCount;
 
   // Listen for Warp Jump command from Navbar
   useEffect(() => {
@@ -65,7 +46,8 @@ function SpaceScene({ scrollYProgress }) {
 
     // Rotate Asteroids
     if (asteroidRef.current) {
-      asteroidData.forEach((ast, i) => {
+      for (let i = 0; i < currentAsteroids; i++) {
+        const ast = asteroidData[i];
         ast.rot[0] += ast.spinSpeed;
         ast.rot[1] += ast.spinSpeed;
         dummy.position.set(ast.pos[0], ast.pos[1], ast.pos[2]);
@@ -73,7 +55,7 @@ function SpaceScene({ scrollYProgress }) {
         dummy.scale.set(ast.scale, ast.scale, ast.scale);
         dummy.updateMatrix();
         asteroidRef.current.setMatrixAt(i, dummy.matrix);
-      });
+      }
       asteroidRef.current.instanceMatrix.needsUpdate = true;
     }
   });
@@ -85,31 +67,40 @@ function SpaceScene({ scrollYProgress }) {
       
       <ambientLight intensity={0.5} />
       
-      {/* Exoplanets */}
+      {/* Exoplanets - Reduced complexity for low-tier devices */}
       {planets.map((p, i) => (
         <mesh key={`planet-${i}`} position={p.position}>
-          <icosahedronGeometry args={[p.size, 1]} />
+          <icosahedronGeometry args={[p.size, performanceTier === 'low' ? 0 : 1]} />
           <meshBasicMaterial color={p.color} wireframe opacity={0.2} transparent />
         </mesh>
       ))}
 
       {/* Asteroid Field */}
-      <instancedMesh ref={asteroidRef} args={[null, null, asteroidCount]}>
+      <instancedMesh ref={asteroidRef} args={[null, null, currentAsteroids]}>
         <dodecahedronGeometry args={[1, 0]} />
         <meshBasicMaterial color="#1a1a2e" wireframe />
       </instancedMesh>
       
-      <Stars radius={100} depth={200} count={2000} factor={6} saturation={1} fade speed={3} />
+      <Stars 
+        radius={100} 
+        depth={200} 
+        count={performanceTier === 'high' ? 2000 : 1000} 
+        factor={6} 
+        saturation={1} 
+        fade 
+        speed={3} 
+      />
     </>
   );
 }
 
 export default function CinematicRoom() {
   const { scrollYProgress } = useScroll();
+  const { dpr } = usePerformance();
 
   return (
     <div className="fixed inset-0 z-0 h-screen w-screen overflow-hidden bg-[#020208] pointer-events-none">
-      <Canvas dpr={[1, 1.5]} gl={{ powerPreference: "high-performance", antialias: false }}>
+      <Canvas dpr={dpr} gl={{ powerPreference: "high-performance", antialias: false }}>
         <SpaceScene scrollYProgress={scrollYProgress} />
       </Canvas>
     </div>

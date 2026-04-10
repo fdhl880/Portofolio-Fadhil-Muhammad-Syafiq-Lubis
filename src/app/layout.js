@@ -75,10 +75,10 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: "/icon.png" },
-      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/logo-initials.png" },
+      { url: "/logo-initials.png", sizes: "32x32", type: "image/png" },
     ],
-    apple: "/apple-icon.png",
+    apple: "/logo-initials.png",
   },
 };
 
