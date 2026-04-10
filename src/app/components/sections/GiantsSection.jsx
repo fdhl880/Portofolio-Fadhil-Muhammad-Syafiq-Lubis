@@ -71,10 +71,12 @@ export default function GiantsSection() {
                 >
                     {/* Background Image / Portrait */}
                     <div className="absolute inset-0 grayscale contrast-125 brightness-50 group-hover:grayscale-0 group-hover:brightness-75 group-hover:scale-105 transition-all duration-1000 ease-out">
-                         <img 
+                         <Image 
                             src={giant.image} 
                             alt={giant.name}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover"
                          />
                     </div>
 
