@@ -5,8 +5,6 @@ import { PerspectiveCamera, Stars, MeshTransmissionMaterial } from '@react-three
 import { useScroll } from 'framer-motion';
 import * as THREE from 'three';
 
-npx -y netlify-cli login
-
 // Distant Exoplanets
 const planets = [
   { position: [-60, 20, -100], size: 10, color: '#00f0ff' },

@@ -1,6 +1,6 @@
 'use client';
 import { Canvas } from '@react-three/fiber';
-import { Float, MeshDistortMaterial, Sphere, ContactShadows, Environment, AdaptiveDpr } from '@react-three/drei';
+import { Float, MeshDistortMaterial, MeshTransmissionMaterial, Sphere, ContactShadows, Environment, AdaptiveDpr } from '@react-three/drei';
 import { Suspense } from 'react';
 
 function Scene() {
