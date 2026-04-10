@@ -108,6 +108,7 @@ export default function NeuralCore() {
   const scrollRef = useRef(null);
   const hasGreeted = useRef(false);
   const { playPip, playSweep } = useSound();
+  const { performanceTier } = usePerformance();
 
   useEffect(() => {
     if (scrollRef.current) {

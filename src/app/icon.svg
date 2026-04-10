@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <rect width="100" height="100" fill="#000000"/>
+  <!-- F vertical stroke -->
+  <line x1="35" y1="15" x2="35" y2="85" stroke="#ffffff" stroke-width="2.5" stroke-linecap="square"/>
+  <!-- F top arm -->
+  <line x1="35" y1="15" x2="65" y2="15" stroke="#ffffff" stroke-width="2.5" stroke-linecap="square"/>
+  <!-- F middle arm -->
+  <line x1="35" y1="45" x2="55" y2="45" stroke="#ffffff" stroke-width="1.5" stroke-linecap="square"/>
+  <!-- L base -->
+  <line x1="35" y1="85" x2="65" y2="85" stroke="#ffffff" stroke-width="2.5" stroke-linecap="square"/>
+  <!-- Nexus accent dots -->
+  <rect x="33" y="13" width="4" height="4" fill="#ffffff" opacity="0.6"/>
+  <rect x="63" y="83" width="4" height="4" fill="#ffffff" opacity="0.6"/>
+</svg>

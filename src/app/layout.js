@@ -76,11 +76,8 @@ export const metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/logo-initials.png" },
-      { url: "/logo-initials.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: "/logo-initials.png",
+    icon: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 

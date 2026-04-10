@@ -1,5 +1,26 @@
 'use client';
+import { useRef, useState, useMemo, useEffect } from 'react';
+import * as THREE from 'three';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { PerspectiveCamera, Stars } from '@react-three/drei';
+import { useScroll } from 'framer-motion';
 import { usePerformance } from '@/app/context/PerformanceContext';
+
+// Asteroid generation data (static, created once)
+const asteroidCount = 150;
+const asteroidData = Array.from({ length: asteroidCount }, () => ({
+  pos: [(Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200],
+  rot: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
+  scale: Math.random() * 0.8 + 0.1,
+  spinSpeed: Math.random() * 0.005,
+}));
+
+// Planet data (static)
+const planets = [
+  { position: [30, 15, -80], size: 6, color: '#1a1a2e' },
+  { position: [-40, -20, -120], size: 10, color: '#0a0a1a' },
+  { position: [60, -30, -160], size: 4, color: '#111128' },
+];
 
 function SpaceScene({ scrollYProgress }) {
   const cameraRef = useRef();
