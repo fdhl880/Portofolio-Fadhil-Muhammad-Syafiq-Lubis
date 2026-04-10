@@ -1,6 +1,8 @@
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "./components/ui/SmoothScroll";
+import { AppModeProvider } from "./context/AppModeContext";
+import LenisProvider from "./context/LenisProvider";
+import MainContent from "./components/MainContent";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -112,9 +114,13 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen bg-black-pure selection:bg-white selection:text-black">
-        <SmoothScroll>
-          {children}
-        </SmoothScroll>
+        <AppModeProvider>
+          <LenisProvider>
+            <MainContent>
+              {children}
+            </MainContent>
+          </LenisProvider>
+        </AppModeProvider>
       </body>
     </html>
   );
