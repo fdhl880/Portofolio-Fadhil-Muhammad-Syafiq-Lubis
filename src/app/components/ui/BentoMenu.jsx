@@ -38,7 +38,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           className="fixed inset-0 z-[1000] flex flex-col bg-black text-white p-6 md:p-24 overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex justify-between items-center mb-12 md:mb-24">
+          <div className="flex justify-between items-center mb-8 md:mb-12">
             <div className="flex flex-col gap-2">
               <span className="font-display text-2xl tracking-[0.2em]">F_L</span>
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Precision Archive</span>
@@ -53,7 +53,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Directory List */}
-          <div className="flex-grow flex flex-col justify-start gap-8 md:gap-12 max-w-4xl mx-auto w-full pt-12 md:pt-24 my-auto">
+          <div className="flex-grow flex flex-col justify-center gap-8 md:gap-10 max-w-4xl mx-auto w-full py-12">
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.name}
@@ -61,7 +61,7 @@ export default function BentoMenu({ isOpen, onClose }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 1 }}
                 onClick={() => handleNav(link.target)}
-                className="group flex items-baseline gap-8 text-3xl md:text-7xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
+                className="group flex items-baseline gap-8 text-3xl md:text-6xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
               >
                 <span className="text-lg md:text-2xl italic opacity-40">/0{i+1}</span>
                 <span className="group-hover:italic group-hover:translate-x-8 transition-all duration-700">
