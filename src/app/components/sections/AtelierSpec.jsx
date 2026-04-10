@@ -28,7 +28,7 @@ export default function AtelierSpec() {
                initial={{ opacity: 0, y: 30 }}
                whileInView={{ opacity: 1, y: 0 }}
                viewport={{ once: true }}
-               className="md:col-span-8 bg-[#050505] border border-white/10 p-12 flex flex-col justify-between aspect-video md:aspect-auto h-[400px] group transition-colors hover:border-white/30"
+               className="md:col-span-8 bg-[#050505] border border-white/10 p-8 md:p-12 flex flex-col justify-between min-h-[400px] group transition-colors hover:border-white/30"
             >
                 <div className="flex justify-between items-start">
                    <div className="space-y-2">
@@ -42,18 +42,16 @@ export default function AtelierSpec() {
                 
                 <div className="mt-12 opacity-40 group-hover:opacity-100 transition-opacity duration-1000">
                     <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/40 to-white/0 mb-12" />
-                    <div className="flex justify-around items-center">
-                        <div className="text-center">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-0 md:divide-x divide-white/5">
+                        <div className="text-center md:py-0 py-4">
                             <span className="text-xs text-white/20 block mb-2 uppercase tracking-widest">Purity</span>
                             <span className="text-xl text-white font-light">99.9% LOGIC</span>
                         </div>
-                        <div className="w-px h-12 bg-white/5" />
-                        <div className="text-center">
+                        <div className="text-center md:py-0 py-4">
                             <span className="text-xs text-white/20 block mb-2 uppercase tracking-widest">Horizon</span>
                             <span className="text-xl text-white font-light">STRATEGIC</span>
                         </div>
-                        <div className="w-px h-12 bg-white/5" />
-                        <div className="text-center">
+                        <div className="text-center md:py-0 py-4">
                             <span className="text-xs text-white/20 block mb-2 uppercase tracking-widest">Status</span>
                             <span className="text-xl text-white font-light">VERIFIED</span>
                         </div>
