@@ -41,7 +41,10 @@ export default function BentoMenu({ isOpen, onClose }) {
           {/* Header */}
           <div className="flex justify-between items-center mb-6 md:mb-8">
             <div className="flex items-center gap-6">
-              <AtelierSigil className="w-10 h-10 text-white" />
+              <AtelierSigil 
+                className="w-10 h-10 text-white" 
+                animateTrigger="whileInView" 
+              />
               <div className="flex flex-col gap-1">
                 <span className="font-display text-xl tracking-[0.2em]">ATELIER</span>
                 <span className="text-[8px] tracking-[0.4em] uppercase text-white/20">Precision Archive</span>
@@ -56,8 +59,8 @@ export default function BentoMenu({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Directory List */}
-          <div className="flex-grow flex flex-col justify-center gap-6 md:gap-8 max-w-4xl mx-auto w-full py-8">
+          {/* Directory List Area */}
+          <div className="flex flex-col justify-center gap-6 md:gap-8 max-w-4xl mx-auto w-full py-8">
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.name}

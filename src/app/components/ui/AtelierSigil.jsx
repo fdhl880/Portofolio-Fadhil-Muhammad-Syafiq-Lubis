@@ -43,7 +43,6 @@ export default function AtelierSigil({ className = "w-12 h-12", animateTrigger }
       initial={animateTrigger ? "hidden" : "visible"}
       animate={animateTrigger || "visible"}
       whileInView={animateTrigger === "whileInView" ? "visible" : undefined}
-      viewport={{ once: true }}
       className={`relative ${className} group`}
     >
       <svg
