@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useAppMode } from '../context/AppModeContext';
+import { useAppMode } from '../../context/AppModeContext';
 import AtelierSigil from './AtelierSigil';
 
 export default function ModeSelection() {

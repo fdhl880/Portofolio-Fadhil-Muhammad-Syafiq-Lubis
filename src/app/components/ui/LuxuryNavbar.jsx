@@ -1,14 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
-import Link from 'next/link';
 import BentoMenu from './BentoMenu';
+import AtelierSigil from './AtelierSigil';
+import { useSound } from '../../context/SoundContext';
 
 export default function LuxuryNavbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const { scrollY } = useScroll();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { playPip } = useSound();
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = scrollY.getPrevious();
@@ -41,13 +43,17 @@ export default function LuxuryNavbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Monogram Logo */}
-          <Link href="/" className="group flex items-center gap-3">
-            <div className="relative font-display text-2xl tracking-tighter text-white group-hover:tracking-widest transition-all duration-700">
-              FADHIL LUBIS
-              <div className="absolute -bottom-1 left-0 w-0 h-px bg-white/40 group-hover:w-full transition-all duration-700" />
+          {/* Atelier Brand Identity */}
+          <div 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="group flex items-center gap-4 cursor-pointer"
+          >
+            <AtelierSigil className="w-8 h-8 text-white group-hover:text-[#D4AF37] transition-all duration-700" />
+            <div className="flex flex-col">
+              <span className="font-display font-bold text-white text-xs tracking-[0.4em] uppercase">ATELIER_LUBIS</span>
+              <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">PRECISION_v2.5</span>
             </div>
-          </Link>
+          </div>
 
           {/* Minimal Nav Items */}
           <div className="hidden md:flex items-center gap-12">

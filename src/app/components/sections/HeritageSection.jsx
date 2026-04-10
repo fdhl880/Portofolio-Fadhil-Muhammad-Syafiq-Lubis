@@ -1,3 +1,8 @@
+'use client';
+import { motion } from 'framer-motion';
+
+export default function HeritageSection() {
+  return (
     <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] -z-10" />

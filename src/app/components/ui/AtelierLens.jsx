@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, useSpring, useMotionValue } from 'framer-motion';
-import { useAppMode } from '../context/AppModeContext';
+import { useAppMode } from '../../context/AppModeContext';
 
 export default function AtelierLens() {
   const { mode } = useAppMode();

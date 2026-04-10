@@ -10,14 +10,16 @@ import PhilosophyUpgrade from './sections/PhilosophyUpgrade';
 import ProjectsSection from './sections/ProjectsSection';
 import ContactSection from './sections/ContactSection';
 import BackToTop from './ui/BackToTop';
-import CustomCursor from './ui/CustomCursor';
 import ScrollProgress from './ui/ScrollProgress';
-import CinematicIntro from './ui/CinematicIntro';
+import CinematicRoom from './three/CinematicRoom';
 import StudioGallery from './sections/StudioGallery';
 import DigitalSignature from './ui/DigitalSignature';
-import MagneticCursor from './ui/MagneticCursor';
 import AmbientSound from './ui/AmbientSound';
 import AtelierSpec from './sections/AtelierSpec';
+import OriginSection from './sections/OriginSection';
+import GiantsSection from './sections/GiantsSection';
+import AtelierLens from './ui/AtelierLens';
+import { useAppMode } from '../context/AppModeContext';
 
 // Lazy-loaded museum sections
 const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
@@ -29,8 +31,8 @@ const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: fa
 const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
+  const { mode } = useAppMode();
   const [mounted, setMounted] = useState(false);
-  const [showMain, setShowMain] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -40,19 +42,22 @@ export default function PageWrapper() {
 
   return (
     <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90">
-      <CustomCursor />
-      <MagneticCursor />
-      <AmbientSound />
-      <ScrollProgress />
+      {/* Mode-Aware 3D Environment (Atelier Only) */}
+      {mode === 'atelier' && (
+        <div className="fixed inset-0 z-[-1] pointer-events-none">
+          <CinematicRoom />
+        </div>
+      )}
+
+      {/* Luxury Interactivity (Atelier Only) */}
+      {mode === 'atelier' && <AtelierLens />}
       
-      <AnimatePresence>
-        {!showMain && (
-          <CinematicIntro onComplete={() => setShowMain(true)} />
-        )}
-      </AnimatePresence>
+      {/* Scroll Progress stays for both as a functional tool */}
+      <ScrollProgress />
 
       <motion.div 
-        animate={{ opacity: showMain ? 1 : 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 2 }}
         className="relative z-10"
       >
@@ -66,6 +71,12 @@ export default function PageWrapper() {
 
           {/* New Technical Spec - The Atelier Precision */}
           <AtelierSpec />
+
+          {/* New Personal Record - The Origin */}
+          <OriginSection />
+
+          {/* New Hall of Mentors - The Giants */}
+          <GiantsSection />
 
           {/* Foundation - The Heritage Path */}
           <HeritageSection />
@@ -117,10 +128,12 @@ export default function PageWrapper() {
         </footer>
 
         <BackToTop />
-        <NeuralCoreBase />
+        
+        {/* Central AI Nucleus - Only in Atelier for performance */}
+        {mode === 'atelier' && <NeuralCoreBase />}
       </motion.div>
 
-      {/* Luxury Vignette & Grain Overlay */}
+      {/* Luxury Vignette & Grain Overlay (Both modes for aesthetic consistency) */}
       <div className="fixed inset-0 pointer-events-none z-[1] shadow-[inset_0_0_200px_rgba(0,0,0,0.9)]" />
       <div className="fixed inset-0 pointer-events-none z-[2] opacity-[0.03] noise-bg" />
       
