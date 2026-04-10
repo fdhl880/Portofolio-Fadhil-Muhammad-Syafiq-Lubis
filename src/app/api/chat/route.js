@@ -24,7 +24,7 @@ export async function POST(req) {
       - FULL NAME: Fadhil Muhammad Syafiq Lubis.
       - ROLE: Student Innovator, Researcher, & Sustainable Engineering Enthusiast.
       - LOCATION: Medan, Indonesia.
-      - EDUCATION: SMA Negeri 1 Medan.
+      - EDUCATION: SMP Harapan 1.
       - KEY PROJECTS: 
         * "ARTHA": AI-powered Financial Analysis & Stock Prediction.
         * "LUMINA": Sustainable Smart City Lighting System.

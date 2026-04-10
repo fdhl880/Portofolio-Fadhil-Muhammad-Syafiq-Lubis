@@ -18,11 +18,11 @@ export default function HeritageSection() {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="aspect-[3/4] bg-[#111] border border-white/5 relative group overflow-hidden"
           >
-            {/* Placeholder for SMEANSA image / Heritage visual */}
+            {/* Placeholder for SMP Harapan 1 image / Heritage visual */}
             <div className="absolute inset-0 bg-gradient-to-tr from-black via-transparent to-white/[0.02]" />
             <div className="absolute inset-x-8 bottom-8">
                  <p className="text-[10px] tracking-[0.5em] text-white/40 uppercase mb-2">Foundation</p>
-                 <h4 className="text-xl font-light text-white italic tracking-tighter">SMA Negeri 1 Medan</h4>
+                 <h4 className="text-xl font-light text-white italic tracking-tighter">SMP Harapan 1</h4>
             </div>
             
             {/* Subtle Texture/Grain Overlay */}
@@ -60,7 +60,7 @@ export default function HeritageSection() {
             
             <div className="flex flex-col gap-8 text-white/60 font-light leading-relaxed max-w-xl">
                <p className="text-lg text-white">
-                  The journey began at SMA Negeri 1 Medan, a crucible of academic excellence where the fundamentals of 
+                  The journey began at SMP Harapan 1, a crucible of academic excellence where the fundamentals of 
                   rigor were first established.
                </p>
                <p>
