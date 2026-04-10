@@ -3,6 +3,8 @@ import "./globals.css";
 import { AppModeProvider } from "./context/AppModeContext";
 import LenisProvider from "./context/LenisProvider";
 import MainContent from "./components/MainContent";
+import { SoundProvider } from "./context/SoundContext";
+import { PerformanceProvider } from "./context/PerformanceContext";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -111,13 +113,17 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="min-h-screen bg-black-pure selection:bg-white selection:text-black">
-        <AppModeProvider>
-          <LenisProvider>
-            <MainContent>
-              {children}
-            </MainContent>
-          </LenisProvider>
-        </AppModeProvider>
+        <PerformanceProvider>
+          <SoundProvider>
+            <AppModeProvider>
+              <LenisProvider>
+                <MainContent>
+                  {children}
+                </MainContent>
+              </LenisProvider>
+            </AppModeProvider>
+          </SoundProvider>
+        </PerformanceProvider>
       </body>
     </html>
   );
