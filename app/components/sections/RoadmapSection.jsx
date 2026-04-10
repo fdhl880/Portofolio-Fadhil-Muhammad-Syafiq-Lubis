@@ -1,86 +1,33 @@
 'use client';
-import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { useSound } from '../../context/SoundContext';
-import GlitchText from '../ui/GlitchText';
+import { useRef } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
 
 const roadmapData = [
   {
     year: '2024',
-    title: 'THE_SPARK',
-    event: 'IPITEx Thailand (International Competition)',
-    desc: 'First entry into the global scientific community. Won Silver Medal for research on sustainable tech.',
-    color: '#c0c0c0',
-    side: 'left'
+    title: 'The Spark of Invention',
+    event: 'IPITEx Thailand',
+    desc: 'The beginning of our brand heritage. Represented scientific innovation on an international level.'
+  },
+  {
+    year: '2024',
+    title: 'Precision Expansion',
+    event: 'MTEX Kuala Lumpur',
+    desc: 'Broadening the engineering horizon. A milestone in regional technological development.'
   },
   {
     year: '2025',
-    title: 'MALAYSIA_EXPANSION',
-    event: 'MTEX Malaysia',
-    desc: 'Expanded engineering research focus. Secured Silver Medal in international technology exhibition.',
-    color: '#8b5cf6',
-    side: 'right'
+    title: 'The Apex Achievement',
+    event: 'I2ASPO Gold Standard',
+    desc: 'Achieving the highest distinction in applied science, confirming the brand’s commitment to excellence.'
   },
   {
-    year: '2025',
-    title: 'GOLD_ACHIEVEMENT',
-    event: 'I2ASPO (International Applied Science)',
-    desc: 'Reached the peak of student innovation with a Gold Medal. Recognized for scientific excellence.',
-    color: '#ffd700',
-    side: 'left'
-  },
-  {
-    year: 'FUTURE',
-    title: 'NEXT_DIMENSION',
-    event: 'Continuous Growth',
-    desc: 'Integrating AI, Engineering, and Finance to solve systemic global challenges.',
-    color: '#ff6b9d',
-    side: 'right'
+    year: 'Futurity',
+    title: 'The Continuous Pursuit',
+    event: 'Nexus of Innovation',
+    desc: 'Merging quantitative strategy with advanced engineering to solve the challenges of the coming decade.'
   }
 ];
-
-function RoadmapNode({ item, index }) {
-  const { playPip } = useSound();
-  
-  return (
-    <div className={`relative flex items-center justify-center w-full min-h-[300px] md:min-h-[400px] py-12 md:py-20
-      ${item.side === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'}
-    `}>
-      {/* Node Content */}
-      <motion.div 
-        initial={{ opacity: 0, x: item.side === 'left' ? -50 : 50 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        onViewportEnter={() => playPip(660 + index * 110, 0.1, 0.03)}
-        className="w-full md:w-[45%] ml-10 md:ml-0 p-6 md:p-8 glass rounded-[2rem] md:rounded-[2.5rem] border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all"
-        style={{ boxShadow: `0 0 50px ${item.color}10` }}
-      >
-        <div className="absolute top-0 right-0 p-6 opacity-5 font-black text-6xl tracking-tighter text-white">
-          {item.year === 'FUTURE' ? '??' : item.year % 100}
-        </div>
-        
-        <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-4">
-             <div className="w-10 h-1 bg-current" style={{ backgroundColor: item.color }} />
-             <span className="text-[10px] font-mono font-bold tracking-[0.4em] uppercase" style={{ color: item.color }}>{item.year}{" // "}EPOCH</span>
-          </div>
-          
-          <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 font-display uppercase tracking-widest">
-            <GlitchText text={item.title} />
-          </h3>
-          <p className="text-cyan-400/80 text-xs font-mono font-bold uppercase mb-4 tracking-wider">{item.event}</p>
-          <p className="text-muted leading-relaxed text-sm md:text-base border-t border-white/5 pt-4">
-            {item.desc}
-          </p>
-        </div>
-      </motion.div>
-
-      {/* Center Circle Trigger */}
-      <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 bg-dark border-2 border-white/20 rounded-full z-20 shadow-[0_0_10px_rgba(255,255,255,0.2)]" />
-    </div>
-  );
-}
 
 export default function RoadmapSection() {
   const containerRef = useRef(null);
@@ -89,61 +36,66 @@ export default function RoadmapSection() {
     offset: ["start end", "end start"]
   });
 
-  const pathLength = useSpring(scrollYProgress, {
+  const pathScale = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
   return (
-    <section ref={containerRef} id="roadmap" className="relative py-32 px-6 bg-dark overflow-hidden">
-      <div className="text-center mb-16 max-w-2xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-[0.5em] mb-4 inline-block">SYSTEM_CHRONOLOGY</span>
-          <h2 className="text-4xl md:text-6xl font-bold font-display uppercase tracking-tighter">
-            <GlitchText text="Innovation Roadmap" />
-          </h2>
-          <p className="text-muted mt-6 border-l-2 border-cyan-500/50 pl-6 mx-auto inline-block text-left relative">
-            <span className="absolute left-0 top-0 bottom-0 w-[1px] bg-gradient-to-b from-cyan-400 to-violet-500 shadow-[0_0_10px_#00f0ff]" />
-            The evolution of a scientific mindset, spanning international medals and future visions of technological impact.
-          </p>
-        </motion.div>
+    <section ref={containerRef} id="roadmap" className="relative py-32 px-6 bg-black border-t border-white/5">
+      {/* Header */}
+      <div className="flex flex-col items-center text-center mb-32 gap-6">
+        <span className="text-white/20 text-[10px] tracking-[0.8em] uppercase font-sans">Chronology</span>
+        <h2 className="font-display text-5xl md:text-7xl">The Evolution of <br /><span className="italic opacity-40">Excellence.</span></h2>
       </div>
 
-      <div className="max-w-7xl mx-auto relative px-4 md:px-0">
-        {/* The 3D Plasma Circuit Line */}
-        <div className="absolute left-4 md:left-1/2 -translate-x-1/2 top-0 bottom-0 w-[4px] bg-dark-3 rounded-full shadow-[inset_0_0_10px_rgba(0,0,0,0.8)] border border-white/5">
-           <motion.div 
-             style={{ scaleY: pathLength, transformOrigin: 'top', background: 'linear-gradient(to bottom, transparent, #00f0ff, #8b5cf6, #ff6b9d)' }}
-             className="absolute inset-x-0 bottom-0 top-0 rounded-full shadow-[0_0_20px_#00f0ff,0_0_40px_#8b5cf6] z-10"
-           />
-           
-           {/* Moving Plasma Energy Core */}
-           <motion.div 
-              style={{ top: useTransform(pathLength, [0, 1], ['0%', '100%']) }}
-              className="absolute left-1/2 -translate-x-1/2 -mt-4 w-8 h-8 rounded-full border border-white/40 flex items-center justify-center z-30"
-           >
-             <div className="absolute inset-0 bg-white blur-[10px] opacity-70" />
-             <div className="absolute inset-[-10px] bg-cyan-400 blur-[20px] opacity-50" />
-             <div className="w-3 h-3 bg-white rounded-full shadow-[0_0_10px_#fff]" />
-           </motion.div>
+      <div className="max-w-7xl mx-auto relative">
+        {/* Central Luxury Line */}
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-white/5">
+          <motion.div 
+            style={{ scaleY: pathScale, transformOrigin: 'top' }}
+            className="absolute inset-0 bg-white opacity-40"
+          />
         </div>
 
-        {/* Roadmap Items */}
-        <div className="relative z-10">
-          {roadmapData.map((item, i) => (
-            <RoadmapNode key={i} item={item} index={i} />
+        <div className="space-y-32">
+          {roadmapData.map((item, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 1.2, delay: idx * 0.1 }}
+              className={`relative flex items-center justify-between w-full flex-col md:flex-row ${
+                idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+              }`}
+            >
+              <div className="w-full md:w-[42%] flex flex-col gap-6">
+                <div className={`flex items-baseline gap-4 ${idx % 2 === 0 ? 'justify-start' : 'md:justify-end'}`}>
+                  <span className="font-display text-lg italic text-white/20">/{item.year}</span>
+                  <h3 className="font-display text-2xl md:text-4xl uppercase tracking-widest">{item.title}</h3>
+                </div>
+                
+                <p className={`text-white/40 text-sm leading-relaxed max-w-sm ${idx % 2 === 0 ? 'text-left' : 'md:text-right ml-auto'}`}>
+                  {item.desc}
+                </p>
+
+                <div className={`flex items-center gap-4 ${idx % 2 === 0 ? '' : 'md:flex-row-reverse'}`}>
+                  <div className="w-12 h-px bg-white/10" />
+                  <span className="text-[10px] tracking-widest uppercase text-white/30 font-sans">{item.event}</span>
+                </div>
+              </div>
+
+              {/* Node Indicator */}
+              <div className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-white opacity-20 border-4 border-black" />
+              
+              {/* Ghost Placeholder for Spacing */}
+              <div className="hidden md:block w-[42%]" />
+            </motion.div>
           ))}
         </div>
       </div>
-
-      {/* Background Decorative Tech Elements */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-cyan-500/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-violet-500/5 blur-[120px] pointer-events-none" />
     </section>
   );
 }

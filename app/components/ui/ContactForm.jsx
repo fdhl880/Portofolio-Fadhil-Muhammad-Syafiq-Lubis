@@ -30,69 +30,61 @@ export default function ContactForm() {
     }
   };
 
-  const inputClass = "w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-base md:text-sm text-white placeholder-white/30 focus:outline-none focus:border-neon/50 focus:ring-1 focus:ring-neon/30 transition-all";
+  const inputClass = "w-full bg-transparent border-b border-white/10 py-6 text-xl md:text-2xl font-display text-white placeholder-white/20 focus:outline-none focus:border-white transition-all duration-700";
 
   return (
     <motion.form
       onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.6 }}
-      className="space-y-4 max-w-lg w-full"
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 1 }}
+      className="space-y-12 max-w-2xl w-full"
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Your Name"
-          value={form.name}
-          onChange={e => setForm({ ...form, name: e.target.value })}
-          className={inputClass}
+      <div className="space-y-8">
+        <div className="flex flex-col md:flex-row gap-12">
+          <input
+            type="text"
+            placeholder="Identity // Name"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value })}
+            className={inputClass}
+            required
+            id="contact-name"
+          />
+          <input
+            type="email"
+            placeholder="Digital Mail"
+            value={form.email}
+            onChange={e => setForm({ ...form, email: e.target.value })}
+            className={inputClass}
+            required
+            id="contact-email"
+          />
+        </div>
+        <textarea
+          placeholder="Brief Description of Inquiry"
+          value={form.message}
+          onChange={e => setForm({ ...form, message: e.target.value })}
+          rows={1}
+          className={`${inputClass} resize-none overflow-hidden`}
           required
-          id="contact-name"
-        />
-        <input
-          type="email"
-          placeholder="Your Email"
-          value={form.email}
-          onChange={e => setForm({ ...form, email: e.target.value })}
-          className={inputClass}
-          required
-          id="contact-email"
+          id="contact-message"
         />
       </div>
-      <input
-        type="text"
-        placeholder="Subject"
-        value={form.subject}
-        onChange={e => setForm({ ...form, subject: e.target.value })}
-        className={inputClass}
-        id="contact-subject"
-      />
-      <textarea
-        placeholder="Your Message"
-        value={form.message}
-        onChange={e => setForm({ ...form, message: e.target.value })}
-        rows={5}
-        className={`${inputClass} resize-none`}
-        required
-        id="contact-message"
-      />
+
       <motion.button
         type="submit"
         disabled={status === 'sending'}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className={`w-full py-3 rounded-xl font-semibold transition-all cursor-pointer ${
-          status === 'sent'
-            ? 'bg-green-500/20 border border-green-500/40 text-green-400'
-            : status === 'error'
-            ? 'bg-red-500/20 border border-red-500/40 text-red-400'
-            : 'bg-gradient-to-r from-neon/20 to-violet/20 border border-neon/30 text-neon hover:from-neon/30 hover:to-violet/30'
+        className={`group relative flex items-center gap-6 py-4 uppercase text-[10px] tracking-[0.6em] font-sans transition-all duration-700 ${
+          status === 'sent' ? 'text-green-400' : 'text-white/60 hover:text-white'
         }`}
         id="contact-submit"
       >
-        {status === 'sending' ? 'Sending...' : status === 'sent' ? '✓ Message Sent!' : status === 'error' ? 'Failed — try again' : 'Send Message'}
+        <span className="relative z-10 transition-all duration-700 group-hover:tracking-[1em]">
+          {status === 'sending' ? 'Sending Inquiry...' : status === 'sent' ? 'Inquiry Delivered' : 'Send Inquiry'}
+        </span>
+        <div className="w-12 h-px bg-white/20 group-hover:w-24 group-hover:bg-white transition-all duration-700" />
       </motion.button>
     </motion.form>
   );

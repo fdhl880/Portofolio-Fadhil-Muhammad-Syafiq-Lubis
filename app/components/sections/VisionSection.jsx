@@ -1,105 +1,53 @@
 'use client';
-import { useState, useEffect, useRef, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-const quotes = [
-  { text: "Price is what you pay. Value is what you get.", author: "Warren Buffett" },
-  { text: "Success is a lousy teacher. It seduces smart people into thinking they can't lose.", author: "Bill Gates" },
-  { text: "When something is important enough, you do it even if the odds are not in your favor.", author: "Elon Musk" }
-];
+import { motion } from 'framer-motion';
 
 export default function VisionSection() {
-  const containerRef = useRef(null);
-  const [quoteIndex, setQuoteIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % quotes.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Pre-compute particle positions to avoid hydration mismatch from Math.random() in render
-  const particles = useMemo(() =>
-    Array.from({ length: 12 }, (_, i) => ({
-      left: `${(i * 8.33 + 4.17) % 100}%`,
-      top: `${((i * 17 + 11) * 7.3) % 100}%`,
-      delay: `${i * 0.4}s`,
-      duration: `${3 + (i % 3) * 0.8}s`,
-    })), []
-  );
-
   return (
-    <section ref={containerRef} className="relative py-16 md:py-48 px-4 overflow-hidden">
-      {/* Light rays background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              width: '2px',
-              height: '200%',
-              background: `linear-gradient(to bottom, transparent, ${i % 2 === 0 ? 'rgba(0,240,255,0.06)' : 'rgba(139,92,246,0.06)'}, transparent)`,
-              transform: `rotate(${i * 36 + 10}deg) translateX(${(i - 2) * 80}px)`,
-              transformOrigin: 'center center',
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Floating particles - deterministic positions */}
-      <div className="absolute inset-0 overflow-hidden">
-        {particles.map((p, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-neon/20 animate-float"
-            style={{
-              left: p.left,
-              top: p.top,
-              animationDelay: p.delay,
-              animationDuration: p.duration,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="max-w-3xl mx-auto relative z-10">
+    <section id="vision" className="relative py-48 px-6 md:px-12 bg-black text-white overflow-hidden">
+      <div className="max-w-4xl mx-auto text-center flex flex-col items-center gap-12">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 2 }}
+          className="flex flex-col gap-8"
         >
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">My Vision</span>
+          <span className="text-white/20 text-[10px] tracking-[1em] uppercase font-sans">The Vision</span>
+          <h2 className="font-display text-4xl md:text-6xl leading-tight">
+            Building the <br />
+            <span className="italic opacity-40">Next Dimension</span> <br />
+            of Sustainable <span className="opacity-40 italic">Excellence.</span>
           </h2>
         </motion.div>
-        <div className="relative pt-8 pb-12 w-full">
-           <AnimatePresence mode="wait">
-             <motion.div
-               key={quoteIndex}
-               initial={{ opacity: 0, scale: 0.95, filter: 'blur(10px)' }}
-               animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-               exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
-               transition={{ duration: 0.8, ease: "circOut" }}
-               className="text-center space-y-8"
-             >
-                <p className="font-display text-xl md:text-4xl font-medium text-white/90 leading-tight md:leading-tight max-w-3xl mx-auto">
-                  &quot;{quotes[quoteIndex].text}&quot;
-                </p>
-                <div className="flex items-center justify-center gap-4 text-cyan-400 pt-4">
-                  <div className="w-12 h-px bg-cyan-400/50" />
-                  <span className="font-mono text-[10px] md:text-sm uppercase tracking-[0.2em]">{quotes[quoteIndex].author}</span>
-                  <div className="w-12 h-px bg-cyan-400/50" />
-                </div>
-             </motion.div>
-           </AnimatePresence>
-        </div>
+
+        <div className="h-px w-32 bg-white/10" />
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+          className="text-white/40 font-sans text-sm md:text-lg leading-relaxed max-w-2xl text-balance"
+        >
+          We envision a future where precision engineering and quantitative strategy converge to solve the most pressing systemic challenges. Our mission is to leave a legacy of innovation that transcends borders and generations.
+        </motion.p>
+
+        {/* Signature Element */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 1 }}
+          className="mt-12 group flex items-center gap-4 cursor-default"
+        >
+          <div className="w-12 h-px bg-white/10 group-hover:w-24 transition-all duration-700" />
+          <span className="font-display text-2xl uppercase tracking-[0.2em] group-hover:tracking-[0.5em] transition-all duration-700">Fadhil Lubis</span>
+          <div className="w-12 h-px bg-white/10 group-hover:w-24 transition-all duration-700" />
+        </motion.div>
       </div>
+
+      {/* Decorative Atmosphere */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none" />
     </section>
   );
 }

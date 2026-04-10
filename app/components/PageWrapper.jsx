@@ -1,448 +1,106 @@
 'use client';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useVelocity, useSpring, useTransform } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
-import CinematicIntro from './ui/CinematicIntro';
-import Navbar from './ui/Navbar';
-import ScrollProgress from './ui/ScrollProgress';
-import BackToTop from './ui/BackToTop';
-import HeroSection from './sections/HeroSection';
-import MissionStats from './sections/MissionStats';
-import SkillsSection from './sections/SkillsSection';
-import EducationSection from './sections/EducationSection';
-import RoadmapSection from './sections/RoadmapSection';
+import LuxuryNavbar from './ui/LuxuryNavbar';
+import LuxuryHero from './sections/LuxuryHero';
+import PhilosophySection from './sections/PhilosophySection';
 import ProjectsSection from './sections/ProjectsSection';
-import VisionSection from './sections/VisionSection';
 import ContactSection from './sections/ContactSection';
-import NeuralCore from './ui/NeuralCore';
-import AudioReactor from './ui/AudioReactor';
-import SoundToggle from './ui/SoundToggle';
-import { PerformanceProvider } from '../context/PerformanceContext';
-import CustomCursor from './ui/CustomCursor';
-import PerformanceToggle from './ui/PerformanceToggle';
-import HolographicFooter from './ui/HolographicFooter';
-import AudioVisualizer from './ui/AudioVisualizer';
-import AuroraOverlay from './ui/AuroraOverlay';
-import WarpPortal from './ui/WarpPortal';
-import { useSound } from '../context/SoundContext';
+import BackToTop from './ui/BackToTop';
 
-// Lazy-loaded heavy 3D sections
-const TrophyGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
+// Lazy-loaded museum sections
 const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
-const DiscoverySection = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
-const GlobeSection = dynamic(() => import('./sections/GlobeSection'), { ssr: false });
-const CinematicRoom = dynamic(() => import('./three/CinematicRoom'), { ssr: false });
-
-
-// Global Scanline Effect
-function Scanline() {
-  return (
-    <motion.div 
-      animate={{ y: ['-100%', '200%'] }}
-      transition={{ repeat: Infinity, duration: 15, ease: 'linear' }}
-      className="fixed inset-x-0 h-[30vh] bg-gradient-to-b from-transparent via-cyan-500/5 to-transparent pointer-events-none z-[100] opacity-30"
-    />
-  );
-}
-
-// Warp Speed & Audio Engine Tracker
-function WarpEngine() {
-  const canvasRef = useRef(null);
-  const { scrollY } = useScroll();
-  const velocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(velocity, { damping: 50, stiffness: 200 });
-  const { setEngineDrive } = useSound();
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    let animId;
-    const stars = Array.from({ length: 60 }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      size: Math.random() * 2 + 0.5,
-      opacity: Math.random() * 0.5 + 0.1
-    }));
-    
-    // Quantum Liquid Trail State
-    const trails = [];
-    const handleMouseMove = (e) => {
-      trails.push({ x: e.clientX, y: e.clientY, age: 0 });
-    };
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    resize();
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', handleMouseMove);
-
-    const animate = () => {
-      const v = smoothVelocity.get();
-      // Update Audio Pitch based on scroll speed
-      setEngineDrive(v); 
-
-      // Clear canvas with trail effect for lightspeed blur
-      ctx.fillStyle = 'rgba(5, 5, 16, 0.3)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      const speedFactor = v * 0.05;
-      const stretchFactor = Math.abs(speedFactor) * 2;
-
-      stars.forEach(s => {
-        s.y -= speedFactor * s.size;
-        
-        // Wrap around screen
-        if (s.y < -100) s.y = canvas.height + 50;
-        if (s.y > canvas.height + 100) s.y = -50;
-
-        ctx.fillStyle = `rgba(0, 240, 255, ${s.opacity})`;
-        // Stretch star vertically based on scroll velocity
-        ctx.fillRect(s.x, s.y, s.size, Math.max(s.size, stretchFactor));
-      });
-
-      // Render Quantum Liquid Cursor Trail
-      if (trails.length > 1) {
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        ctx.beginPath();
-        ctx.moveTo(trails[0].x, trails[0].y);
-        
-        for (let i = 1; i < trails.length; i++) {
-          const pt = trails[i];
-          const prev = trails[i - 1];
-          const xc = (prev.x + pt.x) / 2;
-          const yc = (prev.y + pt.y) / 2;
-          ctx.quadraticCurveTo(prev.x, prev.y, xc, yc);
-          pt.age += 1;
-        }
-        
-        // Final line to exact cursor
-        const last = trails[trails.length - 1];
-        ctx.quadraticCurveTo(last.x, last.y, last.x, last.y);
-
-        // Fluid gradient trail
-        if (trails.length > 5) {
-            const first = trails[0];
-            const grad = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
-            grad.addColorStop(0, 'rgba(0, 240, 255, 0)');
-            grad.addColorStop(0.5, 'rgba(139, 92, 246, 0.3)');
-            grad.addColorStop(1, 'rgba(255, 255, 255, 0.8)');
-            
-            ctx.shadowColor = '#00f0ff';
-            ctx.shadowBlur = 20;
-            ctx.strokeStyle = grad;
-            ctx.lineWidth = 12;
-            ctx.stroke();
-            ctx.shadowBlur = 0; // reset
-        }
-
-        while (trails.length && trails[0].age > 15) {
-          trails.shift();
-        }
-      }
-
-      animId = requestAnimationFrame(animate);
-
-    };
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [smoothVelocity, setEngineDrive]);
-
-  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none opacity-50 mix-blend-screen" />;
-}
-
-// Sector Glitch Wipe Effect
-function SectorWipe({ trigger }) {
-  return (
-    <div key={trigger} className="fixed inset-0 pointer-events-none z-[200] overflow-hidden">
-      <div className="absolute inset-y-0 w-20 bg-cyan-500/20 blur-xl animate-glitch-wipe shadow-[0_0_50px_rgba(0,240,255,0.4)]" />
-      <div className="absolute inset-0 bg-cyan-500/5 opacity-0 animate-[pulse_1.2s_ease-out_forwards]" />
-    </div>
-  );
-}
-
-// Adaptive Sidebars HUD
-function SidebarHUD() {
-  const [activeLabel, setActiveLabel] = useState('SYSTEM_INIT');
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ['hero', 'skills', 'education', 'trophy', 'achievements', 'fl-globe', 'roadmap', 'discovery', 'projects', 'vision', 'contact'];
-      for (const id of sections.reverse()) {
-        const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 300) {
-          setActiveLabel(`DATA_SCAN: ${id.toUpperCase()}`);
-          break;
-        }
-      }
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  return (
-    <>
-      <SectorWipe trigger={activeLabel} />
-      {/* Left Sidebar */}
-      <div className="fixed left-4 top-1/2 -translate-y-1/2 z-[100] hidden xl:flex flex-col gap-8 pointer-events-none">
-        <div className="h-32 w-px bg-white/10 mx-auto" />
-        <div className="text-[10px] font-mono text-white/20 vertical-text font-bold tracking-[0.5em] uppercase whitespace-nowrap">
-          {activeLabel}
-        </div>
-        <div className="h-32 w-px bg-white/10 mx-auto" />
-      </div>
-
-      {/* Right Sidebar */}
-      <div className="fixed right-4 top-1/2 -translate-y-1/2 z-[100] hidden xl:flex flex-col gap-8 pointer-events-none">
-        <div className="h-32 w-px bg-white/10 mx-auto" />
-        <div className="text-[10px] font-mono text-white/20 vertical-text font-bold tracking-[0.5em] uppercase whitespace-nowrap">
-          FL_OS_v4.0.2 // STABLE
-        </div>
-        <div className="h-32 w-px bg-white/10 mx-auto" />
-      </div>
-
-      <style jsx>{`
-        .vertical-text {
-          writing-mode: vertical-rl;
-          transform: rotate(180deg);
-        }
-      `}</style>
-    </>
-  );
-}
-
-// Global Notification HUD
-function NotificationSystem() {
-  const [notif, setNotif] = useState(null);
-
-  useEffect(() => {
-    const handleNotif = (e) => {
-      setNotif(e.detail);
-      setTimeout(() => setNotif(null), 3000);
-    };
-    window.addEventListener('FL_NOTIFY', handleNotif);
-    return () => window.removeEventListener('FL_NOTIFY', handleNotif);
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {notif && (
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -50 }}
-          className="fixed top-4 left-4 md:top-8 md:left-8 z-[250] flex items-center gap-4 pointer-events-none"
-        >
-          <div className="w-1 h-8 bg-cyan-500 shadow-[0_0_10px_#00f0ff]" />
-          <div className="glass px-4 py-2 border-l-0 rounded-r-xl">
-             <div className="text-[9px] font-mono text-cyan-400 font-bold tracking-[0.2em] uppercase">System_Prompt</div>
-             <div className="text-xs font-bold text-white uppercase tracking-wider">{notif}</div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+const MuseumGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
 
 export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isShaking, setIsShaking] = useState(false);
-  const { playBootSequence } = useSound();
-  const introFinished = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+    const timer = setTimeout(() => setShowIntro(false), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
-  useEffect(() => {
-    const checkMobile = () => {
-      const isSmallScreen = window.innerWidth < 768;
-      const isLowPerf = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-      setIsMobile(isSmallScreen || isLowPerf);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile, { passive: true });
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const handleIntroComplete = useCallback(() => {
-    if (introFinished.current) return;
-    introFinished.current = true;
-    setShowIntro(false);
-    
-    // Attempt audio boot sequence safely
-    try {
-      playBootSequence();
-    } catch (e) {
-      console.warn("FL Audio Engine: Boot Sequence Suppressed");
-    }
-
-    setIsShaking(true);
-    setTimeout(() => setIsShaking(false), 1000);
-  }, [playBootSequence]);
-
-  useEffect(() => {
-    if (showIntro) {
-      // Primary Cinematic Timer
-      const timer = setTimeout(handleIntroComplete, 4500);
-      
-      // Secondary FAIL-SAFE Timer: Force reveal after 6.5 seconds no matter what
-      const failsafe = setTimeout(() => {
-         if (!introFinished.current) {
-            console.warn("FL Runtime: Intro hanging. Firing Force Reveal Protocol.");
-            handleIntroComplete();
-         }
-      }, 6500);
-
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(failsafe);
-      };
-    }
-  }, [showIntro, handleIntroComplete]);
-
-  // Prevent Hydration Errors by delaying DOM assembly until client mounts
   if (!mounted) return null;
 
   return (
-    <PerformanceProvider>
-      <AudioReactor />
+    <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90">
       <div className="noise-overlay" />
-      <CustomCursor />
-      <WarpPortal />
-      <AuroraOverlay />
       
       <AnimatePresence>
         {showIntro && (
-          <CinematicIntro onComplete={handleIntroComplete} />
+          <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[200] bg-black flex items-center justify-center flex-col gap-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1 }}
+              className="text-white font-display text-4xl tracking-widest uppercase"
+            >
+              F_L
+            </motion.div>
+            <div className="h-px w-12 bg-white/20" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="text-white/40 font-sans text-[10px] tracking-[0.4em] uppercase"
+            >
+              The Nexus of Precision
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       <motion.div 
-        animate={isShaking ? { 
-          x: [0, -10, 10, -10, 10, 0],
-          y: [0, 5, -5, 5, -5, 0]
-        } : {}}
-        transition={{ duration: 0.5 }}
-        className="relative overflow-x-hidden min-h-screen font-sans" 
-        style={{ opacity: showIntro ? 0 : 1, transition: 'opacity 0.8s ease' }}
+        style={{ opacity: showIntro ? 0 : 1 }}
+        transition={{ duration: 1.5 }}
+        className="relative z-10"
       >
-        <CinematicRoom />
-        <WarpEngine />
-        <AudioVisualizer />
-        <Scanline />
-        <SidebarHUD />
-        <NotificationSystem />
+        <LuxuryNavbar />
         
-        <ScrollProgress />
-        <Navbar />
-        <PerformanceToggle />
-        <SoundToggle />
-        <NeuralCore />
-        
-        <main className="relative z-10 overflow-x-hidden">
-          <motion.section 
-            initial={{ opacity: 0, clipPath: 'inset(10% 0 10% 0)' }}
-            whileInView={{ opacity: 1, clipPath: 'inset(0% 0 0% 0)' }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            id="hero" aria-label="Introduction"
-          >
-            <HeroSection isMobile={isMobile} />
-          </motion.section>
+        <main>
+          <LuxuryHero />
+          
+          <PhilosophySection />
 
-          <MissionStats />
-
-          <motion.section 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            id="skills" aria-label="Professional Skills Overview"
-          >
-            <SkillsSection />
-          </motion.section>
-
-          <motion.section 
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 1 }}
-            id="education" aria-label="Academic Background"
-          >
-            <EducationSection />
-          </motion.section>
-
-          <motion.section 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            id="trophy" aria-label="Awards and Trophies Gallery"
-          >
-            <TrophyGallery />
-          </motion.section>
-
-          <div className="bg-[#020208]/80 backdrop-blur-3xl border-y border-white/5">
-             <motion.section 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ duration: 1 }}
-               id="projects" aria-label="Selected Projects"
-             >
-               <ProjectsSection />
-             </motion.section>
-             
-             <motion.section 
-               initial={{ opacity: 0 }}
-               whileInView={{ opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ duration: 1 }}
-               id="achievements" aria-label="Key Achievements"
-             >
+          <section id="exhibitions" className="py-24 px-6 md:px-12">
+            <div className="max-w-7xl mx-auto">
+               <div className="flex flex-col mb-16">
+                  <span className="text-white/30 text-[10px] tracking-[0.5em] uppercase mb-2">Heritage</span>
+                  <h2 className="font-display">Selected Exhibitions</h2>
+               </div>
                <AchievementsSection />
-             </motion.section>
-          </div>
+            </div>
+          </section>
 
-          <motion.section 
-            initial={{ opacity: 0, filter: 'blur(10px)' }}
-            whileInView={{ opacity: 1, filter: 'blur(0px)' }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2 }}
-            id="fl-globe" aria-label="Global Impact Map"
-          >
-            <GlobeSection />
-          </motion.section>
+          <section id="collections" className="py-24 bg-[#050505]">
+             <ProjectsSection />
+          </section>
 
-          <section id="roadmap" aria-label="Future Roadmap"><RoadmapSection /></section>
-          <section id="discovery" aria-label="Innovation and Discoveries"><DiscoverySection /></section>
-          <section id="vision" aria-label="Vision and Philosophy"><VisionSection /></section>
-          <motion.section 
-            initial={{ opacity: 0, y: 100 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: "circOut" }}
-            id="contact" aria-label="Contact and Collaboration"
-          >
-            <ContactSection />
-          </motion.section>
+          <section id="archives" className="py-24">
+             <MuseumGallery />
+          </section>
+
+          <ContactSection />
         </main>
-        <HolographicFooter />
-        <BackToTop />
 
-        <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />
+        <footer className="py-12 border-t border-white/5 text-center">
+          <div className="text-[10px] tracking-[0.5em] uppercase text-white/20 mb-4">Fadhil Lubis Atelier © 2026</div>
+          <div className="font-display text-lg opacity-40">Precision in Every Concept.</div>
+        </footer>
+
+        <BackToTop />
       </motion.div>
-    </PerformanceProvider>
+
+      {/* Luxury Vignette */}
+      <div className="fixed inset-0 pointer-events-none z-[5] shadow-[inset_0_0_200px_rgba(0,0,0,0.95)]" />
+    </div>
   );
 }

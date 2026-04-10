@@ -1,250 +1,88 @@
 'use client';
-import { useState, useRef, Suspense } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { 
-  Float, 
-  Text, 
-  MeshWobbleMaterial, 
-  PresentationControls, 
-  Environment,
-  Html,
-  MeshDistortMaterial,
-  Torus
-} from '@react-three/drei';
-import { motion, AnimatePresence } from 'framer-motion';
-import { usePerformance } from '../../context/PerformanceContext';
-import { useSound } from '../../context/SoundContext';
+import { motion } from 'framer-motion';
 
-// Procedural Medal Component
-function MedalModel({ color, ribbonColor, title, isActive }) {
-  const groupRef = useRef();
-  const { isCinematic } = usePerformance();
-
-  useFrame((state) => {
-    if (isCinematic && groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.getElapsedTime() * 0.5) * 0.1;
-    }
-  });
-
-  return (
-    <group ref={groupRef}>
-      {/* Ribbon */}
-      <mesh position={[0, 1.2, -0.1]}>
-        <boxGeometry args={[0.4, 1.5, 0.05]} />
-        <meshStandardMaterial color={ribbonColor} roughness={0.5} metalness={0.2} />
-      </mesh>
-
-      {/* Main Medal Body */}
-      <group position={[0, 0, 0]}>
-        {/* Outer Ring */}
-        <mesh rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.6, 0.05, 16, 100]} />
-          <meshStandardMaterial color={color} metalness={1} roughness={0.1} />
-        </mesh>
-        
-        {/* Core Disk */}
-        <mesh position={[0, 0, 0]}>
-          <cylinderGeometry args={[0.55, 0.55, 0.1, 32]} rotation={[Math.PI / 2, 0, 0]} />
-          <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
-        </mesh>
-
-        {/* Dynamic Detail (Floating Particles or Glow) */}
-        {isActive && (
-           <mesh scale={1.2}>
-             <torusGeometry args={[0.7, 0.01, 16, 100]} rotation={[Math.PI / 2, 0, 0]} />
-             <MeshWobbleMaterial color={color} speed={5} factor={0.5} />
-           </mesh>
-        )}
-      </group>
-    </group>
-  );
-}
-
-const trophyData = [
+const archives = [
   {
-    id: 'i2aspo',
-    title: 'I2ASPO Gold Medal',
-    event: 'International Indonesia Applied Science Project Olympiad',
+    title: 'IYSA Distinction',
+    award: 'Gold Achievement',
     year: '2025',
-    color: '#ffd700',
-    ribbonColor: '#8b5cf6', // purple
-    desc: 'Awarded for excellence in scientific innovation and research. The IYSA flagship competition.',
-    stats: { innovation: '98%', complexity: '94%', impact: 'HIGH' }
+    detail: 'Recognized for pioneering scientific research on the international stage.'
   },
   {
-    id: 'ipitex',
-    title: 'IPITEx Silver Medal',
-    event: 'Thailand Inventors\' Day (IPITEx)',
+    title: 'Thai Inventor Council',
+    award: 'Silver Distinction',
     year: '2024',
-    color: '#c0c0c0',
-    ribbonColor: '#fbbf24', // yellow
-    desc: 'Top honor from the National Research Council of Thailand (NRCT) on the global stage.',
-    stats: { innovation: '92%', complexity: '88%', impact: 'GLOBAL' }
+    detail: 'Honored by the National Research Council of Thailand (NRCT).'
   },
   {
-    id: 'mte',
-    title: 'MTE Silver Medal',
-    event: 'Malaysia Technology Expo',
+    title: 'Tech Expo Malaysia',
+    award: 'Silver Distinction',
     year: '2025',
-    color: '#c0c0c0', // silver
-    ribbonColor: '#ffffff', // white
-    desc: 'Showcasing engineering excellence and innovative problem-solving in Kuala Lumpur.',
-    stats: { innovation: '85%', complexity: '92%', impact: 'REGIONAL' }
+    detail: 'Excellence in industrial engineering and problem-solving methodologies.'
   }
 ];
 
 export default function TrophyGallery() {
-  const [activeId, setActiveId] = useState(null);
-  const { isCinematic } = usePerformance();
-  const { playPip } = useSound();
-
-  const activeTrophy = trophyData.find(t => t.id === activeId);
-
-  const handleSelect = (id) => {
-    setActiveId(id === activeId ? null : id);
-    playPip(id === activeId ? 440 : 880, 0.1);
-  };
-
   return (
-    <section className="relative py-32 px-6 min-h-screen bg-dark flex flex-col items-center">
-      <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      
-      <div className="text-center mb-20 max-w-4xl">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="text-3xl md:text-6xl font-bold font-display mb-6"
-        >
-          <span className="text-gradient">3D Virtual Trophy Gallery</span>
-        </motion.h2>
-        <p className="text-muted text-lg">
-          Interactive digital twins of international honors. Select a medal to initiate a technical deep-dive.
-        </p>
-      </div>
+    <section id="archives" className="py-32 px-6 md:px-12 bg-black">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex flex-col items-center text-center mb-24 gap-6">
+          <span className="text-white/20 text-[10px] tracking-[0.8em] uppercase font-sans">Archives</span>
+          <h2 className="font-display text-5xl md:text-7xl">The Collection of <span className="italic opacity-40">Distinction.</span></h2>
+          <div className="h-px w-24 bg-white/10" />
+        </div>
 
-      <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
-        {trophyData.map((trophy, i) => (
-          <div key={trophy.id} className="relative h-[400px] md:h-[500px] group">
-            <div 
-              className={`absolute inset-0 rounded-[3rem] transition-all duration-700 pointer-events-none
-                ${activeId === trophy.id ? 'bg-white/5 border-white/20 scale-105' : 'bg-transparent border-transparent'}
-              `} 
-            />
-            
-            <Canvas camera={{ position: [0, 0, 4.5], fov: 45 }}>
-              <ambientLight intensity={0.5} />
-              <pointLight position={[10, 10, 10]} intensity={1} color={trophy.color} />
-              <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ffffff" />
+        {/* Museum Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          {archives.map((item, idx) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1.2, delay: idx * 0.2 }}
+              className="relative aspect-[3/4] bg-[#050505] border border-white/5 flex flex-col justify-between p-10 group overflow-hidden"
+            >
+              {/* Subtle Texture/Gradient Background */}
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
               
-              <PresentationControls
-                global
-                config={{ mass: 2, tension: 500 }}
-                snap={{ mass: 4, tension: 1500 }}
-                rotation={[0, 0, 0]}
-                polar={[-Math.PI / 4, Math.PI / 4]}
-                azimuth={[-Math.PI / 2, Math.PI / 2]}
-              >
-                <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-                  <group onClick={() => handleSelect(trophy.id)} cursor="pointer">
-                    <MedalModel 
-                      color={trophy.color} 
-                      ribbonColor={trophy.ribbonColor} 
-                      isActive={activeId === trophy.id}
-                    />
-                  </group>
-                </Float>
-              </PresentationControls>
-              <Environment preset="city" />
-            </Canvas>
+              <div className="relative z-10 flex flex-col gap-2">
+                <span className="text-[10px] tracking-[0.4em] uppercase text-white/20 font-sans">{item.year}</span>
+                <h3 className="font-display text-2xl md:text-3xl leading-tight group-hover:tracking-wider transition-all duration-700">{item.title}</h3>
+              </div>
 
-            {/* Scanning HUD Overlay */}
-            <div className="absolute inset-0 pointer-events-none z-10 p-6 flex flex-col justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-               <div className="flex justify-between items-start">
-                  <div className="w-4 h-4 border-t-2 border-l-2 border-cyan-500/50" />
-                  <div className="text-[8px] font-mono text-cyan-400 font-bold tracking-widest animate-pulse">
-                     ANALYZING_OBJECT_{i+1}
+              {/* Pedestal Shadow effect */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity duration-1000">
+                 <div className="w-1/2 h-1/2 rounded-full bg-white blur-[100px]" />
+              </div>
+
+              <div className="relative z-10 flex flex-col gap-6">
+                <p className="text-white/30 text-xs leading-relaxed max-w-[200px] group-hover:text-white/60 transition-colors">
+                  {item.detail}
+                </p>
+                <div className="flex items-center justify-between border-t border-white/10 pt-6">
+                  <span className="font-display italic text-white/50">{item.award}</span>
+                  <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
+                       <path d="M7 17l10-10M7 7h10v10"></path>
+                     </svg>
                   </div>
-                  <div className="w-4 h-4 border-t-2 border-r-2 border-cyan-500/50" />
-               </div>
-               <div className="flex justify-between items-end">
-                  <div className="w-4 h-4 border-b-2 border-l-2 border-cyan-500/50" />
-                  <div className="w-4 h-4 border-b-2 border-r-2 border-cyan-500/50" />
-               </div>
-            </div>
-
-            {/* Medal Label */}
-            <div className="absolute bottom-10 left-0 right-0 text-center pointer-events-none group-hover:opacity-40 transition-opacity">
-              <div className="text-[10px] font-mono text-white/30 tracking-[0.3em] uppercase mb-1">Entry_No_{i+1}</div>
-              <div className="text-xl font-bold text-white uppercase tracking-wider">{trophy.id.toUpperCase()}_UNIT</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Detail Overlay */}
-      <AnimatePresence>
-        {activeId && activeTrophy && (
-          <motion.div
-            initial={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
-            animate={{ opacity: 1, y: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : -window.innerHeight/2 + 250, x: 0 }}
-            exit={{ opacity: 0, y: 100, x: typeof window !== 'undefined' && window.innerWidth < 768 ? 0 : 100 }}
-            className="fixed bottom-0 md:top-1/2 right-0 md:right-12 w-full md:w-80 glass rounded-t-[3rem] md:rounded-3xl border-t md:border border-white/20 p-8 z-[200] shadow-2xl overflow-hidden max-h-[80vh] md:max-h-none overflow-y-auto"
-          >
-            <div className="absolute top-4 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/10 rounded-full md:hidden" />
-            
-            <div className="absolute top-4 right-4 md:top-0 md:right-0 md:p-4">
-              <button 
-                onClick={() => setActiveId(null)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 text-white/50 hover:text-white pointer-events-auto z-50"
-              >
-                <div className="w-10 h-10 glass rounded-full flex items-center justify-center border border-white/20 hover:bg-white/10 transition-colors">
-                  <span className="text-xl">✕</span>
                 </div>
-              </button>
-            </div>
-
-            <div className="relative z-10 space-y-6 pt-4 md:pt-0">
-              <div>
-                <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">{activeTrophy.year}{" // "}HONORS</span>
-                <h3 className="text-2xl font-bold text-white mt-1 leading-tight">{activeTrophy.title}</h3>
-                <p className="text-cyan-400/60 text-xs font-mono mt-1 font-bold">{activeTrophy.event}</p>
               </div>
 
-              <div className="h-px bg-white/10" />
+              {/* Luxury Frame Glow */}
+              <div className="absolute inset-0 border border-white/0 group-hover:border-white/10 transition-all duration-700" />
+            </motion.div>
+          ))}
+        </div>
 
-              <p className="text-muted text-sm leading-relaxed">
-                {activeTrophy.desc}
-              </p>
-
-              <div className="grid grid-cols-2 gap-4 pt-2">
-                {Object.entries(activeTrophy.stats).map(([k, v]) => (
-                  <div key={k} className="bg-white/5 rounded-xl p-3 border border-white/5">
-                    <div className="text-[9px] font-mono text-white/30 uppercase">{k}</div>
-                    <div className="text-sm font-bold text-white">{v}</div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-4">
-                 <button className="w-full py-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl text-[10px] font-mono text-white font-bold tracking-[0.2em] hover:bg-cyan-500/20 transition-all uppercase">
-                   Download_Certification_PDF
-                 </button>
-              </div>
-            </div>
-
-            {/* Background Decorative Circuitry */}
-            <div className="absolute bottom-0 right-0 w-32 h-32 opacity-10 pointer-events-none hidden md:block">
-              <svg viewBox="0 0 100 100" className="w-full h-full text-cyan-500 fill-none stroke-current stroke-1">
-                <path d="M0,50 L50,50 L50,100 M50,50 L100,0" />
-                <circle cx="50" cy="50" r="5" />
-              </svg>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <div className="mt-20 text-[10px] font-mono text-white/20 uppercase tracking-[0.5em]">
-        Interactive_Trophy_Vault{" // "}60FPS_SECURE_LINK
+        {/* Catalog Note */}
+        <div className="mt-20 text-center">
+           <p className="font-sans text-[10px] tracking-[0.6em] uppercase text-white/10 italic">
+             Certified by the International Council of Innovators.
+           </p>
+        </div>
       </div>
     </section>
   );

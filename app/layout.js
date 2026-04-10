@@ -1,38 +1,30 @@
-import { Inter, Outfit, Sora } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/ui/SmoothScroll";
-import TelemetryBar from "./components/ui/TelemetryBar";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-});
-
-const sora = Sora({
-  variable: "--font-sora",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
 export const metadata = {
   metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/"),
   title: {
-    default: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator & Researcher",
-    template: "%s | Fadhil Muhammad Syafiq Lubis",
+    default: "Fadhil Lubis | The Nexus of Precision",
+    template: "%s | Fadhil Lubis",
   },
-  description: "Official portfolio of Fadhil Muhammad Syafiq Lubis — an international gold medal winner in science and engineering competitions. Exploring innovations in Engineering, Finance, and Entrepreneurship.",
+  description: "Official portfolio of Fadhil Muhammad Syafiq Lubis — Monochrome luxury design showcasing international gold medal innovations in science and engineering.",
   keywords: [
     "Fadhil Muhammad Syafiq Lubis", 
-    "Student Innovator", 
+    "Luxury Portfolio", 
     "International Science Competition Winner", 
-    "Research Portfolio", 
     "Engineering Student", 
-    "Medan Indonesia", 
-    "Science Olympiad Medalist"
+    "Precision Design"
   ],
   authors: [{ name: "Fadhil Muhammad Syafiq Lubis" }],
   creator: "Fadhil Muhammad Syafiq Lubis",
@@ -46,10 +38,10 @@ export const metadata = {
     canonical: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/",
   },
   openGraph: {
-    title: "Fadhil Muhammad Syafiq Lubis | Award-Winning Student Innovator",
-    description: "Explore the cinematic portfolio of an international award-winning student innovator from Medan, Indonesia.",
+    title: "Fadhil Lubis | Luxury Innovation",
+    description: "Explore the minimalist excellence of an award-winning student innovator.",
     url: "/",
-    siteName: "Fadhil Portfolio",
+    siteName: "Fadhil Lubis Atelier",
     locale: "en_US",
     type: "website",
     images: [
@@ -57,14 +49,14 @@ export const metadata = {
         url: "/images/photo1.jpg",
         width: 1200,
         height: 630,
-        alt: "Fadhil Muhammad Syafiq Lubis - Student Innovator",
+        alt: "Fadhil Muhammad Syafiq Lubis - Luxury Brand",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fadhil Muhammad Syafiq Lubis | Student Innovator",
-    description: "International award-winning researcher and innovator from Indonesia.",
+    title: "Fadhil Lubis | Luxury Brand",
+    description: "International award-winning researcher and innovator.",
     images: ["/images/photo1.jpg"],
   },
   verification: {
@@ -91,7 +83,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#050510",
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }) {
@@ -99,12 +91,9 @@ export default function RootLayout({ children }) {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Fadhil Muhammad Syafiq Lubis",
-    jobTitle: "Student Innovator & Researcher",
+    jobTitle: "Innovator & Researcher",
     url: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app",
     image: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/images/photo1.jpg",
-    sameAs: [
-      // Add social links here if available
-    ],
     description: "International gold medal winner in science and engineering competitions.",
     address: {
       "@type": "PostalAddress",
@@ -115,17 +104,16 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable} ${sora.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-screen">
+      <body className="min-h-screen bg-black-pure selection:bg-white selection:text-black">
         <SmoothScroll>
           {children}
-          <TelemetryBar />
         </SmoothScroll>
       </body>
     </html>
