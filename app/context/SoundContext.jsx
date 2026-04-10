@@ -7,58 +7,66 @@ export function SoundProvider({ children }) {
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const audioContextRef = useRef(null);
   const masterGainRef = useRef(null);
-  const engineStateRef = useRef(null);
+  const ambientStateRef = useRef(null);
   const analyserRef = useRef(null);
   const dataArrayRef = useRef(null);
 
-  const startAmbientHum = () => {
+  const startMuseumHum = () => {
     if (!audioContextRef.current) return;
     
-    const hum = audioContextRef.current.createOscillator();
-    const humGain = audioContextRef.current.createGain();
+    // Low Frequency Tone
+    const osc1 = audioContextRef.current.createOscillator();
+    const osc2 = audioContextRef.current.createOscillator();
     const filter = audioContextRef.current.createBiquadFilter();
-    const pulseGain = audioContextRef.current.createGain();
-    const pulseOsc = audioContextRef.current.createOscillator();
+    const gain = audioContextRef.current.createGain();
     
-    hum.type = 'sawtooth';
-    hum.frequency.setValueAtTime(40, audioContextRef.current.currentTime);
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(45, audioContextRef.current.currentTime);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(45.5, audioContextRef.current.currentTime); // Slight detune for phasing
     
     filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(150, audioContextRef.current.currentTime);
+    filter.frequency.setValueAtTime(80, audioContextRef.current.currentTime);
+    filter.Q.setValueAtTime(5, audioContextRef.current.currentTime);
     
-    // Add pulsing life to the hum
-    pulseOsc.frequency.setValueAtTime(0.5, audioContextRef.current.currentTime);
-    pulseGain.gain.setValueAtTime(0.1, audioContextRef.current.currentTime);
+    gain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+    gain.gain.linearRampToValueAtTime(0.15, audioContextRef.current.currentTime + 5);
     
-    humGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
-    humGain.gain.linearRampToValueAtTime(0.2, audioContextRef.current.currentTime + 3);
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(gain);
+    gain.connect(masterGainRef.current);
     
-    pulseOsc.connect(pulseGain);
-    pulseGain.connect(humGain.gain);
-    
-    hum.connect(filter);
-    filter.connect(humGain);
-    humGain.connect(masterGainRef.current);
-    
-    hum.start();
-    pulseOsc.start();
-    engineStateRef.current = { hum, filter, humGain };
-  };
+    osc1.start();
+    osc2.start();
 
-  const setEngineDrive = useCallback((velocity) => {
-    if (!isAudioEnabled || !engineStateRef.current || !audioContextRef.current) return;
-    const { hum, filter } = engineStateRef.current;
-    const now = audioContextRef.current.currentTime;
+    // Atmosphere "Air" Noise
+    const bufferSize = 2 * audioContextRef.current.sampleRate;
+    const noiseBuffer = audioContextRef.current.createBuffer(1, bufferSize, audioContextRef.current.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+        output[i] = Math.random() * 2 - 1;
+    }
+
+    const noise = audioContextRef.current.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = true;
+
+    const noiseFilter = audioContextRef.current.createBiquadFilter();
+    noiseFilter.type = 'lowpass';
+    noiseFilter.frequency.setValueAtTime(400, audioContextRef.current.currentTime);
     
-    // Base frequency is 40Hz. High speed pushes it to 100Hz.
-    const targetFreq = 40 + Math.min(Math.abs(velocity) * 0.05, 60);
-    // Filter opens up at high speeds (base 150Hz -> 800Hz)
-    const targetFilter = 150 + Math.min(Math.abs(velocity) * 0.5, 650);
+    const noiseGain = audioContextRef.current.createGain();
+    noiseGain.gain.setValueAtTime(0, audioContextRef.current.currentTime);
+    noiseGain.gain.linearRampToValueAtTime(0.02, audioContextRef.current.currentTime + 8);
+
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(masterGainRef.current);
+    noise.start();
     
-    // Smoothly ramp to the target
-    hum.frequency.exponentialRampToValueAtTime(targetFreq, now + 0.5);
-    filter.frequency.exponentialRampToValueAtTime(targetFilter, now + 0.5);
-  }, [isAudioEnabled]);
+    ambientStateRef.current = { osc1, osc2, noise, gain, noiseGain };
+  };
 
   const initAudio = useCallback(() => {
     if (audioContextRef.current) return;
@@ -67,17 +75,17 @@ export function SoundProvider({ children }) {
     audioContextRef.current = new AudioContext();
     
     masterGainRef.current = audioContextRef.current.createGain();
-    masterGainRef.current.gain.value = 0.45; // Increased from 0.15
+    masterGainRef.current.gain.value = 0.5;
     
     analyserRef.current = audioContextRef.current.createAnalyser();
-    analyserRef.current.fftSize = 64; // 32 frequency bins
+    analyserRef.current.fftSize = 64;
     dataArrayRef.current = new Uint8Array(analyserRef.current.frequencyBinCount);
     
     masterGainRef.current.connect(analyserRef.current);
     analyserRef.current.connect(audioContextRef.current.destination);
     
     setIsAudioEnabled(true);
-    startAmbientHum();
+    startMuseumHum();
   }, []);
 
   const getAudioData = useCallback(() => {
@@ -102,87 +110,16 @@ export function SoundProvider({ children }) {
 
   const playPip = (freq = 880, duration = 0.1, volume = 0.05) => {
     if (!isAudioEnabled || !audioContextRef.current) return;
-    
     const osc = audioContextRef.current.createOscillator();
     const g = audioContextRef.current.createGain();
-    
     osc.type = 'sine';
     osc.frequency.setValueAtTime(freq, audioContextRef.current.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(freq / 2, audioContextRef.current.currentTime + duration);
-    
     g.gain.setValueAtTime(volume, audioContextRef.current.currentTime);
     g.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.current.currentTime + duration);
-    
     osc.connect(g);
     g.connect(masterGainRef.current);
-    
     osc.start();
     osc.stop(audioContextRef.current.currentTime + duration);
-  };
-
-  const playSweep = (startFreq = 200, endFreq = 2000, duration = 0.5) => {
-    if (!isAudioEnabled || !audioContextRef.current) return;
-    
-    const osc = audioContextRef.current.createOscillator();
-    const g = audioContextRef.current.createGain();
-    
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(startFreq, audioContextRef.current.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(endFreq, audioContextRef.current.currentTime + duration);
-    
-    g.gain.setValueAtTime(0.03, audioContextRef.current.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.0001, audioContextRef.current.currentTime + duration);
-    
-    osc.connect(g);
-    g.connect(masterGainRef.current);
-    
-    osc.start();
-    osc.stop(audioContextRef.current.currentTime + duration);
-  };
-
-  const playBootSequence = () => {
-    if (!isAudioEnabled || !audioContextRef.current) return;
-    
-    const now = audioContextRef.current.currentTime;
-    
-    // Quick rising pulses
-    [880, 1320, 1760, 2640].forEach((freq, i) => {
-      const osc = audioContextRef.current.createOscillator();
-      const g = audioContextRef.current.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + i * 0.1);
-      g.gain.setValueAtTime(0, now + i * 0.1);
-      g.gain.linearRampToValueAtTime(0.05, now + i * 0.1 + 0.05);
-      g.gain.linearRampToValueAtTime(0, now + i * 0.1 + 0.1);
-      osc.connect(g);
-      g.connect(masterGainRef.current);
-      osc.start(now + i * 0.1);
-      osc.stop(now + i * 0.1 + 0.1);
-    });
-
-    // Final deep resonance
-    const osc2 = audioContextRef.current.createOscillator();
-    const g2 = audioContextRef.current.createGain();
-    const f2 = audioContextRef.current.createBiquadFilter();
-    
-    osc2.type = 'sawtooth';
-    osc2.frequency.setValueAtTime(40, now + 0.4);
-    osc2.frequency.exponentialRampToValueAtTime(80, now + 1.5);
-    
-    f2.type = 'lowpass';
-    f2.frequency.setValueAtTime(100, now + 0.4);
-    f2.frequency.exponentialRampToValueAtTime(1000, now + 1.5);
-    
-    g2.gain.setValueAtTime(0, now + 0.4);
-    g2.gain.linearRampToValueAtTime(0.15, now + 0.5);
-    g2.gain.linearRampToValueAtTime(0, now + 2.0);
-    
-    osc2.connect(f2);
-    f2.connect(g2);
-    g2.connect(masterGainRef.current);
-    
-    osc2.start(now + 0.4);
-    osc2.stop(now + 2.0);
   };
 
   return (
@@ -190,9 +127,6 @@ export function SoundProvider({ children }) {
       isAudioEnabled, 
       toggleAudio, 
       playPip, 
-      playSweep, 
-      playBootSequence,
-      setEngineDrive,
       getAudioData
     }}>
       {children}
