@@ -10,7 +10,7 @@ export default function AtelierPhilosophy() {
       desc: "Minimalism is the ultimate sophistication. Every pixel is curated to reflect a premium, museum-grade environment where achievement meets high-fashion design."
     },
     {
-      label: "TEGAS",
+      label: "BOLD",
       value: "Decisive Execution",
       desc: "Firmness in logic and sharp clarity in vision. The architectural precision of our methodologies ensures that every solution is bold, decisive, and absolute."
     },
