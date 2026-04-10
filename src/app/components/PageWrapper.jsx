@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import LuxuryNavbar from './ui/LuxuryNavbar';
 import LuxuryHero from './sections/LuxuryHero';
-import PhilosophySection from './sections/PhilosophySection';
+import GoldArchive from './sections/GoldArchive';
+import HeritageSection from './sections/HeritageSection';
+import PhilosophyUpgrade from './sections/PhilosophyUpgrade';
 import ProjectsSection from './sections/ProjectsSection';
 import ContactSection from './sections/ContactSection';
 import BackToTop from './ui/BackToTop';
@@ -12,6 +14,7 @@ import CustomCursor from './ui/CustomCursor';
 import ScrollProgress from './ui/ScrollProgress';
 import CinematicIntro from './ui/CinematicIntro';
 import StudioGallery from './sections/StudioGallery';
+import DigitalSignature from './ui/DigitalSignature';
 
 // Lazy-loaded museum sections
 const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
@@ -52,9 +55,17 @@ export default function PageWrapper() {
         
         <main>
           <LuxuryHero />
-          <PhilosophySection />
+          
+          {/* Elite Prestige - The Gold Archive */}
+          <GoldArchive />
 
-          {/* Heritage Section */}
+          {/* Foundation - The Heritage Path */}
+          <HeritageSection />
+
+          {/* Core Values - Philosophy Upgrade */}
+          <PhilosophyUpgrade />
+
+          {/* Modern Exhibitions */}
           <section id="exhibitions" className="py-24 px-6 md:px-12 bg-black">
             <div className="max-w-7xl mx-auto">
                 <AchievementsSection />
@@ -87,11 +98,13 @@ export default function PageWrapper() {
           <ContactSection />
         </main>
 
-        <footer className="py-24 border-t border-white/5 text-center flex flex-col items-center gap-8 bg-black">
-          <div className="font-display text-4xl tracking-tighter opacity-20 italic">Nexus of Precision.</div>
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] tracking-[0.5em] uppercase text-white/10">Fadhil Lubis Atelier</span>
-            <span className="text-[9px] tracking-[0.3em] font-sans text-white/5 uppercase">Global Innovation Division © 2026</span>
+        <footer className="bg-black">
+          <DigitalSignature />
+          <div className="py-12 border-t border-white/5 text-center flex flex-col items-center gap-4">
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] tracking-[0.5em] uppercase text-white/10">Fadhil Lubis Atelier</span>
+              <span className="text-[9px] tracking-[0.3em] font-sans text-white/5 uppercase">Global Innovation Division © 2026</span>
+            </div>
           </div>
         </footer>
 
