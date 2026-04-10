@@ -35,10 +35,10 @@ export default function BentoMenu({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[1000] flex flex-col bg-black text-white p-6 md:p-24"
+          className="fixed inset-0 z-[1000] flex flex-col bg-black text-white p-6 md:p-24 overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex justify-between items-center mb-24">
+          <div className="flex justify-between items-center mb-12 md:mb-24">
             <div className="flex flex-col gap-2">
               <span className="font-display text-2xl tracking-[0.2em]">F_L</span>
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Precision Archive</span>
@@ -72,7 +72,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Footer Info */}
-          <div className="flex flex-col md:flex-row justify-between items-end mt-24 gap-12 border-t border-white/5 pt-12">
+          <div className="flex flex-col md:flex-row justify-between items-end mt-12 md:mt-24 gap-12 border-t border-white/5 pt-12">
             <div className="flex flex-col gap-1">
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Current Time</span>
               <span className="font-display text-4xl tabular-nums opacity-60 italic">{time}</span>
