@@ -53,7 +53,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Directory List */}
-          <div className="flex-grow flex flex-col justify-start gap-8 md:gap-12 max-w-4xl mx-auto w-full pt-12 md:pt-0 md:justify-center">
+          <div className="flex-grow flex flex-col justify-start gap-8 md:gap-12 max-w-4xl mx-auto w-full pt-12 md:pt-24 my-auto">
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.name}
