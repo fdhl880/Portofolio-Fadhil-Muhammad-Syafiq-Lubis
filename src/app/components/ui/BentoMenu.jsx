@@ -36,10 +36,10 @@ export default function BentoMenu({ isOpen, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[1000] flex flex-col bg-black text-white p-6 md:p-12 overflow-y-auto"
+          className="fixed inset-0 z-[1000] flex flex-col bg-black text-white p-4 md:p-6 overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex justify-between items-center mb-6 md:mb-8">
+          <div className="flex justify-between items-center mb-4 md:mb-6">
             <div className="flex items-center gap-6">
               <AtelierSigil 
                 className="w-10 h-10 text-white" 
@@ -60,7 +60,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Directory List Area */}
-          <div className="flex flex-col justify-center gap-6 md:gap-8 max-w-4xl mx-auto w-full py-8">
+          <div className="flex flex-col justify-start gap-3 md:gap-4 max-w-4xl mx-auto w-full py-4">
             {navLinks.map((link, i) => (
               <motion.button
                 key={link.name}
@@ -68,7 +68,7 @@ export default function BentoMenu({ isOpen, onClose }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.1, duration: 1 }}
                 onClick={() => handleNav(link.target)}
-                className="group flex items-baseline gap-8 text-3xl md:text-5xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
+                className="group flex items-baseline gap-6 text-2xl md:text-3xl font-display uppercase tracking-widest text-white/20 hover:text-white transition-all duration-700 text-left"
               >
                 <span className="text-lg md:text-2xl italic opacity-40">/0{i+1}</span>
                 <span className="group-hover:italic group-hover:translate-x-8 transition-all duration-700">
@@ -79,7 +79,7 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Footer Info */}
-          <div className="flex flex-col items-end mt-6 md:mt-8 gap-4 border-t border-white/5 pt-8 w-full text-right">
+          <div className="flex flex-col items-end mt-4 md:mt-6 gap-2 border-t border-white/5 pt-4 w-full text-right">
             <div className="flex flex-col items-end gap-1">
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Coordinate</span>
               <span className="font-sans text-[10px] text-white/40 italic">3.5952° N, 98.6722° E // Medan, Indonesia</span>
