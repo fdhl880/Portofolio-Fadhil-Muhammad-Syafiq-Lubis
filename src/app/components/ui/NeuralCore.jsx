@@ -173,10 +173,15 @@ export default function NeuralCore() {
               body: JSON.stringify({ message: userText, history: chatHistory }),
             });
             const data = await response.json();
-            res = data.text || data.error || 'FL_SYSTEM_LINK_FAILURE';
+            
+            if (!response.ok) {
+              res = data.error || 'FL_SYSTEM_LINK_FAILURE: NEURAL_LINK_CRITICALLY_UNSTABLE';
+            } else {
+              res = data.text || 'FL_EMPTY_RESPONSE: CORE_STANDBY';
+            }
           } catch (error) {
             console.error("FL AI Error:", error);
-            res = 'FL_CORE_TIMEOUT: RECONNECT_PROTOCOL_REQUIRED.';
+            res = 'FL_CORE_TIMEOUT: ATTEMPTING_RECONNECT... [ERROR: NET_LAYER_DISCONNECT]';
           }
         }
 
