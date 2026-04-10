@@ -13,7 +13,7 @@ export default function PhilosophyUpgrade() {
   const imageY = useTransform(scrollYProgress, [0, 1], [0, 150]);
 
   return (
-    <section ref={containerRef} className="relative min-h-[150vh] bg-black py-32 overflow-hidden" id="philosophy">
+    <section ref={containerRef} className="relative min-h-[150vh] bg-black py-32 transform-gpu" id="philosophy">
       <div className="container mx-auto px-6 h-full">
         <div className="flex flex-col lg:flex-row h-full">
           
@@ -96,7 +96,7 @@ export default function PhilosophyUpgrade() {
       </div>
       
       {/* Scroll indicator for the section */}
-      <div className="absolute right-12 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 py-8 pointer-events-none">
+      <div className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 py-8 pointer-events-none">
           <div className="w-[1px] h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
           <span className="text-[10px] tracking-tighter text-white/20 uppercase vertical-text">SCROLL DEPTH</span>
       </div>

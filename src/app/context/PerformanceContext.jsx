@@ -27,21 +27,18 @@ export function PerformanceProvider({ children }) {
     
     // Performance Tiering & DPR Optimization
     // Android devices often have high resolution (DPR 3+) but limited GPU fill-rate.
-    // We cap mobile/Android to 1.5 - 2 to ensure buttery smooth luxury animations.
+    // We cap mobile/Android to 1.0 - 1.2 to ensure "luxury" smoothness over raw resolution.
     const rawDPR = window.devicePixelRatio || 1;
-    const optimizedDPR = mobile ? Math.min(rawDPR, 1.5) : Math.min(rawDPR, 2);
+    const isAndroidDevice = /android/.test(ua);
+    
+    // Luxury Optimization: Prioritize 60fps over sharpness on mobile
+    const optimizedDPR = isAndroidDevice ? 1 : (mobile ? Math.min(rawDPR, 1.2) : Math.min(rawDPR, 2));
     setDpr(optimizedDPR);
 
-    if (mobile || android) {
-      setPerformanceTier(android ? 'low' : 'medium');
-    }
-
-    // Load config OR auto-fallback for mobile
-    const saved = localStorage.getItem('portfolio-cinematic-mode');
-    if (saved !== null) {
-      setIsCinematic(saved === 'true');
-    } else if (mobile) {
-      setIsCinematic(false); // Force off on mobile by default for initial safety
+    if (mobile || isAndroidDevice) {
+      setPerformanceTier(isAndroidDevice ? 'low' : 'medium');
+      // On Android/Mobile, we disable cinematic mode by default to ensure first-load stability
+      setIsCinematic(false);
     }
 
     setIsInitialized(true);

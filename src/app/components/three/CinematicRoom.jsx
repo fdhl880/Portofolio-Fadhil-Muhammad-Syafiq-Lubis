@@ -9,7 +9,7 @@ function SpaceScene({ scrollYProgress }) {
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
   // Performance-based limits
-  const currentAsteroids = performanceTier === 'low' ? 100 : asteroidCount;
+  const currentAsteroids = performanceTier === 'low' ? 40 : (performanceTier === 'medium' ? 100 : asteroidCount);
 
   // Listen for Warp Jump command from Navbar
   useEffect(() => {
@@ -84,11 +84,11 @@ function SpaceScene({ scrollYProgress }) {
       <Stars 
         radius={100} 
         depth={200} 
-        count={performanceTier === 'high' ? 2000 : 1000} 
+        count={performanceTier === 'high' ? 2000 : (performanceTier === 'medium' ? 800 : 300)} 
         factor={6} 
         saturation={1} 
         fade 
-        speed={3} 
+        speed={performanceTier === 'low' ? 1 : 3} 
       />
     </>
   );

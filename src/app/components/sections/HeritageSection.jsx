@@ -1,9 +1,4 @@
-'use client';
-import { motion } from 'framer-motion';
-
-export default function HeritageSection() {
-  return (
-    <section className="relative min-h-screen bg-black flex items-center justify-center overflow-hidden py-32" id="heritage">
+    <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] -z-10" />
       
@@ -84,8 +79,8 @@ export default function HeritageSection() {
       </div>
       
       {/* Decorative Text */}
-      <div className="absolute left-10 top-1/2 -translate-y-1/2 -rotate-90 origin-left hidden xl:block">
-          <span className="text-[150px] font-bold text-white/[0.02] whitespace-nowrap leading-none select-none italic">
+      <div className="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 -rotate-90 origin-left hidden xl:block pointer-events-none">
+          <span className="text-[120px] 2xl:text-[150px] font-bold text-white/[0.02] whitespace-nowrap leading-none select-none italic">
              NORTHERN ROOTS
           </span>
       </div>

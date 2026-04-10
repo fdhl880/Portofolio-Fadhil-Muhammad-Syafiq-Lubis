@@ -281,13 +281,20 @@ export default function NeuralCore() {
         className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto audio-reactive-scale"
       >
         <div className="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors duration-1000" />
-        <div className="relative w-full h-full opacity-60 group-hover:opacity-100 transition-opacity duration-1000">
-          <Canvas camera={{ position: [0, 0, 4] }}>
-            <ambientLight intensity={0.5} />
-            <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" />
-            <CoreModel />
-            <Environment preset="studio" />
-          </Canvas>
+        <div className="relative w-full h-full opacity-60 group-hover:opacity-100 transition-opacity duration-1000 flex items-center justify-center">
+          {performanceTier === 'low' ? (
+            <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center animate-pulse">
+              <div className="w-10 h-10 rounded-full bg-white/10 blur-xl" />
+              <div className="w-2 h-2 rounded-full bg-white" />
+            </div>
+          ) : (
+            <Canvas camera={{ position: [0, 0, 4] }}>
+              <ambientLight intensity={0.5} />
+              <pointLight position={[10, 10, 10]} intensity={1.5} color="#ffffff" />
+              <CoreModel />
+              <Environment preset="studio" />
+            </Canvas>
+          )}
         </div>
         
         <motion.div 

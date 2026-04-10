@@ -17,6 +17,7 @@ import StudioGallery from './sections/StudioGallery';
 import DigitalSignature from './ui/DigitalSignature';
 import MagneticCursor from './ui/MagneticCursor';
 import AmbientSound from './ui/AmbientSound';
+import AtelierSpec from './sections/AtelierSpec';
 
 // Lazy-loaded museum sections
 const AchievementsSection = dynamic(() => import('./sections/AchievementsSection'), { ssr: false });
@@ -62,6 +63,9 @@ export default function PageWrapper() {
           
           {/* Elite Prestige - The Gold Archive */}
           <GoldArchive />
+
+          {/* New Technical Spec - The Atelier Precision */}
+          <AtelierSpec />
 
           {/* Foundation - The Heritage Path */}
           <HeritageSection />

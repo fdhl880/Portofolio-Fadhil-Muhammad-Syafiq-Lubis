@@ -82,7 +82,7 @@ export default function GoldArchive() {
   }, []);
 
   return (
-    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5" id="gold-archive" ref={containerRef}>
+    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
       <div className="container mx-auto px-6 mb-24">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -132,15 +132,15 @@ export default function GoldArchive() {
                     </span>
                 </div>
 
-                <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-8">
+                <div className="relative z-20">
+                    <div className="flex justify-between items-start mb-6 md:mb-10">
                         <span className="text-[10px] tracking-widest text-white/30 uppercase">{medal.level}</span>
                         <span className="text-[10px] tracking-widest text-[#E5E5E5] font-bold">2024</span>
                     </div>
-                    <h3 className="text-2xl md:text-4xl font-light text-white tracking-tight mb-2">
+                    <h3 className="text-2xl md:text-5xl font-light text-white tracking-tighter mb-4 md:mb-6 leading-tight pr-4">
                         {medal.title}
                     </h3>
-                    <p className="text-sm text-white/40 italic font-serif">
+                    <p className="text-sm text-white/40 italic font-serif max-w-[80%]">
                        "{medal.tagline}"
                     </p>
                 </div>
