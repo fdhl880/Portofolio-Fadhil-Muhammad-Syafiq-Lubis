@@ -76,12 +76,12 @@ export default function BentoMenu({ isOpen, onClose }) {
           </div>
 
           {/* Footer Info */}
-          <div className="flex flex-col md:flex-row justify-between items-end mt-6 md:mt-8 gap-12 border-t border-white/5 pt-8">
-            <div className="flex flex-col gap-1 order-2 md:order-1">
+          <div className="flex flex-col items-end mt-6 md:mt-8 gap-4 border-t border-white/5 pt-8 w-full text-right">
+            <div className="flex flex-col items-end gap-1">
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Coordinate</span>
-              <span className="font-sans text-xs text-white/40 italic">3.5952° N, 98.6722° E // Medan, Indonesia</span>
+              <span className="font-sans text-[10px] text-white/40 italic">3.5952° N, 98.6722° E // Medan, Indonesia</span>
             </div>
-            <div className="flex flex-col md:items-end gap-1 order-1 md:order-2">
+            <div className="flex flex-col items-end gap-1">
               <span className="text-[10px] tracking-[0.4em] uppercase text-white/20">Current Time</span>
               <span className="font-display text-4xl tabular-nums opacity-60 italic">{time}</span>
             </div>
