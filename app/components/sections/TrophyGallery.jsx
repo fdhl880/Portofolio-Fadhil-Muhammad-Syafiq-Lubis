@@ -23,7 +23,7 @@ function MedalArtifact({ color, isActive }) {
     <group>
       {/* The Medal Artifact */}
       <mesh ref={meshRef}>
-        <torusKnotGeometry args={[0.8, 0.25, 128, 32]} />
+        <torusKnotGeometry args={[0.8, 0.25, 64, 16]} />
         <meshPhysicalMaterial 
           color={color}
           metalness={1}
@@ -38,7 +38,7 @@ function MedalArtifact({ color, isActive }) {
 
       {/* Pedestal Base */}
       <mesh position={[0, -2.5, 0]}>
-        <boxGeometry args={[2, 4, 2]} />
+        <boxGeometry args={[1.5, 4, 1.5]} />
         <meshStandardMaterial color="#050505" metalness={0.8} roughness={0.2} />
       </mesh>
     </group>
