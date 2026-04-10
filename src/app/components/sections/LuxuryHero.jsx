@@ -1,20 +1,34 @@
 'use client';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
+import { useAppMode } from '../../context/AppModeContext';
 
 // Placeholder for the 3D Canvas
 const ShowcaseCanvas = dynamic(() => import('../three/ShowcaseCanvas'), { ssr: false });
 
 export default function LuxuryHero() {
+  const { mode } = useAppMode();
+
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center overflow-hidden pt-20">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(20,20,20,1)_0%,rgba(0,0,0,1)_100%)]" />
       
-      {/* 3D Asset Stage (Placeholder for User's 3D assets) */}
-      <div className="absolute inset-0 z-0">
-        <ShowcaseCanvas />
-      </div>
+      {/* 3D Asset Stage (Only in Atelier Mode) */}
+      {mode === 'atelier' && (
+        <div className="absolute inset-0 z-0">
+          <ShowcaseCanvas />
+        </div>
+      )}
+
+      {/* 2D Background Decorative Element for Archive Mode */}
+      {mode === 'archive' && (
+        <div className="absolute inset-0 z-0 opacity-10 pointer-events-none overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[40vw] font-display italic text-white/5 whitespace-nowrap select-none">
+                ATELIER
+            </div>
+        </div>
+      )}
 
       <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
         <motion.div

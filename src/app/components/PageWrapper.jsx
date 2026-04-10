@@ -41,7 +41,7 @@ export default function PageWrapper() {
   if (!mounted) return null;
 
   return (
-    <div className="relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90">
+    <div className={`relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90 ${mode === 'archive' ? 'archive-mode' : ''}`}>
       {/* Mode-Aware 3D Environment (Atelier Only) */}
       {mode === 'atelier' && (
         <div className="fixed inset-0 z-[-1] pointer-events-none">
@@ -132,11 +132,68 @@ export default function PageWrapper() {
       <div className="fixed inset-0 pointer-events-none z-[1] shadow-[inset_0_0_200px_rgba(0,0,0,0.9)]" />
       <div className="fixed inset-0 pointer-events-none z-[2] opacity-[0.03] noise-bg" />
       
-      <style jsx global>{`
-        .noise-bg {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-        }
-      `}</style>
+/* Android Native Polish & Archive Mode Optimization */
+.archive-mode {
+  --font-inter: 'Roboto', 'system-ui', sans-serif;
+  --font-playfair: 'Georgia', serif;
+  font-family: var(--font-inter);
+}
+
+.archive-mode body {
+  background-color: #000;
+  overflow-x: hidden;
+}
+
+/* Force standard font rendering on Android for clarity */
+.archive-mode * {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Remove 3D Containers to save GPU in Archive Mode */
+.archive-mode canvas,
+.archive-mode [class*="three"],
+.archive-mode #neural-core {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Android-Specific Font Scale for Readability */
+@media (max-width: 768px) {
+  .archive-mode h2 {
+    font-size: 2.5rem !important;
+    letter-spacing: -0.02em !important;
+  }
+  
+  .archive-mode .text-sm {
+    font-size: 1rem !important;
+  }
+  
+  .archive-mode .text-\[10px\] {
+    font-size: 12px !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  /* Sticky Bottom Navigation for Mobile Archive */
+  .archive-mobile-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    z-index: 1000;
+    padding: 12px 0;
+    justify-content: space-around;
+  }
+}
+
+.noise-bg {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
     </div>
   );
 }
