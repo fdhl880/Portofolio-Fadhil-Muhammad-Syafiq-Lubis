@@ -10,14 +10,6 @@ gsap.registerPlugin(ScrollTrigger);
 
 const PROJECTS = [
   {
-    year: '2024',
-    title: 'THE_GOLD_STANDARD',
-    subtitle: 'IPITEx Thailand Excellence',
-    description: 'A study in precision and architectural engineering. The project that redefined international standards for student innovators.',
-    image: '/images/photo1.jpg',
-    layout: 'left'
-  },
-  {
     year: '2025',
     title: 'PRECISION_LOGIC',
     subtitle: 'Robotics Engineering',
@@ -114,7 +106,7 @@ export default function LuxuryEditorial() {
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-60" />
       </div>
 
-      <div ref={containerRef} className="flex h-full w-[300%]">
+      <div ref={containerRef} className="flex h-full w-[200%]">
         {PROJECTS.map((project, i) => (
           <div 
             key={i} 
