@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
+import CanvasScrubber from '../ui/CanvasScrubber';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -85,20 +86,30 @@ export default function CinematicAspiration() {
           animate={{ opacity: 1 }}
           className="w-full h-full relative"
         >
-          {/* Native Video Layer for Aspiration */}
-          <video
-            ref={videoRef}
-            src={ASPIRATIONS[activeIndex].video}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            style={{
-              opacity: 1
-            }}
-            className="absolute inset-0 w-full h-full object-cover"
-          />
+          {/* WebP Canvas Scrubber for Elite Performance (Polymath & Captain) */}
+          {(activeIndex === 1 || activeIndex === 2) ? (
+            <CanvasScrubber 
+              sequencePath={`/sequences/${activeIndex === 1 ? 'polymath' : 'captain'}`}
+              frameCount={120} // Capped at 120 to guarantee low memory usage
+              activeIndex={activeIndex}
+              currentIndex={activeIndex}
+              style={{ filter: 'brightness(0.85) contrast(1.1)' }}
+            />
+          ) : (
+            <video
+              ref={videoRef}
+              src={ASPIRATIONS[activeIndex].video}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              style={{
+                opacity: 1
+              }}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          )}
           
           {/* Performance Fixed: Hardware Accelerated Darken Overlay instead of CSS Filter */}
           <div className="absolute inset-0 w-full h-full bg-black/15 z-0" />
