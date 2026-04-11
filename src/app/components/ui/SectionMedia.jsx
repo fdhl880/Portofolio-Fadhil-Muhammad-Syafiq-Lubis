@@ -93,8 +93,12 @@ export default function SectionMedia({ theme = 'silver', opacity = 0.3, classNam
               muted
               loop
               playsInline
-              className="absolute inset-0 w-full h-full object-cover filter brightness-[0.4] contrast-[1.1] grayscale-[0.3]"
-              style={{ willChange: 'transform, opacity' }}
+              preload="metadata"
+              style={{ 
+                filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)',
+                willChange: 'transform, opacity'
+              }}
+              className="absolute inset-0 w-full h-full object-cover"
             />
           )}
 

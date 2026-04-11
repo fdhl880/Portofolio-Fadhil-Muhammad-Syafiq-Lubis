@@ -32,7 +32,8 @@ export default function HeritageSection() {
             </div>
             
             {/* Subtle Texture/Grain Overlay */}
-            <div className="absolute inset-0 opacity-20 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] blend-overlay" />
+            {/* Subtle Texture/Grain Overlay - Using CSS only to prevent external broken links */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none bg-white/5 blend-overlay" />
           </motion.div>
           
           {/* Floating Detail */}

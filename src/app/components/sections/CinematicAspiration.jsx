@@ -76,12 +76,18 @@ export default function CinematicAspiration() {
           >
             {/* Native Video Layer for Aspiration */}
             <video
+              key={ASPIRATIONS[activeIndex].id}
               src={ASPIRATIONS[activeIndex].video}
               autoPlay
               muted
               loop
               playsInline
-              className="absolute inset-0 w-full h-full object-cover filter brightness-50 contrast-125 grayscale"
+              preload="metadata"
+              style={{
+                filter: 'brightness(0.85) contrast(1.1)',
+                opacity: 1
+              }}
+              className="absolute inset-0 w-full h-full object-cover"
             />
             
             {/* Animated gradient background overlay */}
@@ -145,7 +151,8 @@ export default function CinematicAspiration() {
 
       {/* Final Call to Action or Signature */}
       <div className="h-[50vh] flex items-center justify-center bg-black relative z-10 overflow-hidden">
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+          {/* Premium noise overlay - using a CSS-only subtle approach to avoid external breakage */}
+          <div className="absolute inset-0 bg-white/[0.01] pointer-events-none" />
          <div className="text-center">
             <span className="text-[10px] text-white/20 uppercase tracking-[1rem] block mb-4">Convergence_Complete</span>
             <div className="h-12 w-[1px] bg-white/10 mx-auto" />

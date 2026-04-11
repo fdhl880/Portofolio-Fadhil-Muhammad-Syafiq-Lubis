@@ -102,7 +102,7 @@ export default function LuxuryEditorial() {
       {/* Aesthetic Background Overlays */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-[#0a0a0a]" />
-        <div className="absolute inset-0 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-white/[0.02] z-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black opacity-60" />
       </div>
 
