@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -7,7 +8,7 @@ export default function HeritageSection() {
   return (
     <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
       {/* Cinematic Background (Atelier Mode Only) - Nature/Origin Aesthetic */}
-      <SectionMedia src="https://videos.pexels.com/video-files/853889/853889-hd_1920_1080_25fps.mp4" type="video" opacity={0.15} />
+      <SectionMedia theme="nature" opacity={0.15} />
 
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] -z-10" />

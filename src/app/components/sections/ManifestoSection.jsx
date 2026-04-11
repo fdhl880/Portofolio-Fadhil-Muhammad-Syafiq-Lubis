@@ -1,3 +1,4 @@
+'use client';
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import dynamic from 'next/dynamic';
@@ -51,7 +52,7 @@ export default function ManifestoSection() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Cinematic Background (Atelier Mode Only) - Cosmic Setup */}
-      <SectionMedia src="https://videos.pexels.com/video-files/3141208/3141208-hd_1920_1080_25fps.mp4" type="video" opacity={0.3} />
+      <SectionMedia theme="cosmic" opacity={0.3} />
 
       {/* Background Decorative Element */}
       <div className="absolute inset-0 z-0 opacity-20">

@@ -1,3 +1,5 @@
+'use client';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -85,7 +87,7 @@ export default function GoldArchive() {
   return (
     <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
       {/* Cinematic Background (Atelier Mode Only) - Abstract Liquid Gold */}
-      <SectionMedia src="https://videos.pexels.com/video-files/3163534/3163534-uhd_3840_2160_30fps.mp4" type="video" opacity={0.3} />
+      <SectionMedia theme="gold" opacity={0.3} />
 
       <div className="container mx-auto px-6 mb-24">
         <motion.div 

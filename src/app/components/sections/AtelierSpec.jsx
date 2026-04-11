@@ -1,3 +1,4 @@
+'use client';
 import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
@@ -14,7 +15,7 @@ export default function AtelierSpec() {
   return (
     <section className="relative py-48 bg-black border-t border-white/5 transform-gpu" id="specifications">
       {/* Cinematic Background (Atelier Mode Only) - Porsche/Tech Aesthetic */}
-      <SectionMedia src="https://videos.pexels.com/video-files/3129957/3129957-uhd_3840_2160_25fps.mp4" type="video" opacity={0.15} />
+      <SectionMedia theme="tech" opacity={0.15} />
 
       <div className="container mx-auto px-6">
         {/* Header - Rolex Minimalist Style */}
