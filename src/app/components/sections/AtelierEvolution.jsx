@@ -8,19 +8,19 @@ const STAGES = [
     year: '2011',
     title: 'INITIALIZATION_SEQUENCE',
     description: 'The foundation of the creative logic. Early childhood prototypes and the first sparks of technical curiosity.',
-    image: '/images/evolution/2011.jpg' // User will replace this
+    image: '/images/photo1.jpg' // User will replace this
   },
   {
     year: '2018',
     title: 'COGNITIVE_EXPANSION',
     description: 'Transitioning into advanced engineering and robotics. The development of systematic precision.',
-    image: '/images/evolution/2018.jpg' // User will replace this
+    image: '/images/photo2.jpg' // User will replace this
   },
   {
     year: '2026',
     title: 'THE_ATELIER_PHASE',
     description: 'The current state of global innovation. Absolute mastery of the intersection between art and AI.',
-    image: '/images/evolution/2026.jpg' // User will replace this
+    image: '/images/photo3.jpg' // User will replace this
   }
 ];
 
