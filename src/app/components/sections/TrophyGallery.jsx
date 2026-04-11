@@ -137,7 +137,7 @@ export default function TrophyGallery() {
                      {activeId === item.id && <span className="mr-4 text-sm not-italic opacity-40">/0{idx+1}</span>}
                      {item.title}
                    </span>
-                   <span className="text-[10px] tracking-widest uppercase text-white/20">{item.year}</span>
+                   <span className="text-[10px] tracking-widest uppercase text-white/50">{item.year}</span>
                 </div>
                 <p className={`text-white/40 text-sm leading-relaxed max-w-sm transition-opacity duration-700 ${activeId === item.id ? 'opacity-100' : 'opacity-0'}`}>
                   {item.detail}

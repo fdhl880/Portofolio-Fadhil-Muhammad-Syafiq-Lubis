@@ -24,11 +24,13 @@ import { useAppMode } from '../context/AppModeContext';
 
 // Lazy-loaded museum sections
 const MuseumGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
-const Capabilities = dynamic(() => import('./sections/SkillsSection'), { ssr: false });
+const ExpertiseLaboratory = dynamic(() => import('./sections/ExpertiseLaboratory'), { ssr: false });
 const Chronology = dynamic(() => import('./sections/RoadmapSection'), { ssr: false });
 const Vision = dynamic(() => import('./sections/VisionSection'), { ssr: false });
 const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
 const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
+const AtelierEvolution = dynamic(() => import('./sections/AtelierEvolution'), { ssr: false });
+const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
   const { mode } = useAppMode();
@@ -79,6 +81,9 @@ export default function PageWrapper() {
           {/* New Hall of Mentors - The Giants */}
           <GiantsSection />
 
+          {/* New Chronological Sequence */}
+          <AtelierEvolution />
+
           {/* Foundation - The Heritage Path */}
           <HeritageSection />
 
@@ -101,8 +106,8 @@ export default function PageWrapper() {
           {/* Archives - The Medals */}
           <MuseumGallery />
 
-          {/* Capabilities - The Technical Base */}
-          <Capabilities />
+          {/* Laboratory expertise - The Technical Base */}
+          <ExpertiseLaboratory />
 
           {/* Discovery - The Detail */}
           <Discovery />

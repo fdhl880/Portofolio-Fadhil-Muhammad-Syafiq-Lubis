@@ -17,7 +17,7 @@ export default function ContactSection() {
           {/* Left: Branding & Info */}
           <div className="flex flex-col gap-12">
             <div className="flex flex-col gap-6">
-              <span className="text-white/20 text-[10px] tracking-[0.8em] uppercase font-sans">Contact</span>
+              <span className="text-white/50 text-[10px] tracking-[0.8em] uppercase font-sans">Contact</span>
               <h2 className="font-display text-5xl md:text-7xl leading-tight">
                 Submit an <br />
                 <span className="italic opacity-40">Inquiry.</span>
@@ -27,7 +27,7 @@ export default function ContactSection() {
             <div className="flex flex-col gap-8 pt-12">
               {contactinfo.map((info, idx) => (
                 <div key={info.label} className="flex flex-col gap-1">
-                  <span className="text-[10px] tracking-widest uppercase text-white/20 font-sans">{info.label}</span>
+                  <span className="text-[10px] tracking-widest uppercase text-white/50 font-sans">{info.label}</span>
                   {info.link ? (
                     <a href={info.link} target="_blank" rel="noopener noreferrer" className="font-display text-xl text-white/60 hover:text-white transition-colors duration-500">
                       {info.value}

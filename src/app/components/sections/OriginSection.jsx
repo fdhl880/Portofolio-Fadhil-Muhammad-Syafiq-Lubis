@@ -28,7 +28,7 @@ export default function OriginSection() {
           <div className="space-y-16">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
                <div className="space-y-4">
-                  <span className="text-[10px] tracking-[1em] text-white/20 uppercase font-bold">Foundation Baseline</span>
+                  <span className="text-[10px] tracking-[1em] text-white/50 uppercase font-bold">Foundation Baseline</span>
                   <h2 className="text-5xl md:text-8xl font-light text-white tracking-tighter leading-none italic">
                      THE <br />ORIGIN<span className="text-white/20">.</span>
                   </h2>

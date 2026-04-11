@@ -36,7 +36,7 @@ export default function LuxuryHero() {
            animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <span className="text-white/20 text-[10px] tracking-[0.8em] uppercase mb-8 block font-sans">
+          <span className="text-white/50 text-[10px] tracking-[0.8em] uppercase mb-8 block font-sans">
             Atelier of Innovation
           </span>
           

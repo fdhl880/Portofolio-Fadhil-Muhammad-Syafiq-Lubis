@@ -174,7 +174,7 @@ export default function GoldArchive() {
           {/* Closing Card / Next Section Hint */}
           <div className="w-[300px] md:w-[450px] flex items-center justify-center border border-white/5 bg-white/[0.02] p-12">
             <div className="text-center group cursor-pointer">
-                 <p className="text-[10px] tracking-[0.4em] text-white/20 uppercase mb-4">Discovery</p>
+                 <p className="text-[10px] tracking-[0.4em] text-white/50 uppercase mb-4">Discovery</p>
                  <h4 className="text-2xl font-light text-white/30 group-hover:text-white transition-colors">CONTINUE JOURNEY</h4>
                  <div className="mt-6 w-12 h-[1px] bg-white/10 group-hover:w-24 group-hover:bg-white transition-all mx-auto" />
             </div>
