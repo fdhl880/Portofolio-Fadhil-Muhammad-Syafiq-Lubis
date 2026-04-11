@@ -29,6 +29,7 @@ const Chronology = dynamic(() => import('./sections/RoadmapSection'), { ssr: fal
 const Vision = dynamic(() => import('./sections/VisionSection'), { ssr: false });
 const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
 const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
+const CinematicAspiration = dynamic(() => import('./sections/CinematicAspiration'), { ssr: false });
 const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
@@ -93,6 +94,9 @@ export default function PageWrapper() {
 
           {/* Studio Gallery - The Personal Journey */}
           <StudioGallery />
+
+          {/* New Cinematic Aspiration - The Future Legacy */}
+          <CinematicAspiration />
 
           {/* Collections - The Work */}
           <section id="collections" className="py-24 bg-[#050505] border-t border-white/5">
