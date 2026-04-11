@@ -13,7 +13,7 @@ export default function HolographicFooter() {
             <span className="font-mono text-[10px] text-white/60 font-bold tracking-[0.3em] uppercase">ATELIER_ENGINE_ACTIVE</span>
           </div>
           <p className="text-white/20 text-[10px] font-mono uppercase tracking-[0.2em]">
-            &copy; {year} Fadhil Muhammad Syafiq // Archival Core v5.1
+            &copy; {year} Fadhil Muhammad Syafiq Lubis // Archival Core v5.1
           </p>
         </div>
 

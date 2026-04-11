@@ -1,6 +1,5 @@
-﻿'use client';
+'use client';
 import { motion } from 'framer-motion';
-
 import AtelierSigil from './AtelierSigil';
 
 export default function DigitalSignature() {
@@ -20,8 +19,8 @@ export default function DigitalSignature() {
              
              {/* Signature visual */}
              <div className="relative group">
-                <h4 className="text-5xl md:text-8xl font-light text-white tracking-widest italic select-none">
-                   Fadhil <span className="opacity-20 font-serif">Lubis</span>
+                <h4 className="text-3xl md:text-6xl font-light text-white tracking-[0.2em] italic select-none">
+                   Fadhil Muhammad Syafiq <span className="opacity-20 font-serif">Lubis</span>
                 </h4>
                 {/* Underline animation */}
                 <motion.div 
