@@ -77,10 +77,11 @@ export default function ManifestoSection() {
       </motion.div>
 
       {/* The Spotlight Overlay */}
+      {/* The Spotlight Overlay */}
       <motion.div 
         className="absolute inset-x-0 inset-y-0 z-20 pointer-events-none hidden md:block"
         style={{
-          background: `radial-gradient(600px circle at var(--x) var(--y), transparent 0%, rgba(0,0,0,0.95) 100%)`,
+          background: useMotionTemplate`radial-gradient(600px circle at ${mouseX}px ${mouseY}px, transparent 0%, rgba(0,0,0,0.95) 100%)`
         }}
       />
 
@@ -94,12 +95,6 @@ export default function ManifestoSection() {
          <div className="w-full h-full bg-white opacity-20 blur-xl" />
       </motion.div>
 
-      <style jsx>{`
-        section {
-          --x: ${mousePos.x}px;
-          --y: ${mousePos.y}px;
-        }
-      `}</style>
     </section>
   );
 }
