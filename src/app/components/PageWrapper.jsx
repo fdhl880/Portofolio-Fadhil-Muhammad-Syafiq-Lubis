@@ -18,6 +18,7 @@ import AtelierSpec from './sections/AtelierSpec';
 import OriginSection from './sections/OriginSection';
 import GiantsSection from './sections/GiantsSection';
 import AtelierPhilosophy from './sections/AtelierPhilosophy';
+import ManifestoSection from './sections/ManifestoSection';
 import AtelierLens from './ui/AtelierLens';
 import { useAppMode } from '../context/AppModeContext';
 
@@ -83,6 +84,9 @@ export default function PageWrapper() {
 
           {/* New Personal Philosophy - Luxury, Tegas, Rich */}
           <AtelierPhilosophy />
+
+          {/* New Cinematic Manifesto */}
+          <ManifestoSection />
 
           {/* Modern Exhibitions (Integrated) */}
 
