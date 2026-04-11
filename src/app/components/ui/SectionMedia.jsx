@@ -109,28 +109,21 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
               playsInline
               preload="auto"
               style={{ 
-                filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)',
                 willChange: 'transform, opacity'
               }}
               className="absolute inset-0 w-full h-full object-cover"
             />
           )}
 
-          {/* Premium animated gradient overlay - provides the "Luxury Glow" */}
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
-            }}
-            transition={{
-              duration: 35,
-              ease: "linear",
-              repeat: Infinity,
-            }}
+          {/* Performance Fixed: Static Darken Overlay instead of high-cost CSS filter */}
+          <div className="absolute inset-0 w-full h-full bg-black/20" />
+
+          {/* Premium gradient overlay - static for extreme GPU performance */}
+          <div
             className="absolute inset-0 mix-blend-screen opacity-40"
             style={{
               backgroundImage: gradient,
-              backgroundSize: '200% 200%',
-              willChange: 'background-position'
+              backgroundSize: '100% 100%',
             }}
           />
 

@@ -95,20 +95,19 @@ export default function CinematicAspiration() {
             playsInline
             preload="auto"
             style={{
-              filter: 'brightness(0.85) contrast(1.1)',
               opacity: 1
             }}
             className="absolute inset-0 w-full h-full object-cover"
           />
           
-          {/* Animated gradient background overlay */}
-          <motion.div
-            animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
-            transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-            className="w-full h-full relative z-10 mix-blend-overlay"
+          {/* Performance Fixed: Hardware Accelerated Darken Overlay instead of CSS Filter */}
+          <div className="absolute inset-0 w-full h-full bg-black/15 z-0" />
+          
+          {/* Static gradient background overlay (Removed destructive mix-blend and animation) */}
+          <div
+            className="w-full h-full relative z-10 opacity-70"
             style={{
               backgroundImage: ASPIRATIONS[activeIndex].gradient,
-              backgroundSize: '200% 200%',
             }}
           />
         </motion.div>
