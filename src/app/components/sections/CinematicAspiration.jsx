@@ -13,7 +13,7 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
-    video: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=2000&auto=format&fit=crop', // Rolex macro vibe
+    video: 'https://cdn.pixabay.com/video/2021/04/12/70876-538054041_large.mp4', // Rolex macro vibe
     color: '#E5E7EB' // Silver
   },
   {
@@ -21,7 +21,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    video: 'https://images.unsplash.com/photo-1532094349884-543bc11b234d?q=80&w=2000&auto=format&fit=crop', // Data/Research vibe
+    video: 'https://cdn.pixabay.com/video/2019/04/05/22564-328637492_large.mp4', // Data/Research vibe
     color: '#FFFFFF' // Pure White
   },
   {
@@ -29,7 +29,7 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    video: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2000&auto=format&fit=crop', // Architecture/Corporate vibe
+    video: 'https://cdn.pixabay.com/video/2019/01/21/20822-312933089_large.mp4', // Luxury/Corporate vibe
     color: '#D4AF37' // Subtle Gold/Silver
   }
 ];
@@ -77,10 +77,12 @@ export default function CinematicAspiration() {
             <div className="absolute inset-0 bg-black/60 z-10" />
             <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 opacity-80" />
             
-            {/* Replaced video with img since Unsplash proxy provides robust images */}
-            <img
+            <video
               src={ASPIRATIONS[activeIndex].video}
-              alt={ASPIRATIONS[activeIndex].title}
+              autoPlay
+              muted
+              loop
+              playsInline
               className="w-full h-full object-cover filter grayscale contrast-125"
             />
           </motion.div>

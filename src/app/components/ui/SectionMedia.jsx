@@ -7,7 +7,6 @@ import Image from 'next/image';
 export default function SectionMedia({ src, type = 'video', opacity = 0.3, className = "" }) {
   const { mode } = useAppMode();
   const [isMobile, setIsMobile] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     // Disable on mobile for performance as requested
@@ -26,10 +25,10 @@ export default function SectionMedia({ src, type = 'video', opacity = 0.3, class
     <div className={`absolute inset-0 pointer-events-none overflow-hidden z-0 ${className}`}>
       <AnimatePresence>
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isLoaded ? opacity : 0 }}
-          transition={{ duration: 2 }}
-          className="w-full h-full"
+           initial={{ opacity: 0 }}
+           animate={{ opacity: opacity }}
+           transition={{ duration: 2, ease: "easeOut" }}
+           className="w-full h-full"
         >
           {type === 'video' ? (
             <video
@@ -38,7 +37,6 @@ export default function SectionMedia({ src, type = 'video', opacity = 0.3, class
               muted
               loop
               playsInline
-              onLoadedData={() => setIsLoaded(true)}
               className="w-full h-full object-cover filter brightness-75 contrast-110"
             />
           ) : (
@@ -47,7 +45,6 @@ export default function SectionMedia({ src, type = 'video', opacity = 0.3, class
               alt="Section Background"
               fill
               unoptimized
-              onLoad={() => setIsLoaded(true)}
               className="object-cover"
             />
           )}

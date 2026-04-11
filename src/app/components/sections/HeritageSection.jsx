@@ -7,7 +7,7 @@ export default function HeritageSection() {
   return (
     <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
       {/* Cinematic Background (Atelier Mode Only) - Nature/Origin Aesthetic */}
-      <SectionMedia src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?q=80&w=2000&auto=format&fit=crop" type="image" opacity={0.15} />
+      <SectionMedia src="https://cdn.pixabay.com/video/2019/08/08/25852-353272993_large.mp4" type="video" opacity={0.15} />
 
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] -z-10" />

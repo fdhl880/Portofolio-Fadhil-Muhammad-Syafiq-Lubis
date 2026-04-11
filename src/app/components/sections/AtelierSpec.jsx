@@ -13,8 +13,8 @@ const TECHNICAL_DATA = [
 export default function AtelierSpec() {
   return (
     <section className="relative py-48 bg-black border-t border-white/5 transform-gpu" id="specifications">
-      {/* Cinematic Background (Atelier Mode Only) - Porsche Tech Aesthetic */}
-      <SectionMedia src="https://images.unsplash.com/photo-1614200187524-dc4b892acf16?q=80&w=2000&auto=format&fit=crop" type="image" opacity={0.15} />
+      {/* Cinematic Background (Atelier Mode Only) - Porsche/Tech Aesthetic */}
+      <SectionMedia src="https://cdn.pixabay.com/video/2019/04/05/22564-328637492_large.mp4" type="video" opacity={0.15} />
 
       <div className="container mx-auto px-6">
         {/* Header - Rolex Minimalist Style */}
