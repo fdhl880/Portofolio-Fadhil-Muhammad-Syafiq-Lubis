@@ -1,28 +1,24 @@
 'use client';
 import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useMotionTemplate } from 'framer-motion';
 import dynamic from 'next/dynamic';
 
 const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
 export default function ManifestoSection() {
   const containerRef = useRef(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
 
-  // Smooth mouse tracking
-  const mouseX = useSpring(0, { stiffness: 100, damping: 30 });
-  const mouseY = useSpring(0, { stiffness: 100, damping: 30 });
+  // Smooth mouse tracking decoupled from React state renders
+  const mouseX = useSpring(-500, { stiffness: 100, damping: 30 });
+  const mouseY = useSpring(-500, { stiffness: 100, damping: 30 });
 
   useEffect(() => {
     const handleMouseMove = (e) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      mouseX.set(x);
-      mouseY.set(y);
-      setMousePos({ x, y });
+      mouseX.set(e.clientX - rect.left);
+      mouseY.set(e.clientY - rect.top);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -91,8 +87,8 @@ export default function ManifestoSection() {
       {/* Dynamic CSS Variables for the Spotlight */}
       <motion.div
         className="fixed inset-0 pointer-events-none z-[100] mix-blend-difference"
-        animate={{
-          clipPath: `circle(${isHovered ? '150px' : '0px'} at ${mousePos.x}px ${mousePos.y}px)`
+        style={{
+          clipPath: useMotionTemplate`circle(${isHovered ? '150px' : '0px'} at ${mouseX}px ${mouseY}px)`
         }}
       >
          <div className="w-full h-full bg-white opacity-20 blur-xl" />

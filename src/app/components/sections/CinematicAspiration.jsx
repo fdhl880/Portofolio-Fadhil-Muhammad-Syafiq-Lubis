@@ -49,7 +49,6 @@ export default function CinematicAspiration() {
   // Force Playback Logic
   useEffect(() => {
     if (videoRef.current) {
-        setIsVideoReady(false);
         videoRef.current.load();
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
@@ -96,6 +95,7 @@ export default function CinematicAspiration() {
             loop
             playsInline
             preload="auto"
+            onLoadStart={() => setIsVideoReady(false)}
             onLoadedData={() => setIsVideoReady(true)}
             style={{
               filter: 'brightness(0.85) contrast(1.1)',

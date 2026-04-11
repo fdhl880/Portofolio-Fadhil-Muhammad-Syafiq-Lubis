@@ -66,7 +66,6 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
   // Force Playback Logic for Source Changes
   useEffect(() => {
     if (videoRef.current && videoSrc) {
-        setIsVideoReady(false);
         videoRef.current.load();
         const playPromise = videoRef.current.play();
         if (playPromise !== undefined) {
@@ -110,6 +109,7 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
               loop
               playsInline
               preload="auto"
+              onLoadStart={() => setIsVideoReady(false)}
               onLoadedData={() => setIsVideoReady(true)}
               style={{ 
                 filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)',

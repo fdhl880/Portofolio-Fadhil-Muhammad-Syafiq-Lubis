@@ -1,15 +1,25 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function MagneticCursor() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
-  const cursorRef = useRef(null);
+  
+  const mouseX = useMotionValue(-100);
+  const mouseY = useMotionValue(-100);
+
+  const springConfig = { damping: 20, stiffness: 250, mass: 0.5 };
+  const dotSpringConfig = { damping: 28, stiffness: 1000, mass: 0.1 };
+  
+  const cursorX = useSpring(mouseX, springConfig);
+  const cursorY = useSpring(mouseY, springConfig);
+  const dotX = useSpring(mouseX, dotSpringConfig);
+  const dotY = useSpring(mouseY, dotSpringConfig);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mouseX.set(e.clientX - 16);
+      mouseY.set(e.clientY - 16);
       
       // Detect if hovering over clickable elements
       const target = e.target;
@@ -26,25 +36,21 @@ export default function MagneticCursor() {
       {/* Main Outer Ring */}
       <motion.div
         className="fixed top-0 left-0 w-8 h-8 rounded-full border border-white/20 pointer-events-none z-[9999] hidden md:block"
+        style={{ x: cursorX, y: cursorY }}
         animate={{
-          x: mousePos.x - 16,
-          y: mousePos.y - 16,
           scale: isHovering ? 2 : 1,
           borderColor: isHovering ? 'rgba(212, 175, 55, 0.5)' : 'rgba(255, 255, 255, 0.2)',
           backgroundColor: isHovering ? 'rgba(212, 175, 55, 0.05)' : 'transparent',
         }}
-        transition={{ type: 'spring', stiffness: 250, damping: 20, mass: 0.5 }}
       />
       
       {/* Inner Dot */}
       <motion.div
         className="fixed top-0 left-0 w-1.5 h-1.5 bg-white rounded-full pointer-events-none z-[9999] hidden md:block"
+        style={{ x: dotX, y: dotY, translateX: '13px', translateY: '13px' }}
         animate={{
-          x: mousePos.x - 3,
-          y: mousePos.y - 3,
           backgroundColor: isHovering ? '#D4AF37' : '#FFFFFF',
         }}
-        transition={{ type: 'spring', stiffness: 1000, damping: 28, mass: 0.1 }}
       />
     </>
   );
