@@ -84,8 +84,8 @@ export default function GoldArchive() {
 
   return (
     <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
-      {/* Cinematic Background (Atelier Mode Only) */}
-      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-golden-liquid-34358-large.mp4" opacity={0.3} />
+      {/* Cinematic Background (Atelier Mode Only) - Abstract Liquid Gold */}
+      <SectionMedia src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop" type="image" opacity={0.3} />
 
       <div className="container mx-auto px-6 mb-24">
         <motion.div 

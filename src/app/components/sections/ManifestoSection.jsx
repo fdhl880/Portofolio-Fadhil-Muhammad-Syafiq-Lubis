@@ -50,8 +50,8 @@ export default function ManifestoSection() {
       className="relative min-h-screen bg-black flex flex-col items-center justify-center p-6 md:p-24 overflow-hidden cursor-none"
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Cinematic Background (Atelier Mode Only) */}
-      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-the-night-sky-background-9092-large.mp4" opacity={0.3} />
+      {/* Cinematic Background (Atelier Mode Only) - Cosmic Setup */}
+      <SectionMedia src="https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=2000&auto=format&fit=crop" type="image" opacity={0.3} />
 
       {/* Background Decorative Element */}
       <div className="absolute inset-0 z-0 opacity-20">

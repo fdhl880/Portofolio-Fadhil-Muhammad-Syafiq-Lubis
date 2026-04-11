@@ -15,8 +15,8 @@ export default function LuxuryHero() {
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(20,20,20,1)_0%,rgba(0,0,0,1)_100%)]" />
       
-      {/* Cinematic Background (Atelier Mode Only) */}
-      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-blueprint-42710-large.mp4" opacity={0.2} />
+      {/* Cinematic Background (Atelier Mode Only) - Architecture Precision */}
+      <SectionMedia src="https://images.unsplash.com/photo-1503694978374-8a2fa686963a?q=80&w=2000&auto=format&fit=crop" type="image" opacity={0.2} />
       
       {/* 3D Asset Stage (Only in Atelier Mode) */}
       {mode === 'atelier' && (
