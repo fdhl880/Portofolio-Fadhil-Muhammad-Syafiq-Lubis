@@ -8,14 +8,14 @@ export function AppModeProvider({ children }) {
   const [mode, setMode] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('atelier-app-mode');
+    const saved = sessionStorage.getItem('atelier-app-mode');
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setMode(saved);
   }, []);
 
   const selectMode = (newMode) => {
     setMode(newMode);
-    localStorage.setItem('atelier-app-mode', newMode);
+    sessionStorage.setItem('atelier-app-mode', newMode);
   };
 
   return (
