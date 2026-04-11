@@ -9,11 +9,11 @@ export default function HolographicFooter() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
-            <span className="font-mono text-[10px] text-cyan-400 font-bold tracking-[0.3em] uppercase">ATELIER_SYSTEM_Active</span>
+            <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+            <span className="font-mono text-[10px] text-white/60 font-bold tracking-[0.3em] uppercase">ATELIER_ENGINE_ACTIVE</span>
           </div>
-          <p className="text-muted/60 text-xs font-mono lowercase">
-            &copy; {year} Fadhil Muhammad Syafiq Lubis // Port_v5.0.0
+          <p className="text-white/20 text-[10px] font-mono uppercase tracking-[0.2em]">
+            &copy; {year} Fadhil Muhammad Syafiq // Archival Core v5.1
           </p>
         </div>
 

@@ -125,6 +125,29 @@ export default function AtelierPhilosophy() {
             </div>
         </div>
       </div>
+      {/* Symbolism of the Sigil */}
+      <div className="mt-32 max-w-4xl mx-auto border-t border-white/5 pt-24 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+           <div className="flex flex-col gap-4">
+              <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">The Vertical Axis</span>
+              <p className="text-sm text-white/60 font-sans leading-relaxed">
+                Represents the unyielding foundation of **Legacy**. A direct lineage of discipline and standard that remains steadfast across time.
+              </p>
+           </div>
+           <div className="flex flex-col gap-4">
+              <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">Crossed Innovation</span>
+              <p className="text-sm text-white/60 font-sans leading-relaxed">
+                The horizontal 'F' and 'L' arms represent **Expansion**. The intersection of traditional heritage with cutting-edge future tech.
+              </p>
+           </div>
+           <div className="flex flex-col gap-4">
+              <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">Geometric Points</span>
+              <p className="text-sm text-white/60 font-sans leading-relaxed">
+                The accent squares denote **Precision**. Every calculation, every pixel, and every sound is orchestrated with absolute intent.
+              </p>
+           </div>
+        </div>
+      </div>
     </section>
   );
 }

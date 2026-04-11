@@ -36,6 +36,9 @@ export default function ModeSelection() {
                     <button className="px-8 py-3 bg-white text-black text-[10px] tracking-[0.4em] uppercase font-bold hover:bg-[#D4AF37] transition-colors">
                         Select Static
                     </button>
+                    <p className="mt-4 text-[7px] tracking-[0.6em] text-white/30 uppercase">
+                        Recommended for: Mobile & Standard Devices
+                    </p>
                 </div>
             </div>
         </div>
@@ -61,6 +64,9 @@ export default function ModeSelection() {
                     <button className="px-8 py-3 border border-white/20 text-white text-[10px] tracking-[0.4em] uppercase font-bold group-hover:border-white transition-colors">
                         Select Cinematic
                     </button>
+                    <p className="mt-4 text-[7px] tracking-[0.6em] text-[#D4AF37]/40 uppercase">
+                        Recommended for: High-Performance Hardware
+                    </p>
                 </div>
             </div>
         </div>
