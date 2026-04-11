@@ -82,45 +82,40 @@ export default function CinematicAspiration() {
     <section ref={containerRef} className="relative w-full bg-black">
       
       {/* Background Layer - Animated CSS Gradients */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden z-0">
-        <AnimatePresence mode="wait">
+      <div className="sticky top-0 h-screen w-full overflow-hidden z-0 bg-[#050510]">
+        <motion.div
+          animate={{ opacity: 1 }}
+          className="w-full h-full relative"
+        >
+          {/* Native Video Layer for Aspiration */}
+          <video
+            ref={videoRef}
+            src={ASPIRATIONS[activeIndex].video}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            onLoadedData={() => setIsVideoReady(true)}
+            style={{
+              filter: 'brightness(0.85) contrast(1.1)',
+              opacity: isVideoReady ? 1 : 0,
+              transition: 'opacity 1.5s ease-in-out'
+            }}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          
+          {/* Animated gradient background overlay */}
           <motion.div
-            key={ASPIRATIONS[activeIndex].id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="w-full h-full bg-[#050510]" // Fallback dark blue/black
-          >
-            {/* Native Video Layer for Aspiration */}
-            <video
-              ref={videoRef}
-              src={ASPIRATIONS[activeIndex].video}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              onLoadedData={() => setIsVideoReady(true)}
-              style={{
-                filter: 'brightness(0.85) contrast(1.1)',
-                opacity: isVideoReady ? 1 : 0,
-                transition: 'opacity 1.5s ease-in-out'
-              }}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            
-            {/* Animated gradient background overlay */}
-            <motion.div
-              animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
-              transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-              className="w-full h-full relative z-10 mix-blend-overlay"
-              style={{
-                backgroundImage: ASPIRATIONS[activeIndex].gradient,
-                backgroundSize: '200% 200%',
-              }}
-            />
-          </motion.div>
-        </AnimatePresence>
+            animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
+            transition={{ duration: 25, ease: "linear", repeat: Infinity }}
+            className="w-full h-full relative z-10 mix-blend-overlay"
+            style={{
+              backgroundImage: ASPIRATIONS[activeIndex].gradient,
+              backgroundSize: '200% 200%',
+            }}
+          />
+        </motion.div>
       </div>
 
       {/* Content Segments - Scrolling Layer */}
