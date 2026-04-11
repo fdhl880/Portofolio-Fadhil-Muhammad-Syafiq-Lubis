@@ -1,40 +1,79 @@
 'use client';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 
 const STAGES = [
   {
-    year: '2011',
-    title: 'INITIALIZATION_SEQUENCE',
+    year: '2023',
+    title: 'THE_DRAFT_PHASE',
     description: 'The foundation of the creative logic. Early childhood prototypes and the first sparks of technical curiosity.',
-    image: '/images/photo1.jpg' // User will replace this
+    image: '/images/photo1.jpg'
   },
   {
-    year: '2018',
+    year: '2024',
     title: 'COGNITIVE_EXPANSION',
     description: 'Transitioning into advanced engineering and robotics. The development of systematic precision.',
-    image: '/images/photo2.jpg' // User will replace this
+    image: '/images/photo2.jpg'
   },
   {
-    year: '2026',
-    title: 'THE_ATELIER_PHASE',
+    year: '2025',
+    title: 'THE_ATELIER_ERA',
     description: 'The current state of global innovation. Absolute mastery of the intersection between art and AI.',
-    image: '/images/photo3.jpg' // User will replace this
+    image: '/images/photo3.jpg'
   }
 ];
 
 export default function AtelierEvolution() {
   const containerRef = useRef(null);
-  
+  const audioRef = useRef(null);
+  const [isAudioLoaded, setIsAudioLoaded] = useState(false);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
+  // Handle Pencil Sound Sync
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on('change', (latest) => {
+      if (audioRef.current && isAudioLoaded) {
+        // Only play if moving and in range
+        if (latest > 0.05 && latest < 0.95) {
+          audioRef.current.playbackRate = 1.2;
+          audioRef.current.play().catch(() => {});
+        } else {
+          audioRef.current.pause();
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, isAudioLoaded]);
+
   return (
-    <section ref={containerRef} className="relative h-[300vh] bg-black selection:bg-[#D4AF37] selection:text-black">
+    <section ref={containerRef} className="relative h-[400vh] bg-black selection:bg-[#D4AF37] selection:text-black">
       
+      {/* Hidden Audio Element */}
+      <audio 
+        ref={audioRef} 
+        src="https://www.soundjay.com/misc/sounds/pencil-writing-1.mp3" 
+        loop 
+        onCanPlayThrough={() => setIsAudioLoaded(true)}
+      />
+
+      {/* SVG Artistic Filter Definitions */}
+      <svg className="hidden">
+        <filter id="charcoal-sketch">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" result="noise" />
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+          <feConvolveMatrix kernelMatrix="0 -1 0 -1 5 -1 0 -1 0" />
+          <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 
+                                              0.33 0.33 0.33 0 0 
+                                              0.33 0.33 0.33 0 0 
+                                              0 0 0 1 0" />
+        </filter>
+      </svg>
+
       {/* Sticky Container */}
       <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden">
         
@@ -51,67 +90,81 @@ export default function AtelierEvolution() {
         <div className="container mx-auto px-6 relative z-10 flex flex-col items-center gap-12">
             
             <div className="flex flex-col items-center text-center gap-4">
-               <span className="text-white/50 text-[10px] tracking-[1.2em] uppercase font-sans">Project Evolution // Biological Time</span>
+               <span className="text-white/60 text-[10px] tracking-[1.2em] uppercase font-sans">Project Evolution // Biological Time</span>
                <h2 className="text-5xl md:text-8xl font-display uppercase tracking-widest text-[#D4AF37]">The <span className="italic text-white underline">Sequence</span></h2>
             </div>
 
-            <div className="relative w-full max-w-4xl h-[500px] flex items-center justify-center">
+            <div className="relative w-full max-w-5xl h-[500px] flex items-center justify-center">
                {STAGES.map((stage, i) => {
-                 // Calculate specialized scroll range for each stage image
-                 const start = i * 0.33;
-                 const mid = (i * 0.33) + 0.16;
-                 const end = (i + 1) * 0.33;
+                 const step = 1 / STAGES.length;
+                 const start = i * step;
+                 const mid = (i * step) + (step / 2);
+                 const end = (i + 1) * step;
                  
-                 // Opacity and Scalling transforms
                  // eslint-disable-next-line react-hooks/rules-of-hooks
                  const opacity = useTransform(scrollYProgress, [start, mid, end], [0, 1, 0]);
                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                 const scale = useTransform(scrollYProgress, [start, mid, end], [0.8, 1, 1.2]);
+                 const scale = useTransform(scrollYProgress, [start, mid, end], [0.9, 1, 1.1]);
                  // eslint-disable-next-line react-hooks/rules-of-hooks
-                 const x = useTransform(scrollYProgress, [start, end], [50, -50]);
+                 const maskProgress = useTransform(scrollYProgress, [start, mid], ["inset(100% 0 0 0)", "inset(0% 0 0 0)"]);
 
                  return (
                    <motion.div 
                      key={stage.year}
-                     style={{ opacity, scale, x }}
-                     className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-12"
+                     style={{ opacity, scale }}
+                     className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-16"
                    >
-                     {/* The Sketch Filtered Image */}
-                     <div className="relative w-64 h-80 md:w-80 md:h-96 border border-white/10 p-2 bg-black group overflow-hidden">
-                        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
+                     {/* The Sketch Filtered Image with Radial Background Removal */}
+                     <div className="relative w-72 h-96 md:w-[400px] md:h-[500px] group overflow-hidden">
                         
-                        {/* THE SKETCH LAYER (CSS Filter Magic) */}
-                        <div className="w-full h-full relative overflow-hidden grayscale contrast-[250%] brightness-[40%] group-hover:grayscale-0 group-hover:contrast-100 group-hover:brightness-100 transition-all duration-1000">
-                           <Image 
-                              src={stage.image} 
-                              alt={`Year ${stage.year}`}
-                              fill
-                              className="object-cover"
-                              onError={(e) => {
-                                // Fallback if user hasn't uploaded images yet
-                                e.target.style.display = 'none';
-                              }}
-                           />
-                           {/* Fallback Placeholder (Stylized Silhouette) */}
-                           <div className="absolute inset-x-0 inset-y-0 flex items-center justify-center border-2 border-dashed border-white/5 text-white/5 text-[10px] uppercase text-center p-8">
-                              [UPLOAD_SNAPSHOT_REQUIRED_{stage.year}]
+                        {/* Animated Drafting Mask - Simulated Drawing Reveal */}
+                        <motion.div 
+                          style={{ clipPath: maskProgress }}
+                          className="w-full h-full relative"
+                        >
+                           {/* THE ARTY FILTER LAYER */}
+                           <div className="w-full h-full relative grayscale contrast-[180%] brightness-[85%] transition-all duration-1000"
+                                style={{ 
+                                  filter: 'url(#charcoal-sketch)',
+                                  maskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)',
+                                  WebkitMaskImage: 'radial-gradient(circle at center, black 30%, transparent 80%)'
+                                }}>
+                              <Image 
+                                 src={stage.image} 
+                                 alt={`Year ${stage.year}`}
+                                 fill
+                                 className="object-cover"
+                              />
                            </div>
-                        </div>
+                        </motion.div>
 
+                        {/* Hand-Drawn Outlines Reveal (Decorative) */}
+                        <div className="absolute inset-0 border border-white/5 opacity-40 pointer-events-none" />
+                        
                         {/* Metadata Tag */}
-                        <div className="absolute bottom-4 left-4 z-20 flex flex-col items-start gap-1">
-                           <span className="text-[10px] font-mono text-[#D4AF37] tracking-[0.5em]">{stage.year}</span>
-                           <span className="text-[8px] font-mono text-white/40 tracking-widest">{stage.title}</span>
+                        <div className="absolute bottom-12 left-0 z-20 flex flex-col items-start gap-1">
+                           <span className="text-[12px] font-mono text-[#D4AF37] tracking-[0.8em] bg-black px-2">{stage.year}</span>
+                           <span className="text-[10px] font-mono text-white/60 tracking-widest bg-black px-2">{stage.title}</span>
                         </div>
                      </div>
 
                      {/* Text Description */}
-                     <div className="max-w-xs text-center md:text-left space-y-4">
-                        <h3 className="text-xl md:text-3xl font-display italic text-white/80">{stage.title}</h3>
-                        <p className="text-[10px] md:text-xs text-white/40 leading-relaxed uppercase tracking-widest">
-                           {stage.description}
-                        </p>
-                        <div className="h-px w-12 bg-[#D4AF37] opacity-40 mx-auto md:mx-0 pt-4" />
+                     <div className="max-w-md text-center md:text-left space-y-8">
+                        <div className="space-y-4">
+                           <motion.h3 
+                            className="text-3xl md:text-5xl font-display italic text-white/90 leading-tight"
+                           >
+                             {stage.title.split('_').join(' ')}
+                           </motion.h3>
+                           <p className="text-xs md:text-sm text-white/60 leading-relaxed uppercase tracking-[0.2em] font-light">
+                              {stage.description}
+                           </p>
+                        </div>
+                        
+                        <div className="flex items-center gap-4">
+                           <div className="h-[1px] w-24 bg-[#D4AF37]" />
+                           <span className="text-[10px] text-[#D4AF37] uppercase tracking-widest">Archival Status: Optimized</span>
+                        </div>
                      </div>
                    </motion.div>
                  );
@@ -121,9 +174,9 @@ export default function AtelierEvolution() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-20">
-           <span className="text-[8px] tracking-[0.5em] uppercase">Scroll to Evolve</span>
-           <div className="w-[1px] h-12 bg-white" />
+        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
+           <span className="text-[8px] tracking-[0.5em] uppercase text-[#D4AF37]">Drafting in progress</span>
+           <div className="w-[1px] h-12 bg-gradient-to-b from-[#D4AF37] to-transparent" />
         </div>
       </div>
 
