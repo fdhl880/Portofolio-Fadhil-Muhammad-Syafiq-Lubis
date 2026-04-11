@@ -38,11 +38,31 @@ const THEMES = {
   `,
 };
 
+// Map themes to 8 unique local video assets
+const THEME_MAP = {
+  hero_intro: '/videos/hero_intro.mp4',
+  precision: '/videos/precision.mp4',
+  data_flow: '/videos/data_flow.mp4',
+  leadership: '/videos/leadership.mp4',
+  gold: '/videos/gold.mp4',
+  origin: '/videos/origin.mp4',
+  vision: '/videos/vision.mp4',
+  material: '/videos/material.mp4',
+  // Backwards compatibility mappings
+  tech: '/videos/hero_intro.mp4',
+  cosmic: '/videos/vision.mp4',
+  silver: '/videos/hero_intro.mp4',
+  nature: '/videos/origin.mp4',
+};
+
 export default function SectionMedia({ theme = 'silver', opacity = 0.3, className = "" }) {
   const { mode } = useAppMode();
   const [isMobile, setIsMobile] = useState(false);
+  const [videoSrc, setVideoSrc] = useState(null);
 
   useEffect(() => {
+    // Set video src on client only
+    setVideoSrc(THEME_MAP[theme] || THEME_MAP.silver);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -65,20 +85,34 @@ export default function SectionMedia({ theme = 'silver', opacity = 0.3, classNam
           transition={{ duration: 2, ease: "easeOut" }}
           className="w-full h-full relative"
         >
-          {/* Animated gradient layer 1 - slow drift */}
+          {/* Native Video Layer with Local Asset */}
+          {videoSrc && !isMobile && (
+            <video
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover filter brightness-[0.4] contrast-[1.1] grayscale-[0.3]"
+              style={{ willChange: 'transform, opacity' }}
+            />
+          )}
+
+          {/* Premium animated gradient overlay - provides the "Luxury Glow" */}
           <motion.div
             animate={{
               backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'],
             }}
             transition={{
-              duration: 30,
+              duration: 35,
               ease: "linear",
               repeat: Infinity,
             }}
-            className="absolute inset-0"
+            className="absolute inset-0 mix-blend-screen opacity-40"
             style={{
               backgroundImage: gradient,
               backgroundSize: '200% 200%',
+              willChange: 'background-position'
             }}
           />
 

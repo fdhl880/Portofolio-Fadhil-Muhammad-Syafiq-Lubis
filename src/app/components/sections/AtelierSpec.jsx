@@ -15,7 +15,7 @@ export default function AtelierSpec() {
   return (
     <section className="relative py-48 bg-black border-t border-white/5 transform-gpu" id="specifications">
       {/* Cinematic Background (Atelier Mode Only) - Porsche/Tech Aesthetic */}
-      <SectionMedia theme="tech" opacity={0.15} />
+      <SectionMedia theme="material" opacity={0.15} />
 
       <div className="container mx-auto px-6">
         {/* Header - Rolex Minimalist Style */}

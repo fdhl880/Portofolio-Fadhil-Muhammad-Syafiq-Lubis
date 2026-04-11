@@ -2,8 +2,11 @@
 import { Canvas } from '@react-three/fiber';
 import { Float, MeshDistortMaterial, MeshTransmissionMaterial, Sphere, ContactShadows, Environment, AdaptiveDpr } from '@react-three/drei';
 import { Suspense } from 'react';
+import { usePerformance } from '@/app/context/PerformanceContext';
 
 function Scene() {
+  const { performanceTier } = usePerformance();
+  
   return (
     <>
       <Environment preset="city" />
@@ -12,23 +15,33 @@ function Scene() {
       
       <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
         <mesh castShadow receiveShadow>
-          <icosahedronGeometry args={[1.2, 16]} />
-          <MeshTransmissionMaterial 
-            backside
-            samples={4}
-            thickness={2}
-            chromaticAberration={0.02}
-            anisotropy={0.1}
-            distortion={0.1}
-            distortionScale={0.1}
-            temporalDistortion={0.1}
-            clearcoat={1}
-            attenuationDistance={1}
-            attenuationColor="#ffffff"
-            color="#ffffff"
-            metalness={0}
-            roughness={0}
-          />
+          <icosahedronGeometry args={[1.2, performanceTier === 'high' ? 16 : 8]} />
+          {performanceTier === 'high' ? (
+            <MeshTransmissionMaterial 
+              backside
+              samples={4}
+              thickness={2}
+              chromaticAberration={0.02}
+              anisotropy={0.1}
+              distortion={0.1}
+              distortionScale={0.1}
+              temporalDistortion={0.1}
+              clearcoat={1}
+              attenuationDistance={1}
+              attenuationColor="#ffffff"
+              color="#ffffff"
+              metalness={0}
+              roughness={0}
+            />
+          ) : (
+            <meshStandardMaterial 
+              color="#ffffff" 
+              metalness={0.1} 
+              roughness={0.05} 
+              transparent 
+              opacity={0.6} 
+            />
+          )}
         </mesh>
       </Float>
 

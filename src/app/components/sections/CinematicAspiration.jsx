@@ -13,6 +13,7 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
+    video: '/videos/precision.mp4',
     gradient: 'radial-gradient(ellipse at 30% 40%, rgba(0,120,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(100,180,255,0.08) 0%, transparent 40%)',
     color: '#E5E7EB' // Silver
   },
@@ -21,6 +22,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
+    video: '/videos/data_flow.mp4',
     gradient: 'radial-gradient(ellipse at 25% 25%, rgba(100,50,200,0.12) 0%, transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(0,100,255,0.08) 0%, transparent 45%)',
     color: '#FFFFFF' // Pure White
   },
@@ -29,6 +31,7 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
+    video: '/videos/leadership.mp4',
     gradient: 'radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 40%)',
     color: '#D4AF37' // Subtle Gold
   }
@@ -70,18 +73,22 @@ export default function CinematicAspiration() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 1.5, ease: 'easeInOut' }}
-            className="absolute inset-0"
           >
-            {/* Dark Overlay for Typography Legibility */}
-            <div className="absolute inset-0 bg-black/60 z-10" />
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-black z-10 opacity-80" />
+            {/* Native Video Layer for Aspiration */}
+            <video
+              src={ASPIRATIONS[activeIndex].video}
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover filter brightness-50 contrast-125 grayscale"
+            />
             
-            {/* Animated gradient background */}
+            {/* Animated gradient background overlay */}
             <motion.div
               animate={{ backgroundPosition: ['0% 0%', '100% 100%', '0% 0%'] }}
               transition={{ duration: 25, ease: "linear", repeat: Infinity }}
-              className="w-full h-full"
+              className="w-full h-full relative z-10 mix-blend-overlay"
               style={{
                 backgroundImage: ASPIRATIONS[activeIndex].gradient,
                 backgroundSize: '200% 200%',

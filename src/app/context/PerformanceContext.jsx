@@ -1,5 +1,15 @@
 'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
+import gsap from 'gsap';
+
+// Global GSAP Config for optimal performance
+if (typeof window !== 'undefined') {
+  gsap.config({ 
+    autoSleep: 60, // Sleep after 60 frames of inactivity
+    force3D: true, // Hardware acceleration
+    nullTargetWarn: false
+  });
+}
 
 const PerformanceContext = createContext();
 
@@ -27,8 +37,10 @@ export function PerformanceProvider({ children }) {
     setIsInitialized(true);
 
     if (mobile || android) {
+      // Force 'low' for Android to guarantee zero lag, 'medium' for iOS mobile
       setPerformanceTier(android ? 'low' : 'medium');
       setIsCinematic(false);
+      setDpr(Math.min(optimizedDPR, 1)); // Cap DPR on mobile for fill-rate heavy sections
     }
 
     const handleResize = () => {

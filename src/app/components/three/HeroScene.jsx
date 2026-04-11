@@ -3,11 +3,14 @@ import { useRef, useMemo, useCallback } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
+import { usePerformance } from '@/app/context/PerformanceContext';
 
 function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
   const ref = useRef();
   const velocity = useRef(new THREE.Vector3());
-  const origin = useMemo(() => new THREE.Vector3(...position), [position]);
+  // Pre-allocate scratchpads for math to avoid GC thrashing
+  const tempVec = useMemo(() => new THREE.Vector3(), []);
+  const tensionVec = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime;
@@ -17,9 +20,9 @@ function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
     // Apply Velocity
     ref.current.position.addScaledVector(velocity.current, delta);
     
-    // Tension (Spring back to origin)
-    const tension = origin.clone().sub(ref.current.position).multiplyScalar(2.0);
-    velocity.current.addScaledVector(tension, delta);
+    // Tension (Spring back to origin) - Optimized to avoid .clone()
+    tensionVec.copy(origin).sub(ref.current.position).multiplyScalar(2.0);
+    velocity.current.addScaledVector(tensionVec, delta);
     
     // Friction
     velocity.current.multiplyScalar(0.92);
@@ -59,7 +62,11 @@ function FloatingShape({ position, color, geometry, speed = 1, scale = 1 }) {
   );
 }
 
-function Particles({ count = 80 }) {
+function Particles() {
+  const { performanceTier } = usePerformance();
+  // Drastically reduce count for lag mitigation
+  const count = performanceTier === 'low' ? 20 : (performanceTier === 'medium' ? 40 : 60);
+  
   const mesh = useRef();
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const data = useMemo(() => {
@@ -204,7 +211,7 @@ export default function HeroScene() {
         scale={0.6}
       />
 
-      <Particles count={80} />
+      <Particles />
       <GlowRing radius={2.8} color="#00f0ff" speed={0.25} />
       <GlowRing radius={3.8} color="#8b5cf6" speed={0.18} />
       <GlowRing radius={4.5} color="#ffd700" speed={0.12} />

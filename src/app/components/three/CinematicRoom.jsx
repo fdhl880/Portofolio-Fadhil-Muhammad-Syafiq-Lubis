@@ -7,7 +7,7 @@ import { useScroll } from 'framer-motion';
 import { usePerformance } from '@/app/context/PerformanceContext';
 
 // Asteroid generation data (static, created once)
-const asteroidCount = 150;
+const asteroidCount = 100; // Reduced from 150 for better baseline
 const asteroidData = Array.from({ length: asteroidCount }, () => ({
   pos: [(Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200],
   rot: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
@@ -29,8 +29,8 @@ function SpaceScene({ scrollYProgress }) {
   const [warpSpeed, setWarpSpeed] = useState(false);
   const dummy = useMemo(() => new THREE.Object3D(), []);
 
-  // Performance-based limits
-  const currentAsteroids = performanceTier === 'low' ? 40 : (performanceTier === 'medium' ? 100 : asteroidCount);
+  // Performance-based limits - Drastically reduced for lag mitigation
+  const currentAsteroids = performanceTier === 'low' ? 20 : (performanceTier === 'medium' ? 45 : asteroidCount);
 
   // Listen for Warp Jump command from Navbar
   useEffect(() => {
@@ -71,6 +71,8 @@ function SpaceScene({ scrollYProgress }) {
         const ast = asteroidData[i];
         ast.rot[0] += ast.spinSpeed;
         ast.rot[1] += ast.spinSpeed;
+        
+        // Use pre-allocated dummy to update matrix
         dummy.position.set(ast.pos[0], ast.pos[1], ast.pos[2]);
         dummy.rotation.set(ast.rot[0], ast.rot[1], ast.rot[2]);
         dummy.scale.set(ast.scale, ast.scale, ast.scale);
