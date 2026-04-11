@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppMode } from '../../context/AppModeContext';
+import Image from 'next/image';
 
 export default function SectionMedia({ src, type = 'video', opacity = 0.3, className = "" }) {
   const { mode } = useAppMode();
@@ -41,11 +42,13 @@ export default function SectionMedia({ src, type = 'video', opacity = 0.3, class
               className="w-full h-full object-cover filter brightness-75 contrast-110"
             />
           ) : (
-            <img
+            <Image
               src={src}
-              alt=""
+              alt="Section Background"
+              fill
+              unoptimized
               onLoad={() => setIsLoaded(true)}
-              className="w-full h-full object-cover"
+              className="object-cover"
             />
           )}
 

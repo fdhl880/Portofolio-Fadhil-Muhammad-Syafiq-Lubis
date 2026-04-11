@@ -41,10 +41,8 @@ export default function CinematicAspiration() {
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Only show in 3D Mode
-  if (mode !== 'atelier') return null;
-
   useGSAP(() => {
+    if (mode !== 'atelier') return;
     const sections = gsap.utils.toArray('.aspiration-segment');
     
     sections.forEach((section, index) => {
@@ -57,6 +55,9 @@ export default function CinematicAspiration() {
       });
     });
   }, { scope: containerRef });
+
+  // Only show in 3D Mode
+  if (mode !== 'atelier') return null;
 
   return (
     <section ref={containerRef} className="relative w-full bg-black">
@@ -124,7 +125,7 @@ export default function CinematicAspiration() {
                 </h3>
 
                 <p className="max-w-xl text-xs md:text-sm text-white/40 leading-relaxed uppercase tracking-widest font-sans italic">
-                  "{aspiration.narrative}"
+                  &quot;{aspiration.narrative}&quot;
                 </p>
               </motion.div>
 
