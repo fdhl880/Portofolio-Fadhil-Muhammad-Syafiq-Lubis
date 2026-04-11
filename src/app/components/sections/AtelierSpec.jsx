@@ -1,5 +1,7 @@
-'use client';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
 const TECHNICAL_DATA = [
     { label: 'CALIBRE', value: 'INNOVATION_v2.5', detail: 'Advanced structural logic framework optimized for sustainable engineering solutions.' },
@@ -11,6 +13,9 @@ const TECHNICAL_DATA = [
 export default function AtelierSpec() {
   return (
     <section className="relative py-48 bg-black border-t border-white/5 transform-gpu" id="specifications">
+      {/* Cinematic Background (Atelier Mode Only) */}
+      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-blueprint-42710-large.mp4" opacity={0.15} />
+
       <div className="container mx-auto px-6">
         {/* Header - Rolex Minimalist Style */}
         <div className="mb-24 flex flex-col items-center md:items-start">

@@ -13,7 +13,7 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
-    video: 'https://cdn.pixabay.com/video/2021/04/12/70876-538054041_large.mp4', // Technical/Blueprint vibe
+    video: 'https://assets.mixkit.co/videos/preview/mixkit-close-up-of-a-watch-mechanism-42711-large.mp4', // Rolex macro vibe
     color: '#E5E7EB' // Silver
   },
   {
@@ -21,7 +21,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    video: 'https://cdn.pixabay.com/video/2019/04/05/22564-328637492_large.mp4', // Data/Research vibe
+    video: 'https://assets.mixkit.co/videos/preview/mixkit-medical-laboratory-researcher-analyzing-samples-44026-large.mp4', // Data/Research vibe
     color: '#FFFFFF' // Pure White
   },
   {
@@ -29,14 +29,20 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    video: 'https://cdn.pixabay.com/video/2020/09/27/50608-462372200_large.mp4', // City/Business vibe
+    video: 'https://assets.mixkit.co/videos/preview/mixkit-city-traffic-at-night-aerial-view-4592-large.mp4', // City/Business vibe
     color: '#D4AF37' // Subtle Gold/Silver
   }
 ];
 
+import { useAppMode } from '../../context/AppModeContext';
+
 export default function CinematicAspiration() {
+  const { mode } = useAppMode();
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  // Only show in 3D Mode
+  if (mode !== 'atelier') return null;
 
   useGSAP(() => {
     const sections = gsap.utils.toArray('.aspiration-segment');

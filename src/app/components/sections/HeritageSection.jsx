@@ -1,9 +1,14 @@
-'use client';
 import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
 export default function HeritageSection() {
   return (
     <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
+      {/* Cinematic Background (Atelier Mode Only) */}
+      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-waves-coming-to-a-beach-in-slow-motion-1193-large.mp4" opacity={0.15} />
+
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-[#050505] -z-10" />
       

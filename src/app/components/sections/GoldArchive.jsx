@@ -1,6 +1,7 @@
-'use client';
-import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
 const GOLD_MEDALS = [
   {
@@ -83,6 +84,9 @@ export default function GoldArchive() {
 
   return (
     <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
+      {/* Cinematic Background (Atelier Mode Only) */}
+      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-slow-motion-of-a-golden-liquid-34358-large.mp4" opacity={0.3} />
+
       <div className="container mx-auto px-6 mb-24">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

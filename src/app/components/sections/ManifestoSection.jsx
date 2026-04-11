@@ -1,6 +1,8 @@
-'use client';
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
 export default function ManifestoSection() {
   const containerRef = useRef(null);
@@ -46,9 +48,11 @@ export default function ManifestoSection() {
     <section 
       ref={containerRef}
       className="relative min-h-screen bg-black flex flex-col items-center justify-center p-6 md:p-24 overflow-hidden cursor-none"
-      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Cinematic Background (Atelier Mode Only) */}
+      <SectionMedia src="https://assets.mixkit.co/videos/preview/mixkit-stars-in-the-night-sky-background-9092-large.mp4" opacity={0.3} />
+
       {/* Background Decorative Element */}
       <div className="absolute inset-0 z-0 opacity-20">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#D4AF37]/5 rounded-full blur-[120px]" />
