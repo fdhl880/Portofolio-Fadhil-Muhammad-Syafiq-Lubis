@@ -29,7 +29,6 @@ const Chronology = dynamic(() => import('./sections/RoadmapSection'), { ssr: fal
 const Vision = dynamic(() => import('./sections/VisionSection'), { ssr: false });
 const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
 const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
-const AtelierEvolution = dynamic(() => import('./sections/AtelierEvolution'), { ssr: false });
 const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
@@ -80,9 +79,6 @@ export default function PageWrapper() {
 
           {/* New Hall of Mentors - The Giants */}
           <GiantsSection />
-
-          {/* New Chronological Sequence */}
-          <AtelierEvolution />
 
           {/* Foundation - The Heritage Path */}
           <HeritageSection />
