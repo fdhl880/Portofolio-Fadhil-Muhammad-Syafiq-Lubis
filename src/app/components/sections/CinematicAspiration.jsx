@@ -22,7 +22,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    video: '/videos/data_flow.mp4',
+    video: '/videos/polymath_new.mp4',
     gradient: 'radial-gradient(ellipse at 25% 25%, rgba(100,50,200,0.12) 0%, transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(0,100,255,0.08) 0%, transparent 45%)',
     color: '#FFFFFF' // Pure White
   },
@@ -31,7 +31,7 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    video: '/videos/leadership.mp4',
+    video: '/videos/captain_new.mp4',
     gradient: 'radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 40%)',
     color: '#D4AF37' // Subtle Gold
   }
