@@ -55,14 +55,27 @@ const THEME_MAP = {
   nature: '/videos/origin.mp4',
 };
 
-export default function SectionMedia({ theme = 'silver', opacity = 0.3, className = "" }) {
+export default function SectionMedia({ theme = 'silver', className = '', opacity = 1 }) {
   const { mode } = useAppMode();
   const [isMobile, setIsMobile] = useState(false);
-  const [videoSrc, setVideoSrc] = useState(null);
+  const videoRef = useRef(null);
+
+  const videoSrc = THEME_MAP[theme];
+
+  // Force Playback Logic for Source Changes
+  useEffect(() => {
+    if (videoRef.current && videoSrc) {
+        videoRef.current.load();
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("SectionMedia Autoplay blocked:", error);
+            });
+        }
+    }
+  }, [videoSrc]);
 
   useEffect(() => {
-    // Set video src on client only
-    setVideoSrc(THEME_MAP[theme] || THEME_MAP.silver);
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -88,12 +101,13 @@ export default function SectionMedia({ theme = 'silver', opacity = 0.3, classNam
           {/* Native Video Layer with Local Asset */}
           {videoSrc && !isMobile && (
             <video
+              ref={videoRef}
               src={videoSrc}
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
               style={{ 
                 filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)',
                 willChange: 'transform, opacity'

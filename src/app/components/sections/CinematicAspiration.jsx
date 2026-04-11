@@ -42,7 +42,23 @@ import { useAppMode } from '../../context/AppModeContext';
 export default function CinematicAspiration() {
   const { mode } = useAppMode();
   const containerRef = useRef(null);
+  const videoRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+
+  // Force Playback Logic
+  useEffect(() => {
+    if (videoRef.current) {
+        setIsVideoReady(false);
+        videoRef.current.load();
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.warn("Autoplay blocked or interrupted:", error);
+            });
+        }
+    }
+  }, [activeIndex]);
 
   useGSAP(() => {
     if (mode !== 'atelier') return;
@@ -73,19 +89,22 @@ export default function CinematicAspiration() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            className="w-full h-full bg-[#050510]" // Fallback dark blue/black
           >
             {/* Native Video Layer for Aspiration */}
             <video
-              key={ASPIRATIONS[activeIndex].id}
+              ref={videoRef}
               src={ASPIRATIONS[activeIndex].video}
               autoPlay
               muted
               loop
               playsInline
-              preload="metadata"
+              preload="auto"
+              onLoadedData={() => setIsVideoReady(true)}
               style={{
                 filter: 'brightness(0.85) contrast(1.1)',
-                opacity: 1
+                opacity: isVideoReady ? 1 : 0,
+                transition: 'opacity 1.5s ease-in-out'
               }}
               className="absolute inset-0 w-full h-full object-cover"
             />
