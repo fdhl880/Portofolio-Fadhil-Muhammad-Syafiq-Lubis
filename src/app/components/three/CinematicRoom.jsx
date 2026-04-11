@@ -61,9 +61,11 @@ function SpaceScene({ scrollYProgress }) {
 
     // Warp Jump stretch effect
     const targetFov = warpSpeed ? 140 : 70;
-    cameraRef.current.fov = THREE.MathUtils.damp(cameraRef.current.fov, targetFov, 10, delta);
+    if (Math.abs(cameraRef.current.fov - targetFov) > 0.1) {
+      cameraRef.current.fov = THREE.MathUtils.damp(cameraRef.current.fov, targetFov, 10, delta);
+      cameraRef.current.updateProjectionMatrix();
+    }
     if (warpSpeed) cameraRef.current.position.z -= 3;
-    cameraRef.current.updateProjectionMatrix();
 
     // Rotate Asteroids
     if (asteroidRef.current) {

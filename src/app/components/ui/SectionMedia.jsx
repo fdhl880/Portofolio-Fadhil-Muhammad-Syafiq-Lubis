@@ -108,9 +108,6 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
               loop
               playsInline
               preload="auto"
-              style={{ 
-                willChange: 'transform, opacity'
-              }}
               className="absolute inset-0 w-full h-full object-cover"
             />
           )}
