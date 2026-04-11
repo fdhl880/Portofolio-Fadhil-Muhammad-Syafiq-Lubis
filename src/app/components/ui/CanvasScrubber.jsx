@@ -7,6 +7,7 @@ export default function CanvasScrubber({
   frameCount, 
   activeIndex, 
   currentIndex, 
+  loop = false,
   style 
 }) {
   const canvasRef = useRef(null);
@@ -28,7 +29,7 @@ export default function CanvasScrubber({
         loadedCount++;
         if (loadedCount === frameCount) {
           setLoaded(true);
-          renderFrame(1);
+          renderFrame(0);
         }
       };
       
@@ -37,17 +38,14 @@ export default function CanvasScrubber({
   }, [sequencePath, frameCount]);
 
   const renderFrame = (index) => {
-    if (!canvasRef.current || !imagesRef.current[index]) return;
+    const safeIndex = Math.floor(index) % frameCount;
+    if (!canvasRef.current || !imagesRef.current[safeIndex]) return;
     const ctx = canvasRef.current.getContext('2d');
-    const img = imagesRef.current[index];
+    const img = imagesRef.current[safeIndex];
     
-    // Maintain highly performant 16:9 aspect ratio or cover
     const canvas = canvasRef.current;
-    
-    // Standard drawing
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Image cover calculation
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
     const ratio = Math.max(hRatio, vRatio);
@@ -58,25 +56,32 @@ export default function CanvasScrubber({
                   centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
   };
 
-  // Render Loop
+  // Render Loop / Scrub Logic
   useEffect(() => {
     if (!loaded) return;
     
-    let targetFrame = activeIndex === currentIndex ? frameCount - 1 : 0;
-    
-    // Simulate scroll-triggered scrubbing via simple interpolation for this example
-    // In a fully integrated version, this is tied to GSAP scroll trigger progress.
     let animationFrameId;
-    
+    let frame = currentFrame;
+
     const animate = () => {
-      let diff = targetFrame - currentFrame;
-      if (Math.abs(diff) > 0.1) {
-        let nextFrame = currentFrame + diff * 0.1;
-        setCurrentFrame(nextFrame);
-        renderFrame(Math.floor(nextFrame));
+      if (loop) {
+        // Continuous luxury loop at 15fps
+        frame = (frame + 0.25) % frameCount;
+        setCurrentFrame(frame);
+        renderFrame(frame);
         animationFrameId = requestAnimationFrame(animate);
       } else {
-        renderFrame(Math.floor(targetFrame));
+        // Scrubbing logic for specific sections
+        let targetFrame = activeIndex === currentIndex ? frameCount - 1 : 0;
+        let diff = targetFrame - frame;
+        if (Math.abs(diff) > 0.1) {
+          frame += diff * 0.1;
+          setCurrentFrame(frame);
+          renderFrame(frame);
+          animationFrameId = requestAnimationFrame(animate);
+        } else {
+          renderFrame(targetFrame);
+        }
       }
     };
     
@@ -85,7 +90,7 @@ export default function CanvasScrubber({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [activeIndex, currentIndex, loaded, currentFrame, frameCount]);
+  }, [activeIndex, currentIndex, loaded, loop, frameCount]);
 
   return (
     <div className="absolute inset-0 w-full h-full" style={style}>

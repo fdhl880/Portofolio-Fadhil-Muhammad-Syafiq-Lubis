@@ -2,8 +2,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppMode } from '../../context/AppModeContext';
+import CanvasScrubber from './CanvasScrubber';
 
-// Premium CSS animated backgrounds that mimic luxury brand aesthetics
+// Map themes to its corresponding frame sequence folder
+const SEQUENCE_MAP = {
+  hero_intro: 'hero',
+  precision: 'precision',
+  gold: 'gold',
+  origin: 'origin',
+  vision: 'vision',
+  material: 'material',
+  tech: 'hero',
+  cosmic: 'vision',
+  silver: 'hero',
+  nature: 'origin'
+};
 // No external video dependencies = zero CORS issues, instant loading
 const THEMES = {
   // Rolex-style: slow moving golden shimmer
@@ -38,43 +51,13 @@ const THEMES = {
   `,
 };
 
-// Map themes to 8 unique local video assets
-const THEME_MAP = {
-  hero_intro: '/videos/hero_intro.mp4',
-  precision: '/videos/precision.mp4',
-  data_flow: '/videos/data_flow.mp4',
-  leadership: '/videos/leadership.mp4',
-  gold: '/videos/gold.mp4',
-  origin: '/videos/origin.mp4',
-  vision: '/videos/vision.mp4',
-  material: '/videos/material.mp4',
-  // Backwards compatibility mappings
-  tech: '/videos/hero_intro.mp4',
-  cosmic: '/videos/vision.mp4',
-  silver: '/videos/hero_intro.mp4',
-  nature: '/videos/origin.mp4',
-};
-
 export default function SectionMedia({ theme = 'silver', className = '', opacity = 1 }) {
   const { mode } = useAppMode();
   const [isMobile, setIsMobile] = useState(false);
-  const videoRef = useRef(null);
+  
+  const sequenceFolder = SEQUENCE_MAP[theme] || 'hero';
 
-  const videoSrc = THEME_MAP[theme];
-
-  // Force Playback Logic for Source Changes
-  useEffect(() => {
-    if (videoRef.current && videoSrc) {
-        videoRef.current.load();
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.warn("SectionMedia Autoplay blocked:", error);
-            });
-        }
-    }
-  }, [videoSrc]);
-
+  // Clean up unused deps
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -98,17 +81,15 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
           transition={{ duration: 2, ease: "easeOut" }}
           className="w-full h-full relative"
         >
-          {/* Native Video Layer with Local Asset */}
-          {videoSrc && !isMobile && (
-            <video
-              ref={videoRef}
-              src={videoSrc}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              className="absolute inset-0 w-full h-full object-cover"
+          {/* WebP Canvas Scrubber for Elite Performance (Rolex-tier) */}
+          {!isMobile && (
+            <CanvasScrubber 
+              sequencePath={`/sequences/${sequenceFolder}`}
+              frameCount={120}
+              activeIndex={0} 
+              currentIndex={0}
+              loop={true}
+              style={{ filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)' }}
             />
           )}
 

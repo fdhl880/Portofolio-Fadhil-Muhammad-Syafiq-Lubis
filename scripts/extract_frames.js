@@ -19,13 +19,13 @@ const extractFrames = (videoFilename, outputDirname) => {
 
     ffmpeg(inputPath)
       .outputOptions([
-        '-vf scale=960:-1', 
+        '-vf scale=1280:-1', // Increased to 720p width for "Premium" look
         '-r 15', 
+        '-vframes 120', // LIMIT to 120 frames (8 seconds) for browser memory safety
         '-vcodec libwebp',
         '-lossless 0',
-        '-qscale 50',
+        '-qscale 60',
         '-preset default',
-        '-loop 0',
         '-an'
       ])
       .output(`${outputDir}/frame_%03d.webp`)
@@ -43,9 +43,21 @@ const extractFrames = (videoFilename, outputDirname) => {
 
 const run = async () => {
   try {
-    await extractFrames('polymath_new.mp4', 'polymath');
-    await extractFrames('captain_new.mp4', 'captain');
-    console.log("All done!");
+    const jobs = [
+      { vid: 'hero_intro.mp4', dir: 'hero' },
+      { vid: 'precision.mp4', dir: 'precision' },
+      { vid: 'gold.mp4', dir: 'gold' },
+      { vid: 'origin.mp4', dir: 'origin' },
+      { vid: 'vision.mp4', dir: 'vision' },
+      { vid: 'material.mp4', dir: 'material' },
+      { vid: 'polymath_new.mp4', dir: 'polymath' },
+      { vid: 'captain_new.mp4', dir: 'captain' }
+    ];
+
+    for (const job of jobs) {
+      await extractFrames(job.vid, job.dir);
+    }
+    console.log("All extractions completed!");
   } catch (err) {
     console.error("Failed:", err);
   }
