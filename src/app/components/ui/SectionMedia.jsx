@@ -59,7 +59,6 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
   const { mode } = useAppMode();
   const [isMobile, setIsMobile] = useState(false);
   const videoRef = useRef(null);
-  const [isVideoReady, setIsVideoReady] = useState(false);
 
   const videoSrc = THEME_MAP[theme];
 
@@ -109,12 +108,8 @@ export default function SectionMedia({ theme = 'silver', className = '', opacity
               loop
               playsInline
               preload="auto"
-              onLoadStart={() => setIsVideoReady(false)}
-              onLoadedData={() => setIsVideoReady(true)}
               style={{ 
                 filter: 'brightness(0.8) contrast(1.1) grayscale(0.1)',
-                opacity: isVideoReady ? 1 : 0,
-                transition: 'opacity 1.5s ease-in-out',
                 willChange: 'transform, opacity'
               }}
               className="absolute inset-0 w-full h-full object-cover"

@@ -44,7 +44,6 @@ export default function CinematicAspiration() {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isVideoReady, setIsVideoReady] = useState(false);
 
   // Force Playback Logic
   useEffect(() => {
@@ -95,12 +94,9 @@ export default function CinematicAspiration() {
             loop
             playsInline
             preload="auto"
-            onLoadStart={() => setIsVideoReady(false)}
-            onLoadedData={() => setIsVideoReady(true)}
             style={{
               filter: 'brightness(0.85) contrast(1.1)',
-              opacity: isVideoReady ? 1 : 0,
-              transition: 'opacity 1.5s ease-in-out'
+              opacity: 1
             }}
             className="absolute inset-0 w-full h-full object-cover"
           />
