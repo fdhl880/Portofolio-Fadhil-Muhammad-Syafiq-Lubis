@@ -85,7 +85,7 @@ export default function GoldArchive() {
   return (
     <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
       {/* Cinematic Background (Atelier Mode Only) - Abstract Liquid Gold */}
-      <SectionMedia src="https://cdn.pixabay.com/video/2019/11/13/29035-373323067_large.mp4" type="video" opacity={0.3} />
+      <SectionMedia src="https://videos.pexels.com/video-files/3163534/3163534-uhd_3840_2160_30fps.mp4" type="video" opacity={0.3} />
 
       <div className="container mx-auto px-6 mb-24">
         <motion.div 

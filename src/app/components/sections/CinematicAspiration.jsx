@@ -13,7 +13,7 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
-    video: 'https://cdn.pixabay.com/video/2021/04/12/70876-538054041_large.mp4', // Rolex macro vibe
+    video: 'https://videos.pexels.com/video-files/856148/856148-hd_1920_1080_30fps.mp4', // Mechanism/macro vibe
     color: '#E5E7EB' // Silver
   },
   {
@@ -21,7 +21,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    video: 'https://cdn.pixabay.com/video/2019/04/05/22564-328637492_large.mp4', // Data/Research vibe
+    video: 'https://videos.pexels.com/video-files/3129957/3129957-uhd_3840_2160_25fps.mp4', // Data/Research vibe
     color: '#FFFFFF' // Pure White
   },
   {
@@ -29,7 +29,7 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    video: 'https://cdn.pixabay.com/video/2019/01/21/20822-312933089_large.mp4', // Luxury/Corporate vibe
+    video: 'https://videos.pexels.com/video-files/3121459/3121459-uhd_3840_2160_24fps.mp4', // Architecture/Corporate vibe
     color: '#D4AF37' // Subtle Gold/Silver
   }
 ];

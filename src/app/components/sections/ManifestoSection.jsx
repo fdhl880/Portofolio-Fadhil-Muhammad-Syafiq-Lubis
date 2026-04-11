@@ -51,7 +51,7 @@ export default function ManifestoSection() {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Cinematic Background (Atelier Mode Only) - Cosmic Setup */}
-      <SectionMedia src="https://cdn.pixabay.com/video/2020/05/25/40149-425026920_large.mp4" type="video" opacity={0.3} />
+      <SectionMedia src="https://videos.pexels.com/video-files/3141208/3141208-hd_1920_1080_25fps.mp4" type="video" opacity={0.3} />
 
       {/* Background Decorative Element */}
       <div className="absolute inset-0 z-0 opacity-20">
