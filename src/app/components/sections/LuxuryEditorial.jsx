@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -143,7 +144,7 @@ export default function LuxuryEditorial() {
                {/* Text Column */}
                <div className={`col-span-1 md:col-span-5 flex flex-col gap-8 ${project.layout === 'right' ? 'md:order-1 text-right items-end' : 'items-start text-left'}`}>
                   <div className="flex flex-col gap-2">
-                     <span className="text-[10px] tracking-[1.2rem] text-[#D4AF37] uppercase font-sans">{project.year} // ARCHIVE</span>
+                     <span className="text-[10px] tracking-[1.2rem] text-[#D4AF37] uppercase font-sans">{project.year} {'//'} ARCHIVE</span>
                      <h2 className="variable-heading text-4xl md:text-7xl font-playfair uppercase text-white leading-[0.9] tracking-tighter">
                         {project.title.split('_').join(' ')}
                      </h2>

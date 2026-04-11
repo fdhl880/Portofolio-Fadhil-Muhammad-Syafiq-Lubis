@@ -136,9 +136,9 @@ export default function AtelierPhilosophy() {
            </div>
            <div className="flex flex-col gap-4">
               <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">Crossed Innovation</span>
-              <p className="text-sm text-white/60 font-sans leading-relaxed">
-                The horizontal 'F' and 'L' arms represent **Expansion**. The intersection of traditional heritage with cutting-edge future tech.
-              </p>
+               <p className="text-sm text-white/60 font-sans leading-relaxed">
+                 The horizontal &apos;F&apos; and &apos;L&apos; arms represent **Expansion**. The intersection of traditional heritage with cutting-edge future tech.
+               </p>
            </div>
            <div className="flex flex-col gap-4">
               <span className="text-[10px] tracking-[0.4em] text-white/40 uppercase">Geometric Points</span>
