@@ -10,13 +10,37 @@ export default function CanvasScrubber({
   loop = false,
   style 
 }) {
+  const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const imagesRef = useRef([]);
+  const frameRef = useRef(0);
+  const isNearViewport = useRef(false);
   const [loaded, setLoaded] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState(0);
+  const [hasStartedLoading, setHasStartedLoading] = useState(false);
 
-  // Preload Images
+  // Intersection Observer for Lazy Loading
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStartedLoading) {
+          setHasStartedLoading(true);
+        }
+        isNearViewport.current = entry.isIntersecting;
+      },
+      { rootMargin: '400px' } // Start loading 400px before reaching the section
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasStartedLoading]);
+
+  // Preload Images (Only when near viewport)
+  useEffect(() => {
+    if (!hasStartedLoading) return;
+
     let loadedCount = 0;
     imagesRef.current = [];
 
@@ -35,16 +59,15 @@ export default function CanvasScrubber({
       
       imagesRef.current.push(img);
     }
-  }, [sequencePath, frameCount]);
+  }, [sequencePath, frameCount, hasStartedLoading]);
 
   const renderFrame = (index) => {
     const safeIndex = Math.floor(index) % frameCount;
     if (!canvasRef.current || !imagesRef.current[safeIndex]) return;
-    const ctx = canvasRef.current.getContext('2d');
+    const ctx = canvasRef.current.getContext('2d', { alpha: false }); // Optimize for opaque content
     const img = imagesRef.current[safeIndex];
     
     const canvas = canvasRef.current;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     const hRatio = canvas.width / img.width;
     const vRatio = canvas.height / img.height;
@@ -56,33 +79,32 @@ export default function CanvasScrubber({
                   centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
   };
 
-  // Render Loop / Scrub Logic
+  // Ultra-Performant Render Loop (Direct Canvas Update)
   useEffect(() => {
     if (!loaded) return;
     
     let animationFrameId;
-    let frame = currentFrame;
 
     const animate = () => {
-      if (loop) {
-        // Continuous luxury loop at 15fps
-        frame = (frame + 0.25) % frameCount;
-        setCurrentFrame(frame);
-        renderFrame(frame);
-        animationFrameId = requestAnimationFrame(animate);
-      } else {
-        // Scrubbing logic for specific sections
-        let targetFrame = activeIndex === currentIndex ? frameCount - 1 : 0;
-        let diff = targetFrame - frame;
-        if (Math.abs(diff) > 0.1) {
-          frame += diff * 0.1;
-          setCurrentFrame(frame);
-          renderFrame(frame);
-          animationFrameId = requestAnimationFrame(animate);
+      // Only process frames if we are actually near the viewport to save CPU/GPU
+      if (isNearViewport.current) {
+        if (loop) {
+          frameRef.current = (frameRef.current + 0.25) % frameCount;
+          renderFrame(frameRef.current);
         } else {
-          renderFrame(targetFrame);
+          let targetFrame = activeIndex === currentIndex ? frameCount - 1 : 0;
+          let diff = targetFrame - frameRef.current;
+          
+          if (Math.abs(diff) > 0.05) {
+            frameRef.current += diff * 0.15; // Smooth interpolation
+            renderFrame(frameRef.current);
+          } else {
+            frameRef.current = targetFrame;
+            renderFrame(targetFrame);
+          }
         }
       }
+      animationFrameId = requestAnimationFrame(animate);
     };
     
     animate();
@@ -93,20 +115,20 @@ export default function CanvasScrubber({
   }, [activeIndex, currentIndex, loaded, loop, frameCount]);
 
   return (
-    <div className="absolute inset-0 w-full h-full" style={style}>
+    <div ref={containerRef} className="absolute inset-0 w-full h-full" style={style}>
       <motion.canvas
         ref={canvasRef}
-        width={1920}
-        height={1080}
+        width={1280} // Optimized internal resolution
+        height={720}
         className="w-full h-full object-cover"
         initial={{ opacity: 0 }}
         animate={{ opacity: loaded ? 1 : 0 }}
-        transition={{ duration: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       />
       {!loaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <div className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-mono animate-pulse">
-            Loading Asset System...
+        <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-mono">
+            {hasStartedLoading ? 'Loading Binary...' : 'Standby...'}
           </div>
         </div>
       )}

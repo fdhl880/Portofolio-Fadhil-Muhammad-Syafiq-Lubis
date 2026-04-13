@@ -121,11 +121,30 @@ function SpaceScene({ scrollYProgress }) {
 
 export default function CinematicRoom() {
   const { scrollYProgress } = useScroll();
-  const { dpr } = usePerformance();
+  const { dpr, performanceTier, isCinematic } = usePerformance();
+
+  // "Extreme Lightness" Bypass: Completely skip Three.js on low-tier mobile hardware
+  if (performanceTier === 'low' || !isCinematic) {
+    return (
+      <div className="fixed inset-0 z-0 h-screen w-screen overflow-hidden bg-[#020208] pointer-events-none">
+         {/* Lightweight CSS Stars that look premium but cost 0.1% GPU */}
+         <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_black_90%)]" />
+         <div 
+           className="absolute inset-0"
+           style={{
+             backgroundImage: 'radial-gradient(1.5px 1.5px at 25% 25%, white, transparent), radial-gradient(1.5px 1.5px at 50% 50%, white, transparent), radial-gradient(1.5px 1.5px at 75% 75%, white, transparent)',
+             backgroundSize: '200px 200px',
+             opacity: 0.2
+           }}
+         />
+         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black" />
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-0 h-screen w-screen overflow-hidden bg-[#020208] pointer-events-none">
-      <Canvas dpr={dpr} gl={{ powerPreference: "high-performance", antialias: false }}>
+      <Canvas dpr={dpr} gl={{ powerPreference: "high-performance", antialias: false, stencil: false, depth: true }}>
         <SpaceScene scrollYProgress={scrollYProgress} />
       </Canvas>
     </div>

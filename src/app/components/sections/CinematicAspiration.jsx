@@ -14,7 +14,7 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
-    video: '/videos/precision.mp4',
+    sequence: 'precision',
     gradient: 'radial-gradient(ellipse at 30% 40%, rgba(0,120,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(100,180,255,0.08) 0%, transparent 40%)',
     color: '#E5E7EB' // Silver
   },
@@ -23,7 +23,7 @@ const ASPIRATIONS = [
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    video: '/videos/polymath_new.mp4',
+    sequence: 'polymath',
     gradient: 'radial-gradient(ellipse at 25% 25%, rgba(100,50,200,0.12) 0%, transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(0,100,255,0.08) 0%, transparent 45%)',
     color: '#FFFFFF' // Pure White
   },
@@ -32,7 +32,7 @@ const ASPIRATIONS = [
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    video: '/videos/captain_new.mp4',
+    sequence: 'captain',
     gradient: 'radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 40%)',
     color: '#D4AF37' // Subtle Gold
   }
@@ -43,21 +43,7 @@ import { useAppMode } from '../../context/AppModeContext';
 export default function CinematicAspiration() {
   const { mode } = useAppMode();
   const containerRef = useRef(null);
-  const videoRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
-
-  // Force Playback Logic
-  useEffect(() => {
-    if (videoRef.current) {
-        videoRef.current.load();
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.warn("Autoplay blocked or interrupted:", error);
-            });
-        }
-    }
-  }, [activeIndex]);
 
   useGSAP(() => {
     if (mode !== 'atelier') return;
@@ -86,30 +72,14 @@ export default function CinematicAspiration() {
           animate={{ opacity: 1 }}
           className="w-full h-full relative"
         >
-          {/* WebP Canvas Scrubber for Elite Performance (Polymath & Captain) */}
-          {(activeIndex === 1 || activeIndex === 2) ? (
-            <CanvasScrubber 
-              sequencePath={`/sequences/${activeIndex === 1 ? 'polymath' : 'captain'}`}
-              frameCount={120} // Capped at 120 to guarantee low memory usage
-              activeIndex={activeIndex}
-              currentIndex={activeIndex}
-              style={{ filter: 'brightness(0.85) contrast(1.1)' }}
-            />
-          ) : (
-            <video
-              ref={videoRef}
-              src={ASPIRATIONS[activeIndex].video}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="auto"
-              style={{
-                opacity: 1
-              }}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
+          {/* WebP Canvas Scrubber for Elite Performance (Global Rolex 2.0 Sync) */}
+          <CanvasScrubber 
+            sequencePath={`/sequences/${ASPIRATIONS[activeIndex].sequence}`}
+            frameCount={120}
+            activeIndex={activeIndex}
+            currentIndex={activeIndex}
+            style={{ filter: 'brightness(0.85) contrast(1.1)' }}
+          />
           
           {/* Performance Fixed: Hardware Accelerated Darken Overlay instead of CSS Filter */}
           <div className="absolute inset-0 w-full h-full bg-black/15 z-0" />
