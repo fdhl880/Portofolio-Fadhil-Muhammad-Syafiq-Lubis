@@ -37,8 +37,8 @@ export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    
+    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
+
     const observerOptions = {
       root: null,
       rootMargin: '-20% 0px -20% 0px',
@@ -55,8 +55,6 @@ export default function PageWrapper() {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    
-    // Select all sections/blocks
     const sections = document.querySelectorAll('section, [data-section]');
     sections.forEach(section => observer.observe(section));
 

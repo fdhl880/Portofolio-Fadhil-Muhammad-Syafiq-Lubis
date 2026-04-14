@@ -97,6 +97,28 @@ function CoreModel() {
   );
 }
 
+// Static section brief map — defined outside component for stable reference
+const SECTION_BRIEFS = {
+  'intro': 'SYSTEM_INITIALIZATION: Calibrating biometric signature and core identity protocols. Identity: Fadhil Muhammad Syafiq Lubis.',
+  'LuxuryHero': 'PRIMARY_INTERFACE: High-fidelity subject profile. Serving as the master gateway for elite visitor navigation.',
+  'GoldArchive': 'LEGACY_VALIDATION: Tracking global competitive success. High-impact research and international accolades detected.',
+  'AtelierSpec': 'TECH_SCHEMA: Deep-dive into technical architecture and research credentials. Quantifying academic and professional depth.',
+  'OriginSection': 'FOUNDATION_LOG: Analyzing subject heritage and geographic roots. Mapping the genetic source of innovation.',
+  'GiantsSection': 'MENTOR_NETWORK: Intellectual lineage scan. Identifying the visionary pillars that shaped the current cognitive framework.',
+  'HeritageSection': "EXPERIENCE_MATRIX: Decoding formative milestones and industrial exposure. Rendering the subject's evolution through time.",
+  'AtelierPhilosophy': "VISION_QUERY: Processing the subject's underlying logic and aesthetic philosophy. Evaluating core strategic intent.",
+  'ManifestoSection': "SYST_DIRECTIVE: High-fidelity objective projection. Defining the subject's impact on the global engineering ecosystem.",
+  'StudioGallery': "VISUAL_REPOSITORY: Chronological media archive. Visualizing the subject's physical presence across global touchpoints.",
+  'CinematicAspiration': 'IDENTITY_CONVERGENCE: Multi-dimensional future projection. Mapping the path to Engineering, Academic, and Industrial mastery.',
+  'collections': 'CODEBOOK_INDEX: Digital laboratory. Housing smart systems, fintech scripts, and high-performance development assets.',
+  'TrophyGallery': 'AESTHETIC_CERTIFICATION: Verifying visual proof of achievement and international standard excellence.',
+  'ExpertiseLaboratory': 'CAPABILITY_SCAN: Real-time assessment of architectural skills, multi-stack proficiency, and problem-solving metrics.',
+  'DiscoverySection': 'DETAIL_MODULE: Investigating granular system nuances. Highlighting the intersection of research and implementation.',
+  'RoadmapSection': 'EVOLUTION_ARCH: Navigating historical and predictive milestones. Projecting the trajectory of future innovations.',
+  'VisionSection': 'STRATEGIC_PREDICTION: Forecasting high-impact contributions to the sustainable and digital global landscape.',
+  'ContactSection': 'UPLINK_STATION: Final protocols for secure communication. Facilitating elite collaboration and high-level inquiry.'
+};
+
 export default function NeuralCore() {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([
@@ -137,29 +159,9 @@ export default function NeuralCore() {
     }
   };
 
+
   const [showBrief, setShowBrief] = useState(false);
   const [briefContent, setBriefContent] = useState('');
-
-  const SECTION_BRIEFS = {
-    'intro': 'SYSTEM_INITIALIZATION: Calibrating biometric signature and core identity protocols. Identity: Fadhil Muhammad Syafiq Lubis.',
-    'LuxuryHero': 'PRIMARY_INTERFACE: High-fidelity subject profile. Serving as the master gateway for elite visitor navigation.',
-    'GoldArchive': 'LEGACY_VALIDATION: Tracking global competitive success. High-impact research and international accolades detected.',
-    'AtelierSpec': 'TECH_SCHEMA: Deep-dive into technical architecture and research credentials. Quantifying academic and professional depth.',
-    'OriginSection': 'FOUNDATION_LOG: Analyzing subject heritage and geographic roots. Mapping the genetic source of innovation.',
-    'GiantsSection': 'MENTOR_NETWORK: Intellectual lineage scan. Identifying the visionary pillars that shaped the current cognitive framework.',
-    'HeritageSection': 'EXPERIENCE_MATRIX: Decoding formative milestones and industrial exposure. Rendering the subject\'s evolution through time.',
-    'AtelierPhilosophy': 'VISION_QUERY: Processing the subject\'s underlying logic and aesthetic philosophy. Evaluating core strategic intent.',
-    'ManifestoSection': 'SYST_DIRECTIVE: High-fidelity objective projection. Defining the subject\'s impact on the global engineering ecosystem.',
-    'StudioGallery': 'VISUAL_REPOSITORY: Chronological media archive. Visualizing the subject\'s physical presence across global touchpoints.',
-    'CinematicAspiration': 'IDENTITY_CONVERGENCE: Multi-dimensional future projection. Mapping the path to Engineering, Academic, and Industrial mastery.',
-    'collections': 'CODEBOOK_INDEX: Digital laboratory. Housing smart systems, fintech scripts, and high-performance development assets.',
-    'TrophyGallery': 'AESTHETIC_CERTIFICATION: Verifying visual proof of achievement and international standard excellence.',
-    'ExpertiseLaboratory': 'CAPABILITY_SCAN: Real-time assessment of architectural skills, multi-stack proficiency, and problem-solving metrics.',
-    'DiscoverySection': 'DETAIL_MODULE: Investigating granular system nuances. Highlighting the intersection of research and implementation.',
-    'RoadmapSection': 'EVOLUTION_ARCH: Navigating historical and predictive milestones. Projecting the trajectory of future innovations.',
-    'VisionSection': 'STRATEGIC_PREDICTION: Forecasting high-impact contributions to the sustainable and digital global landscape.',
-    'ContactSection': 'UPLINK_STATION: Final protocols for secure communication. Facilitating elite collaboration and high-level inquiry.'
-  };
 
   // Auto-notification and Data Brief when section changes
   useEffect(() => {
