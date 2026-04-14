@@ -37,7 +37,11 @@ export default function PageWrapper() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true); // eslint-disable-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
 
     const observerOptions = {
       root: null,
@@ -55,11 +59,18 @@ export default function PageWrapper() {
     };
 
     const observer = new IntersectionObserver(handleIntersect, observerOptions);
-    const sections = document.querySelectorAll('section, [data-section]');
-    sections.forEach(section => observer.observe(section));
+    
+    // Wait for NextJS dynamic imports to attach to the DOM
+    const timer = setTimeout(() => {
+      const sections = document.querySelectorAll('section, [data-section]');
+      sections.forEach(section => observer.observe(section));
+    }, 500);
 
-    return () => observer.disconnect();
-  }, [setActiveSection]);
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+    };
+  }, [mounted, setActiveSection]);
 
   if (!mounted) return null;
 
