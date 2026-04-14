@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import AtelierSigil from './AtelierSigil';
+import Image from 'next/image';
 
 export default function DigitalSignature() {
   return (
@@ -15,7 +15,14 @@ export default function DigitalSignature() {
             transition={{ duration: 1.2 }}
             className="flex flex-col items-center gap-8"
           >
-             <AtelierSigil className="w-16 h-16 text-white" />
+             <div className="relative w-16 h-16 overflow-hidden rounded-none border border-white/10 p-2 bg-black/40">
+                <Image 
+                   src="/logo-initials.png" 
+                   alt="Atelier Logo" 
+                   fill 
+                   className="object-contain p-2" 
+                />
+             </div>
              
              {/* Signature visual */}
              <div className="relative group">

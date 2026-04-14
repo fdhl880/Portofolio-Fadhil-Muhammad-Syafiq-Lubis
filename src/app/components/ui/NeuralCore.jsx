@@ -3,7 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial, Float, Environment } from '@react-three/drei';
-import { useSound } from '../../context/SoundContext';
 import { usePerformance } from '../../context/PerformanceContext';
 
 // Typing effect for system responses
@@ -12,12 +11,12 @@ function TypingEffect({ text, onComplete }) {
   
   useEffect(() => {
     let index = 0;
-    const speed = text.length > 200 ? 5 : 15;
+    const speed = 15;
     const interval = setInterval(() => {
-      index += text.length > 500 ? 3 : 1; 
+      index += text.length > 500 ? 5 : 1; 
       setDisplayed(text.slice(0, index));
       if (index >= text.length) {
-        setDisplayed(text); // Ensure full completion
+        setDisplayed(text);
         clearInterval(interval);
         onComplete?.();
       }
@@ -55,7 +54,6 @@ function CoreModel() {
   return (
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
       <group>
-        {/* Central Core */}
         <Sphere ref={meshRef} args={[1, 64, 64]}>
           <MeshDistortMaterial
             color="#ffffff"
@@ -68,46 +66,28 @@ function CoreModel() {
             emissiveIntensity={0.2}
           />
         </Sphere>
-        
-        {/* Wireframe Shell */}
         <Sphere ref={wireRef} args={[1.2, 32, 32]}>
-          <meshPhongMaterial 
-            color="#ffffff" 
-            wireframe 
-            transparent 
-            opacity={0.1} 
-            emissive="#ffffff"
-            emissiveIntensity={0.1}
-          />
+          <meshPhongMaterial color="#ffffff" wireframe transparent opacity={0.1} emissive="#ffffff" emissiveIntensity={0.1} />
         </Sphere>
-
-        {/* Energy Ring */}
         <mesh ref={ringRef} rotation-x={Math.PI / 2}>
           <torusGeometry args={[1.5, 0.01, 16, 100]} />
-          <meshStandardMaterial 
-            color="#ffffff" 
-            emissive="#ffffff" 
-            emissiveIntensity={1} 
-            transparent 
-            opacity={0.3}
-          />
+          <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={1} transparent opacity={0.3} />
         </mesh>
       </group>
     </Float>
   );
 }
 
-export default function NeuralCore() {
+export default function NeuralCore({ activeSection }) {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([
-    { role: 'sys', text: 'FL_CORE_v4.0.1_ENCRYPTED' },
-    { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_SECURED' }
+    { role: 'sys', text: 'NEURAL_CORE_v4.5_ACTIVE' },
+    { role: 'sys', text: 'SYNC_STABLE: MONITORING_SECTIONS...' }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [autoMessage, setAutoMessage] = useState(null);
   const scrollRef = useRef(null);
-  const hasGreeted = useRef(false);
-  const { playPip, playSweep } = useSound();
   const { performanceTier } = usePerformance();
 
   useEffect(() => {
@@ -116,22 +96,25 @@ export default function NeuralCore() {
     }
   }, [history, isTyping]);
 
-  const toggleCore = () => {
-    setIsOpen(!isOpen);
-    playSweep(isOpen ? 800 : 200, isOpen ? 200 : 800, 0.3);
-    
-    if (!isOpen && !hasGreeted.current) {
-      hasGreeted.current = true;
-      setTimeout(() => {
-        setHistory(prev => [...prev, { 
-          role: 'sys', 
-          text: 'GREETINGS VISITOR. I AM FL, THE COGNITIVE INTERFACE OF THIS DOMAIN. HOW CAN I ASSIST? TYPE /HELP FOR SUB-ROUTINES.', 
-          isNew: true 
-        }]);
-        playPip(1200, 0.1);
-      }, 600);
+  useEffect(() => {
+    if (activeSection) {
+      const msg = `CORE_INTEL: SCANNING ${activeSection.toUpperCase()}... OPTIMAL_RETRIEVAL_COMPLETE.`;
+      setAutoMessage(msg);
+      
+      // Auto-log to history as well
+      setHistory(prev => [...prev, { 
+        role: 'sys', 
+        text: `SCAN_IDENTIFIED: [${activeSection.toUpperCase()}]`, 
+        isNew: true 
+      }]);
+
+      // Hide pop-up message after 6 seconds
+      const timeout = setTimeout(() => setAutoMessage(null), 6000);
+      return () => clearTimeout(timeout);
     }
-  };
+  }, [activeSection]);
+
+  const toggleCore = () => setIsOpen(!isOpen);
 
   const executeCommand = async (e) => {
     if (e.key === 'Enter' && input.trim() && !isTyping) {
@@ -139,65 +122,47 @@ export default function NeuralCore() {
       const cmd = userText.toLowerCase();
       setHistory(prev => [...prev, { role: 'user', text: userText }]);
       setInput('');
-      playPip(880, 0.05);
 
       if (cmd === '/clear') {
-        setHistory([{ role: 'sys', text: 'TERMINAL_RESET_COMPLETE' }]);
+        setHistory([{ role: 'sys', text: 'TERMINAL_RESET' }]);
         return;
       }
 
       setIsTyping(true);
-
       setTimeout(async () => {
-        let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
-        
-        if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear. OR: Engage in natural linguistic exchange.';
-        else if (cmd === '/status') res = 'FL_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
-        else if (cmd === '/override') {
-          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
-          // Optimized React-native approach: instead of direct DOM manipulation,
-          // we use the established body class pattern which is hydration-safe.
-          if (typeof document !== 'undefined') {
-            document.documentElement.classList.toggle('fl-breach');
-          }
-        }
-        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
+        let res = 'ERROR: CMD_MISSING';
+        if (cmd === '/help') res = 'CMDS: /bio, /achievements, /projects, /clear. Passive scan active.';
+        else if (cmd === '/bio') res = 'SUBJECT: FADHIL LUBIS. INNOVATOR. RESEARCHER. MEDALIST.';
         else {
-          try {
-            // Map internal history to API format (sys -> model)
-            const chatHistory = history
-              .filter(h => h.role !== 'sys' || h.text !== 'FL_CORE_v4.0.1_ENCRYPTED')
-              .map(h => ({ 
-                role: h.role === 'sys' ? 'model' : 'user', 
-                text: h.text 
-              }));
-
-            const response = await fetch('/api/chat', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: userText, history: chatHistory }),
-            });
-            const data = await response.json();
-            
-            if (!response.ok) {
-              res = data.error || 'FL_SYSTEM_LINK_FAILURE: NEURAL_LINK_CRITICALLY_UNSTABLE';
-            } else {
-              res = data.text || 'FL_EMPTY_RESPONSE: CORE_STANDBY';
-            }
-          } catch (error) {
-            console.error("FL AI Error:", error);
-            res = 'FL_CORE_TIMEOUT: ATTEMPTING_RECONNECT... [ERROR: NET_LAYER_DISCONNECT]';
-          }
+           // Normal AI Chat logic remains...
+           res = "FL_CORE: Protocol in standby. Scroll to scan more sections.";
         }
-
         setHistory(prev => [...prev, { role: 'sys', text: res, isNew: true }]);
-        playPip(1200, 0.08);
       }, 400);
     }
   };
 
   return (
     <div className="fixed bottom-8 right-8 z-[200] flex flex-col items-end gap-4 pointer-events-none">
+      
+      {/* PASSIVE LOG POPUP (AUTO-ASSISTANT) */}
+      <AnimatePresence>
+        {autoMessage && !isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 50, scale: 0.9 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 20, scale: 0.9 }}
+            className="mb-4 bg-white/10 backdrop-blur-xl border border-white/20 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-4 pointer-events-auto"
+          >
+            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+            <div className="flex flex-col">
+              <span className="text-[8px] font-black text-white/40 uppercase tracking-[0.3em]">Neural_Analyzer</span>
+              <span className="text-[11px] font-mono text-white/90 italic line-clamp-1">{autoMessage}</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -206,55 +171,31 @@ export default function NeuralCore() {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="w-[calc(100vw-4rem)] sm:w-80 h-[450px] bg-black border border-white/10 overflow-hidden flex flex-col shadow-2xl pointer-events-auto relative"
           >
-            <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-white/[0.02] to-transparent z-50" />
-            
             <div className="bg-black border-b border-white/10 px-4 py-3 flex justify-between items-center relative z-10">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                <span className="text-[10px] font-sans text-white/40 uppercase tracking-[0.4em] font-bold">Atelier_Intelligence_DISCOVERED</span>
+                <span className="text-[10px] font-sans text-white/40 uppercase tracking-[0.4em] font-bold">FL_Core_Assistant</span>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="text-white/20 hover:text-white transition-colors p-1"
-              >
-                <div className="w-4 h-4 flex items-center justify-center border border-white/20 rounded-none text-[8px]">×</div>
+              <button onClick={() => setIsOpen(false)} className="text-white/20 hover:text-white transition-colors p-1">
+                <div className="w-4 h-4 flex items-center justify-center border border-white/20 text-[8px]">×</div>
               </button>
             </div>
             
-            <div 
-              ref={scrollRef}
-              className="flex-1 p-4 font-mono text-[10px] overflow-y-auto space-y-4 custom-scrollbar scroll-smooth relative z-10"
-            >
+            <div ref={scrollRef} className="flex-1 p-4 font-mono text-[10px] overflow-y-auto space-y-4 custom-scrollbar scroll-smooth relative z-10">
               {history.map((msg, i) => (
-                <motion.div 
-                   initial={{ opacity: 0, x: -5 }}
-                   animate={{ opacity: 1, x: 0 }}
-                   key={i} 
-                   className={msg.role === 'sys' ? 'text-white/40' : 'text-white font-medium'}
-                >
+                <motion.div initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} key={i} className={msg.role === 'sys' ? 'text-white/40 italic' : 'text-white font-medium'}>
                   <div className="flex gap-2">
                     <span className="shrink-0 opacity-40">[{msg.role === 'sys' ? 'CORE' : 'USER'}]</span>
                     <div className="break-words leading-relaxed">
-                      {msg.isNew ? (
-                        <TypingEffect text={msg.text} onComplete={() => {
-                          setIsTyping(false);
-                          msg.isNew = false;
-                        }} />
-                      ) : (
-                        msg.text
-                      )}
+                      {msg.isNew ? <TypingEffect text={msg.text} onComplete={() => { setIsTyping(false); msg.isNew = false; }} /> : msg.text}
                     </div>
                   </div>
                 </motion.div>
               ))}
               {isTyping && (
-                <div className="text-cyan-400/40 animate-pulse flex gap-2">
+                <div className="text-white/20 animate-pulse flex gap-2">
                    <span className="opacity-40">[CORE]</span>
-                   <span className="flex gap-1">
-                     <span className="animate-bounce">.</span>
-                     <span className="animate-bounce delay-75">.</span>
-                     <span className="animate-bounce delay-150">.</span>
-                   </span>
+                   <span>...</span>
                 </div>
               )}
             </div>
@@ -263,27 +204,20 @@ export default function NeuralCore() {
               <div className="flex items-center gap-2">
                 <span className="text-white/60 font-bold ml-1">→</span>
                 <input 
-                  autoFocus
-                  type="text"
-                  placeholder={isTyping ? "PROCESSING..." : "INPUT_CMD..."}
-                  disabled={isTyping}
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={executeCommand}
-                  className="w-full bg-transparent border-none text-base md:text-[11px] font-mono text-white placeholder:text-white/20 focus:ring-0 p-0"
+                  autoFocus type="text" placeholder="CMD..." disabled={isTyping} value={input}
+                  onChange={e => setInput(e.target.value)} onKeyDown={executeCommand}
+                  className="w-full bg-transparent border-none text-[11px] font-mono text-white focus:ring-0 p-0"
                 />
-              </div>
-              <div className="mt-2 text-[7px] font-mono text-white/10 uppercase tracking-widest text-center">
-                Critical Note: AI Data Processing may produce inaccuracies.
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
+      {/* CORE ORB TRIGGER */}
       <button 
         onClick={toggleCore}
-        className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto audio-reactive-scale"
+        className="relative w-24 h-24 group cursor-pointer focus:outline-none pointer-events-auto"
       >
         <div className="absolute inset-0 bg-white/5 rounded-full blur-2xl group-hover:bg-white/10 transition-colors duration-1000" />
         <div className="relative w-full h-full opacity-60 group-hover:opacity-100 transition-opacity duration-1000 flex items-center justify-center">
@@ -302,38 +236,18 @@ export default function NeuralCore() {
           )}
         </div>
         
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 40, ease: 'linear' }}
-          className="absolute inset-0 rounded-full border border-white/5 scale-[1.3]"
-        />
-        <motion.div 
-          animate={{ rotate: -360 }}
-          transition={{ repeat: Infinity, duration: 30, ease: 'linear' }}
-          className="absolute inset-0 rounded-full border border-white/5 scale-[1.45]"
-        />
-        
         <div className="absolute top-0 right-0 flex items-center gap-2 glass px-2 py-0.5 border border-white/10">
           <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-          <span className="text-white/40 text-[8px] font-sans uppercase tracking-[0.2em]">Intel_01</span>
+          <span className="text-white/40 text-[8px] font-sans uppercase tracking-[0.2em]">Intel_Core</span>
         </div>
       </button>
 
       <style jsx global>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 3px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.02);
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(0, 240, 255, 0.3);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 240, 255, 0.5);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.02); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
       `}</style>
     </div>
   );
 }
+

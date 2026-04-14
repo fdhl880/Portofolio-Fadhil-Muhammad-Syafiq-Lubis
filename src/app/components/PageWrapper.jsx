@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import LuxuryNavbar from './ui/LuxuryNavbar';
@@ -13,7 +13,6 @@ import ScrollProgress from './ui/ScrollProgress';
 import CinematicRoom from './three/CinematicRoom';
 import StudioGallery from './sections/StudioGallery';
 import DigitalSignature from './ui/DigitalSignature';
-import AmbientSound from './ui/AmbientSound';
 import AtelierSpec from './sections/AtelierSpec';
 import OriginSection from './sections/OriginSection';
 import GiantsSection from './sections/GiantsSection';
@@ -22,23 +21,34 @@ import ManifestoSection from './sections/ManifestoSection';
 import AtelierLens from './ui/AtelierLens';
 import { useAppMode } from '../context/AppModeContext';
 
-// Lazy-loaded museum sections
-const MuseumGallery = dynamic(() => import('./sections/TrophyGallery'), { ssr: false });
-const ExpertiseLaboratory = dynamic(() => import('./sections/ExpertiseLaboratory'), { ssr: false });
-const Chronology = dynamic(() => import('./sections/RoadmapSection'), { ssr: false });
-const Vision = dynamic(() => import('./sections/VisionSection'), { ssr: false });
-const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
-const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
-const CinematicAspiration = dynamic(() => import('./sections/CinematicAspiration'), { ssr: false });
 const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
+const CinematicAspiration = dynamic(() => import('./sections/CinematicAspiration'), { ssr: false });
+const LiquidOverlay = dynamic(() => import('./ui/LiquidOverlay'), { ssr: false });
 
 export default function PageWrapper() {
   const { mode } = useAppMode();
   const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState('Hero');
+  const scrollRef = useRef(null);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.getAttribute('data-section') || 'Exploring');
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    const sections = document.querySelectorAll('[data-section]');
+    sections.forEach((s) => observer.observe(s));
+
+    return () => observer.disconnect();
   }, []);
 
   if (!mounted) return null;
@@ -66,59 +76,42 @@ export default function PageWrapper() {
       >
         <LuxuryNavbar />
         
-        <main>
-          <LuxuryHero />
+        <main ref={scrollRef}>
+          <div data-section="Welcome to the Atelier"><LuxuryHero /></div>
           
-          {/* Elite Prestige - The Gold Archive */}
-          <GoldArchive />
+          <div data-section="Gold Archive Achievements"><GoldArchive /></div>
 
-          {/* New Technical Spec - The Atelier Precision */}
-          <AtelierSpec />
+          <div data-section="Technical Specifications"><AtelierSpec /></div>
 
-          {/* New Personal Record - The Origin */}
-          <OriginSection />
+          <div data-section="The Origin Story"><OriginSection /></div>
 
-          {/* New Hall of Mentors - The Giants */}
-          <GiantsSection />
+          <div data-section="The Giants Hall"><GiantsSection /></div>
 
-          {/* Foundation - The Heritage Path */}
-          <HeritageSection />
+          <div data-section="Heritage and Path"><HeritageSection /></div>
 
-          {/* New Personal Philosophy - Luxury, Tegas, Rich */}
-          <AtelierPhilosophy />
+          <div data-section="Atelier Philosophy"><AtelierPhilosophy /></div>
 
-          {/* New Cinematic Manifesto */}
-          <ManifestoSection />
+          <div data-section="Manifesto"><ManifestoSection /></div>
 
-          {/* Modern Exhibitions (Integrated) */}
+          <div data-section="Studio Gallery"><StudioGallery /></div>
 
-          {/* Studio Gallery - The Personal Journey */}
-          <StudioGallery />
+          <div data-section="Future Aspirations"><CinematicAspiration /></div>
 
-          {/* New Cinematic Aspiration - The Future Legacy */}
-          <CinematicAspiration />
-
-          {/* Collections - The Work */}
-          <section id="collections" className="py-24 bg-[#050505] border-t border-white/5">
+          <section id="collections" className="py-24 bg-[#050505] border-t border-white/5" data-section="Project Collections">
              <ProjectsSection />
           </section>
 
-          {/* Archives - The Medals */}
-          <MuseumGallery />
+          <div data-section="Trophy Gallery"><MuseumGallery /></div>
 
-          {/* Laboratory expertise - The Technical Base */}
-          <ExpertiseLaboratory />
+          <div data-section="Expertise Laboratory"><ExpertiseLaboratory /></div>
 
-          {/* Discovery - The Detail */}
-          <Discovery />
+          <div data-section="Scientific Discovery"><Discovery /></div>
 
-          {/* Chronology - The Evolution */}
-          <Chronology />
+          <div data-section="Evolution Roadmap"><Chronology /></div>
 
-          {/* Vision - The Future */}
-          <Vision />
+          <div data-section="Strategic Vision"><Vision /></div>
 
-          <ContactSection />
+          <div data-section="Contact Entrance"><ContactSection /></div>
         </main>
 
         <footer className="bg-black">
@@ -133,16 +126,18 @@ export default function PageWrapper() {
 
         <BackToTop />
         
-        {/* Central AI Nucleus - Only in Atelier for performance */}
-        {mode === 'atelier' && <NeuralCoreBase />}
+        {/* Central AI Nucleus - Now with Passive Assistance */}
+        {mode === 'atelier' && <NeuralCore activeSection={activeSection} />}
+        
+        {/* Cinematic Transitions */}
+        <LiquidOverlay />
       </motion.div>
 
-      {/* Luxury Vignette & Grain Overlay (Both modes for aesthetic consistency) */}
+      {/* Luxury Vignette & Grain Overlay */}
       <div className="fixed inset-0 pointer-events-none z-[1] shadow-[inset_0_0_200px_rgba(0,0,0,0.9)]" />
       <div className="fixed inset-0 pointer-events-none z-[2] opacity-[0.03] noise-bg" />
       
       <style jsx global>{`
-/* Android Native Polish & Archive Mode Optimization */
 .archive-mode {
   --font-inter: 'Roboto', 'system-ui', sans-serif;
   --font-playfair: 'Georgia', serif;
@@ -154,13 +149,11 @@ export default function PageWrapper() {
   overflow-x: hidden;
 }
 
-/* Force standard font rendering on Android for clarity */
 .archive-mode * {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Remove 3D Containers to save GPU in Archive Mode */
 .archive-mode canvas,
 .archive-mode [class*="three"],
 .archive-mode #neural-core {
@@ -169,7 +162,6 @@ export default function PageWrapper() {
   pointer-events: none !important;
 }
 
-/* Android-Specific Font Scale for Readability */
 @media (max-width: 768px) {
   .archive-mode h2 {
     font-size: 2.5rem !important;
@@ -183,21 +175,6 @@ export default function PageWrapper() {
   .archive-mode .text-\[10px\] {
     font-size: 12px !important;
     letter-spacing: 0.2em !important;
-  }
-
-  /* Sticky Bottom Navigation for Mobile Archive */
-  .archive-mobile-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background: rgba(0,0,0,0.9);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(255,255,255,0.05);
-    z-index: 1000;
-    padding: 12px 0;
-    justify-content: space-around;
   }
 }
 

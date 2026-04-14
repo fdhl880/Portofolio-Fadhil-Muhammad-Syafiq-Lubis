@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { useAppMode } from '../../context/AppModeContext';
-import AtelierSigil from './AtelierSigil';
+import Image from 'next/image';
 
 export default function ModeSelection() {
   const { selectMode } = useAppMode();
@@ -11,8 +11,13 @@ export default function ModeSelection() {
       
       {/* Absolute Logo - Anchored in Center (Desktop Only) */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none hidden md:block">
-          <div className="p-8 bg-black border border-white/5 backdrop-blur-xl">
-             <AtelierSigil className="w-16 h-16 text-white" />
+          <div className="p-8 bg-black border border-white/5 backdrop-blur-xl relative w-16 h-16">
+             <Image 
+                src="/logo-initials.png" 
+                alt="Atelier Logo" 
+                fill 
+                className="object-contain p-2" 
+             />
           </div>
       </div>
 

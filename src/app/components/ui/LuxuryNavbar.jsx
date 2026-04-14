@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import BentoMenu from './BentoMenu';
-import AtelierSigil from './AtelierSigil';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useSound } from '../../context/SoundContext';
 
@@ -49,7 +49,14 @@ export default function LuxuryNavbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="group flex items-center gap-6 cursor-pointer"
           >
-            <AtelierSigil className="w-8 h-8 md:w-10 md:h-10 text-white" />
+            <div className="relative w-10 h-10 overflow-hidden rounded-none border border-white/10 p-1 bg-black/40">
+              <Image 
+                src="/logo-initials.png" 
+                alt="Atelier Logo" 
+                fill 
+                className="object-contain p-2 grayscale group-hover:grayscale-0 transition-all duration-700" 
+              />
+            </div>
             <div className="flex flex-col">
               <span className="text-[12px] md:text-[14px] font-light tracking-[0.4em] text-white uppercase leading-none">
                 ATELIER
