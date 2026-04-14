@@ -4,12 +4,11 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AppModeContext = createContext();
 
 export function AppModeProvider({ children }) {
-  // modes: 'null' (not chosen), 'archive' (2D/Static), 'atelier' (3D/Cinematic)
   const [mode, setMode] = useState(null);
+  const [activeSection, setActiveSection] = useState('intro');
 
   useEffect(() => {
     const saved = sessionStorage.getItem('atelier-app-mode');
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved) setMode(saved);
   }, []);
 
@@ -19,7 +18,7 @@ export function AppModeProvider({ children }) {
   };
 
   return (
-    <AppModeContext.Provider value={{ mode, selectMode }}>
+    <AppModeContext.Provider value={{ mode, selectMode, activeSection, setActiveSection }}>
       {children}
     </AppModeContext.Provider>
   );

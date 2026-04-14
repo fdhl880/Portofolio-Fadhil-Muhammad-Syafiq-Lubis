@@ -17,7 +17,7 @@ export default function DigitalSignature() {
           >
              <div className="relative w-16 h-16 overflow-hidden rounded-none border border-white/10 p-2 bg-black/40">
                 <Image 
-                   src="/logo-initials.png" 
+                   src="/brand-logo.png" 
                    alt="Atelier Logo" 
                    fill 
                    className="object-contain p-2" 

@@ -49,9 +49,9 @@ export default function LuxuryNavbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="group flex items-center gap-6 cursor-pointer"
           >
-            <div className="relative w-10 h-10 overflow-hidden rounded-none border border-white/10 p-1 bg-black/40">
+            <div className="relative w-12 h-12 overflow-hidden rounded-none border border-white/10 p-1 bg-black/40">
               <Image 
-                src="/logo-initials.png" 
+                src="/brand-logo.png" 
                 alt="Atelier Logo" 
                 fill 
                 className="object-contain p-2 grayscale group-hover:grayscale-0 transition-all duration-700" 

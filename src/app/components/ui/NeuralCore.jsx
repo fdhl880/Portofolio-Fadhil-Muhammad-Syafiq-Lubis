@@ -109,6 +109,10 @@ export default function NeuralCore() {
   const hasGreeted = useRef(false);
   const { playPip, playSweep } = useSound();
   const { performanceTier } = usePerformance();
+  const { activeSection } = useAppMode();
+
+  // Track the previous section to trigger context alerts
+  const lastSection = useRef(activeSection);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -125,13 +129,62 @@ export default function NeuralCore() {
       setTimeout(() => {
         setHistory(prev => [...prev, { 
           role: 'sys', 
-          text: 'GREETINGS VISITOR. I AM FL, THE COGNITIVE INTERFACE OF THIS DOMAIN. HOW CAN I ASSIST? TYPE /HELP FOR SUB-ROUTINES.', 
+          text: `SYSTEM_READY. CURRENT_LOC: ${activeSection ? activeSection.toUpperCase() : 'UNKNOWN'}. CORE_INTERFACE_ACTIVE.`, 
           isNew: true 
         }]);
         playPip(1200, 0.1);
       }, 600);
     }
   };
+
+  const [showBrief, setShowBrief] = useState(false);
+  const [briefContent, setBriefContent] = useState('');
+
+  const SECTION_BRIEFS = {
+    'intro': 'SYSTEM_INITIALIZATION: Calibrating biometric signature and core identity protocols. Identity: Fadhil Muhammad Syafiq Lubis.',
+    'LuxuryHero': 'PRIMARY_INTERFACE: High-fidelity subject profile. Serving as the master gateway for elite visitor navigation.',
+    'GoldArchive': 'LEGACY_VALIDATION: Tracking global competitive success. High-impact research and international accolades detected.',
+    'AtelierSpec': 'TECH_SCHEMA: Deep-dive into technical architecture and research credentials. Quantifying academic and professional depth.',
+    'OriginSection': 'FOUNDATION_LOG: Analyzing subject heritage and geographic roots. Mapping the genetic source of innovation.',
+    'GiantsSection': 'MENTOR_NETWORK: Intellectual lineage scan. Identifying the visionary pillars that shaped the current cognitive framework.',
+    'HeritageSection': 'EXPERIENCE_MATRIX: Decoding formative milestones and industrial exposure. Rendering the subject\'s evolution through time.',
+    'AtelierPhilosophy': 'VISION_QUERY: Processing the subject\'s underlying logic and aesthetic philosophy. Evaluating core strategic intent.',
+    'ManifestoSection': 'SYST_DIRECTIVE: High-fidelity objective projection. Defining the subject\'s impact on the global engineering ecosystem.',
+    'StudioGallery': 'VISUAL_REPOSITORY: Chronological media archive. Visualizing the subject\'s physical presence across global touchpoints.',
+    'CinematicAspiration': 'IDENTITY_CONVERGENCE: Multi-dimensional future projection. Mapping the path to Engineering, Academic, and Industrial mastery.',
+    'collections': 'CODEBOOK_INDEX: Digital laboratory. Housing smart systems, fintech scripts, and high-performance development assets.',
+    'TrophyGallery': 'AESTHETIC_CERTIFICATION: Verifying visual proof of achievement and international standard excellence.',
+    'ExpertiseLaboratory': 'CAPABILITY_SCAN: Real-time assessment of architectural skills, multi-stack proficiency, and problem-solving metrics.',
+    'DiscoverySection': 'DETAIL_MODULE: Investigating granular system nuances. Highlighting the intersection of research and implementation.',
+    'RoadmapSection': 'EVOLUTION_ARCH: Navigating historical and predictive milestones. Projecting the trajectory of future innovations.',
+    'VisionSection': 'STRATEGIC_PREDICTION: Forecasting high-impact contributions to the sustainable and digital global landscape.',
+    'ContactSection': 'UPLINK_STATION: Final protocols for secure communication. Facilitating elite collaboration and high-level inquiry.'
+  };
+
+  // Auto-notification and Data Brief when section changes
+  useEffect(() => {
+    if (activeSection !== lastSection.current) {
+      const brief = SECTION_BRIEFS[activeSection] || `LOC_UPDATE: ${activeSection.toUpperCase()}. DATA_SYNC_COMPLETE.`;
+      
+      // Update history
+      setHistory(prev => [...prev, { 
+        role: 'sys', 
+        text: brief, 
+        isNew: true 
+      }]);
+      
+      // Show Pop-up Brief
+      setBriefContent(brief);
+      setShowBrief(true);
+      playPip(1600, 0.05);
+
+      // Auto-hide brief after 5 seconds
+      const timer = setTimeout(() => setShowBrief(false), 5000);
+      
+      lastSection.current = activeSection;
+      return () => clearTimeout(timer);
+    }
+  }, [activeSection, playPip]);
 
   const executeCommand = async (e) => {
     if (e.key === 'Enter' && input.trim() && !isTyping) {
@@ -175,7 +228,11 @@ export default function NeuralCore() {
             const response = await fetch('/api/chat', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ message: userText, history: chatHistory }),
+              body: JSON.stringify({ 
+                message: userText, 
+                history: chatHistory,
+                context: activeSection || 'general' 
+              }),
             });
             const data = await response.json();
             
@@ -277,6 +334,33 @@ export default function NeuralCore() {
                 Critical Note: AI Data Processing may produce inaccuracies.
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {showBrief && !isOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 20, scale: 0.8 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute bottom-28 right-0 w-64 p-3 bg-black/80 backdrop-blur-xl border border-white/20 shadow-2xl z-50 pointer-events-auto"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+                <span className="text-[8px] font-mono text-white/40 uppercase tracking-[0.3em]">Technical_Brief</span>
+                <span className="text-[7px] font-mono text-white/20">UPLINK_01</span>
+              </div>
+              <div className="text-[9px] font-mono text-white/80 leading-relaxed uppercase tracking-widest">
+                <TypingEffect text={briefContent} />
+              </div>
+              <div className="flex justify-end pt-1">
+                <div className="w-8 h-[1px] bg-white/10" />
+              </div>
+            </div>
+            
+            {/* Visual Pointer */}
+            <div className="absolute -bottom-2 right-10 w-4 h-4 bg-black border-r border-b border-white/20 rotate-45" />
           </motion.div>
         )}
       </AnimatePresence>

@@ -33,13 +33,35 @@ const CinematicAspiration = dynamic(() => import('./sections/CinematicAspiration
 const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
-  const { mode } = useAppMode();
+  const { mode, setActiveSection } = useAppMode();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-  }, []);
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -20% 0px',
+      threshold: 0.2
+    };
+
+    const handleIntersect = (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id || entry.target.getAttribute('data-section');
+          if (sectionId) setActiveSection(sectionId);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+    
+    // Select all sections/blocks
+    const sections = document.querySelectorAll('section, [data-section]');
+    sections.forEach(section => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [setActiveSection]);
 
   if (!mounted) return null;
 

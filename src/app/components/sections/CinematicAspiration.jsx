@@ -4,9 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import CanvasScrubber from '../ui/CanvasScrubber';
-
-gsap.registerPlugin(ScrollTrigger);
+import VideoBackground from '../ui/VideoBackground';
+import { getAssetUrl } from '../../utils/assetLoader';
 
 const ASPIRATIONS = [
   {
@@ -14,27 +13,27 @@ const ASPIRATIONS = [
     title: 'THE_ENGINEER',
     subtitle: 'Professional Excellence (Ir.)',
     narrative: 'Architecting the systems of tomorrow with precision, integrity, and relentless innovation.',
-    sequence: 'precision',
+    videoSrc: getAssetUrl('VIDEOS', 'ENGINEER', 'https://cdn.pixabay.com/vimeo/328941243/circuit-23114.mp4'),
     gradient: 'radial-gradient(ellipse at 30% 40%, rgba(0,120,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 70% 60%, rgba(100,180,255,0.08) 0%, transparent 40%)',
-    color: '#E5E7EB' // Silver
+    color: '#E5E7EB'
   },
   {
     id: 'professor',
     title: 'THE_POLYMATH',
     subtitle: 'Academic Mastery (Dr. M. Eng Ir. ASEAN Eng)',
     narrative: 'Pushing the boundaries of human knowledge through rigorous research and global mentorship.',
-    sequence: 'polymath',
+    videoSrc: getAssetUrl('VIDEOS', 'PROFESSOR', 'https://cdn.pixabay.com/vimeo/644686414/abstract-92331.mp4'),
     gradient: 'radial-gradient(ellipse at 25% 25%, rgba(100,50,200,0.12) 0%, transparent 50%), radial-gradient(ellipse at 75% 75%, rgba(0,100,255,0.08) 0%, transparent 45%)',
-    color: '#FFFFFF' // Pure White
+    color: '#FFFFFF'
   },
   {
     id: 'entrepreneur',
     title: 'THE_CAPTAIN',
     subtitle: 'Industrial Leadership',
     narrative: 'Building a successful ecosystem where innovation meets scale, sustainability, and global impact.',
-    sequence: 'captain',
+    videoSrc: getAssetUrl('VIDEOS', 'CAPTAIN', 'https://cdn.pixabay.com/vimeo/459039233/yacht-50854.mp4'),
     gradient: 'radial-gradient(ellipse at 20% 50%, rgba(212,175,55,0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(212,175,55,0.08) 0%, transparent 40%)',
-    color: '#D4AF37' // Subtle Gold
+    color: '#D4AF37'
   }
 ];
 
@@ -47,11 +46,11 @@ export default function CinematicAspiration() {
 
   useGSAP(() => {
     if (mode !== 'atelier') return;
-    const sections = gsap.utils.toArray('.aspiration-segment');
+    const segments = gsap.utils.toArray('.aspiration-segment');
     
-    sections.forEach((section, index) => {
+    segments.forEach((segment, index) => {
       ScrollTrigger.create({
-        trigger: section,
+        trigger: segment,
         start: 'top center',
         end: 'bottom center',
         onEnter: () => setActiveIndex(index),
@@ -60,42 +59,43 @@ export default function CinematicAspiration() {
     });
   }, { scope: containerRef });
 
-  // Only show in 3D Mode
   if (mode !== 'atelier') return null;
 
   return (
-    <section ref={containerRef} className="relative w-full bg-black">
+    <section ref={containerRef} className="relative w-full bg-black" id="aspiration-core" data-section="CinematicAspiration">
       
-      {/* Background Layer - Animated CSS Gradients */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden z-0 bg-[#050510]">
-        <motion.div
-          animate={{ opacity: 1 }}
-          className="w-full h-full relative"
-        >
-          {/* WebP Canvas Scrubber for Elite Performance (Global Rolex 2.0 Sync) */}
-          <CanvasScrubber 
-            sequencePath={`/sequences/${ASPIRATIONS[activeIndex].sequence}`}
-            frameCount={120}
-            activeIndex={activeIndex}
-            currentIndex={activeIndex}
-            style={{ filter: 'brightness(0.85) contrast(1.1)' }}
-          />
-          
-          {/* Performance Fixed: Hardware Accelerated Darken Overlay instead of CSS Filter */}
-          <div className="absolute inset-0 w-full h-full bg-black/15 z-0" />
-          
-          {/* Static gradient background overlay (Removed destructive mix-blend and animation) */}
-          <div
-            className="w-full h-full relative z-10 opacity-70"
-            style={{
-              backgroundImage: ASPIRATIONS[activeIndex].gradient,
-            }}
-          />
-        </motion.div>
+      {/* Background Layer - High Performance Video Switcher */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden z-0 bg-black">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={ASPIRATIONS[activeIndex].id}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.5 }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <VideoBackground 
+              src={ASPIRATIONS[activeIndex].videoSrc}
+              overlayOpacity={0.4}
+              grayscale={activeIndex !== 2} // Captain stays in color/gold
+              brightness={0.7}
+              contrast={1.2}
+            />
+            
+            {/* Context-aware dynamic gradient overlay */}
+            <div
+              className="w-full h-full absolute inset-0 z-20 pointer-events-none opacity-60 transition-all duration-1000"
+              style={{
+                backgroundImage: ASPIRATIONS[activeIndex].gradient,
+              }}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Content Segments - Scrolling Layer */}
-      <div className="relative z-10">
+      <div className="relative z-30">
         {ASPIRATIONS.map((aspiration, index) => (
           <div 
             key={aspiration.id} 
@@ -109,27 +109,29 @@ export default function CinematicAspiration() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className="flex flex-col items-center"
               >
-                <span 
-                  className="text-[10px] md:text-xs tracking-[1.5rem] md:tracking-[2.5rem] uppercase mb-8 ml-[1.5rem] md:ml-[2.5rem] font-sans"
-                  style={{ color: aspiration.color, opacity: 0.5 }}
-                >
-                  Future_Identity
-                </span>
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-12 h-[1px] bg-white/20" />
+                  <span 
+                    className="text-[10px] md:text-[11px] tracking-[2em] uppercase font-sans"
+                    style={{ color: aspiration.color, opacity: 0.5 }}
+                  >
+                    IDENT_NODE_{index + 1}
+                  </span>
+                  <div className="w-12 h-[1px] bg-white/20" />
+                </div>
                 
                 <h2 
-                  className="text-5xl md:text-9xl font-playfair leading-none tracking-tighter mb-8"
+                  className="text-6xl md:text-9xl font-playfair leading-none tracking-tighter mb-8"
                   style={{ color: aspiration.color }}
                 >
                   {aspiration.title}
                 </h2>
 
-                <div className="h-[1px] w-24 bg-white/20 mb-8" />
-
-                <h3 className="text-sm md:text-xl font-sans uppercase tracking-[0.3em] text-white/80 mb-6 px-4">
+                <h3 className="text-[10px] md:text-sm font-sans uppercase tracking-[0.5em] text-white/60 mb-8 border border-white/10 px-6 py-2 backdrop-blur-md">
                   {aspiration.subtitle}
                 </h3>
 
-                <p className="max-w-xl text-xs md:text-sm text-white/40 leading-relaxed uppercase tracking-widest font-sans italic">
+                <p className="max-w-xl text-xs md:text-sm text-white/40 leading-relaxed uppercase tracking-widest font-sans italic px-4">
                   &quot;{aspiration.narrative}&quot;
                 </p>
               </motion.div>
