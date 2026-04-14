@@ -100,24 +100,24 @@ function CoreModel() {
 
 // Static section brief map — defined outside component for stable reference
 const SECTION_BRIEFS = {
-  'intro': 'ATELIER GUIDE: Welcome to the Nexus. Initializing your VIP access to the Fadhil Lubis digital exhibition.',
-  'LuxuryHero': 'ATELIER GUIDE: You are currently viewing the Main Pavilion. Notice the precision in engineering and aesthetic design.',
-  'GoldArchive': 'ATELIER GUIDE: We have entered the Gold Archive. Here we showcase international accolades and top-tier scientific innovations.',
-  'AtelierSpec': 'ATELIER GUIDE: Examining the Technical Blueprint. This section details the subject\'s structural approach to problem-solving.',
-  'OriginSection': 'ATELIER GUIDE: The Heritage Log. Discovering the geographic and cultural roots that shaped this engineering mindset.',
-  'GiantsSection': 'ATELIER GUIDE: The Hall of Giants. Acknowledging the mentors and visionary figures who laid the foundation for current success.',
-  'HeritageSection': "ATELIER GUIDE: Time-lapse enabled. We are now reviewing pivotal milestones and industrial exposure over the years.",
-  'AtelierPhilosophy': "ATELIER GUIDE: The Core Philosophy. This is the logic engine driving the subject's aesthetic and strategic decisions.",
-  'ManifestoSection': "ATELIER GUIDE: The Manifesto. A projection of future impact on the global sustainable engineering ecosystem.",
-  'StudioGallery': "ATELIER GUIDE: The Studio Gallery. A visual chronicle of physical milestones, public features, and key moments.",
-  'CinematicAspiration': 'ATELIER GUIDE: Aspiration Matrix. Exploring the multi-dimensional facets: The Engineer, The Polymath, and The Captain.',
-  'collections': 'ATELIER GUIDE: The Code Vault. Housing advanced fintech, smart systems, and high-performance algorithms.',
-  'TrophyGallery': 'ATELIER GUIDE: Certification Wing. Visual proof of global technical standards and international excellence.',
-  'ExpertiseLaboratory': 'ATELIER GUIDE: The Expertise Lab. Displaying architectural capability, full-stack proficiency, and active tech stacks.',
-  'DiscoverySection': 'ATELIER GUIDE: Deep-Dive Module. Investigating the intersection of rigorous research and practical deployment.',
-  'RoadmapSection': 'ATELIER GUIDE: The Chronology. Charting past developments and projecting the trajectory of future innovations.',
-  'VisionSection': 'ATELIER GUIDE: Horizon Forecast. Predicting upcoming high-consequence contributions to the global digital landscape.',
-  'ContactSection': 'ATELIER GUIDE: The Communications Node. Secure channels for elite collaboration and enterprise inquiries.'
+  'intro': 'ATELIER GUIDE: Welcome to the Nexus. I am your AI concierge. I will be guiding you through Fadhil Lubis\'s digital exhibition.',
+  'LuxuryHero': 'ATELIER GUIDE: We are currently at the Main Pavilion. This space embodies Fadhil\'s core philosophy: relentless precision and engineering excellence. It sets the tone for the entire journey ahead.',
+  'GoldArchive': 'ATELIER GUIDE: Here is the Gold Archive. This vault contains the highlights of Fadhil\'s journey, particularly his international gold medals and top-tier scientific innovations that shook the industry.',
+  'AtelierSpec': 'ATELIER GUIDE: Now examining the Technical Blueprint. Every great structure needs a solid foundation. This section reveals the rigorous problem-solving architecture behind Fadhil\'s work.',
+  'OriginSection': 'ATELIER GUIDE: The Heritage Log. To understand the future, we must look at the past. This area showcases the cultural roots and geographical origins that forged Fadhil\'s unique mindset.',
+  'GiantsSection': 'ATELIER GUIDE: The Hall of Giants. No innovator stands alone. Here, we honor the mentors, professors, and visionary figures whose guidance acted as the catalyst for Fadhil\'s success.',
+  'HeritageSection': "ATELIER GUIDE: Let's take a walk through time. This panoramic timeline visualizes the critical milestones and industrial exposure that have sharpened Fadhil's expertise over the years.",
+  'AtelierPhilosophy': "ATELIER GUIDE: The Core Philosophy. You are looking at the logic engine of the Atelier. It is a harmonious blend of high-end luxury, absolute decisiveness, and technical wealth.",
+  'ManifestoSection': "ATELIER GUIDE: The Manifesto. This is not just a statement; it is a promise. It outlines a bold projection of Fadhil's future impact on the global sustainable engineering ecosystem.",
+  'StudioGallery': "ATELIER GUIDE: Welcome to the Studio Gallery. This visual chronicle captures the essence of Fadhil's physical presence across global stages, public features, and career-defining moments.",
+  'CinematicAspiration': 'ATELIER GUIDE: The Aspiration Matrix. Notice the multi-dimensional facets here: The analytical Engineer, the creative Polymath, and the decisive Captain of Industry. All paths converge.',
+  'collections': 'ATELIER GUIDE: We have breached the Code Vault. This highly secured section houses advanced fintech infrastructures, scalable smart systems, and high-performance algorithms.',
+  'TrophyGallery': 'ATELIER GUIDE: The Certification Wing. This is the visual proof. A meticulously curated collection of hard-earned achievements that meet and exceed international technical standards.',
+  'ExpertiseLaboratory': 'ATELIER GUIDE: Entering the Expertise Lab. Observe the active tech stacks and full-stack proficiencies running in real-time. This is the engine room of Fadhil\'s digital capabilities.',
+  'DiscoverySection': 'ATELIER GUIDE: The Deep-Dive Module. For those who seek the details. We are investigating the exact intersection where rigorous theoretical research meets practical, real-world deployment.',
+  'RoadmapSection': 'ATELIER GUIDE: The Chronology. Like a map of the stars, this section charts out past developments while simultaneously projecting the exact trajectory of Fadhil\'s future technological innovations.',
+  'VisionSection': 'ATELIER GUIDE: The Horizon Forecast. You are now looking into the future. Predicting upcoming high-consequence contributions to the global digital landscape and sustainable engineering sectors.',
+  'ContactSection': 'ATELIER GUIDE: The Communications Node. We have reached the final terminal. These are the secure channels reserved for elite collaboration and high-level enterprise inquiries.'
 };
 
 export default function NeuralCore() {
@@ -183,7 +183,7 @@ export default function NeuralCore() {
       setShowBrief(true);
       playPip(1600, 0.05);
 
-      const timer = setTimeout(() => setShowBrief(false), 5000);
+      const timer = setTimeout(() => setShowBrief(false), 12000);
       lastSection.current = activeSection;
       return timer;
     };
@@ -351,7 +351,7 @@ export default function NeuralCore() {
           >
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
-                <span className="text-[8px] font-mono text-white/40 uppercase tracking-[0.3em]">Technical_Brief</span>
+                <span className="text-[8px] font-mono text-white/40 uppercase tracking-[0.3em]">Atelier_Guide</span>
                 <span className="text-[7px] font-mono text-white/20">UPLINK_01</span>
               </div>
               <div className="text-[9px] font-mono text-white/80 leading-relaxed uppercase tracking-widest">
