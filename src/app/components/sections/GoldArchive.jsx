@@ -62,8 +62,6 @@ const GOLD_MEDALS = [
   }
 ];
 
-import TextReveal from '../ui/TextReveal';
-
 export default function GoldArchive() {
   const containerRef = useRef(null);
   const scrollContentRef = useRef(null);
@@ -87,7 +85,7 @@ export default function GoldArchive() {
   }, []);
 
   return (
-    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef} data-section="The Gold Distinction Archives">
+    <section className="relative pt-32 pb-64 bg-black overflow-hidden border-t border-white/5 transform-gpu" id="gold-archive" ref={containerRef}>
       {/* Cinematic Background (Atelier Mode Only) - Abstract Liquid Gold */}
       <SectionMedia theme="gold" opacity={0.3} />
 
@@ -101,16 +99,10 @@ export default function GoldArchive() {
         >
           <div>
             <span className="text-[10px] tracking-[0.5em] text-white/40 uppercase mb-4 block">Archive 2024</span>
-            <div className="flex flex-col">
-              <TextReveal 
-                text="THE GOLD" 
-                className="text-4xl md:text-7xl font-light text-white tracking-tighter leading-none" 
-              />
-              <TextReveal 
-                text="DISTINCTION." 
-                className="text-4xl md:text-7xl font-light text-white tracking-tighter leading-none italic opacity-40" 
-              />
-            </div>
+            <h2 className="text-4xl md:text-7xl font-light text-white tracking-tighter leading-none">
+                THE GOLD <br />
+                DISTINCTION<span className="text-white/20">.</span>
+            </h2>
           </div>
           <div className="max-w-md text-right">
             <p className="text-white/50 text-sm leading-relaxed font-light">
@@ -121,7 +113,6 @@ export default function GoldArchive() {
           </div>
         </motion.div>
       </div>
-
 
       <div className="relative h-[400px] md:h-[600px] cursor-grab active:cursor-grabbing">
         {/* Interaction Guide */}

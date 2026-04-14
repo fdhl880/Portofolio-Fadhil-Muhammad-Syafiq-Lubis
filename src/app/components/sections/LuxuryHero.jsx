@@ -7,8 +7,6 @@ import { useAppMode } from '../../context/AppModeContext';
 const ShowcaseCanvas = dynamic(() => import('../three/ShowcaseCanvas'), { ssr: false });
 const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
-import TextReveal from '../ui/TextReveal';
-
 export default function LuxuryHero() {
   const { mode } = useAppMode();
 
@@ -20,7 +18,7 @@ export default function LuxuryHero() {
       {/* Cinematic Background (Atelier Mode Only) - Architecture Precision */}
       <SectionMedia theme="hero_intro" opacity={0.2} />
       
-      {/* 3D Asset Stage (Only in Atelier Only) */}
+      {/* 3D Asset Stage (Only in Atelier Mode) */}
       {mode === 'atelier' && (
         <div className="absolute inset-0 z-0">
           <ShowcaseCanvas />
@@ -46,16 +44,10 @@ export default function LuxuryHero() {
             Atelier of Innovation
           </span>
           
-          <div className="mb-6">
-            <TextReveal 
-              text="The Architecture of" 
-              className="font-display text-white text-5xl md:text-7xl leading-tight" 
-            />
-            <TextReveal 
-              text="Precision." 
-              className="font-display text-white/40 italic text-5xl md:text-7xl leading-tight" 
-            />
-          </div>
+          <h1 className="font-display mb-6">
+            The Architecture of <br />
+            <span className="opacity-40 italic">Precision.</span>
+          </h1>
 
           <p className="max-w-2xl mx-auto text-white/50 leading-relaxed text-balance">
             Crafting the future through rigorous engineering and uncompromising design excellence. 
@@ -81,4 +73,3 @@ export default function LuxuryHero() {
     </section>
   );
 }
-

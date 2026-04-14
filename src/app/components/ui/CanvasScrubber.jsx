@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 export default function CanvasScrubber({ 
@@ -17,6 +17,24 @@ export default function CanvasScrubber({
   const isNearViewport = useRef(false);
   const [loaded, setLoaded] = useState(false);
   const [hasStartedLoading, setHasStartedLoading] = useState(false);
+
+  const renderFrame = useCallback((index) => {
+    const safeIndex = Math.floor(index) % frameCount;
+    if (!canvasRef.current || !imagesRef.current[safeIndex]) return;
+    const ctx = canvasRef.current.getContext('2d', { alpha: false }); // Optimize for opaque content
+    const img = imagesRef.current[safeIndex];
+    
+    const canvas = canvasRef.current;
+    
+    const hRatio = canvas.width / img.width;
+    const vRatio = canvas.height / img.height;
+    const ratio = Math.max(hRatio, vRatio);
+    const centerShift_x = (canvas.width - img.width * ratio) / 2;
+    const centerShift_y = (canvas.height - img.height * ratio) / 2;  
+    
+    ctx.drawImage(img, 0, 0, img.width, img.height,
+                  centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
+  }, [frameCount]);
 
   // Intersection Observer for Lazy Loading
   useEffect(() => {
@@ -59,25 +77,7 @@ export default function CanvasScrubber({
       
       imagesRef.current.push(img);
     }
-  }, [sequencePath, frameCount, hasStartedLoading]);
-
-  const renderFrame = (index) => {
-    const safeIndex = Math.floor(index) % frameCount;
-    if (!canvasRef.current || !imagesRef.current[safeIndex]) return;
-    const ctx = canvasRef.current.getContext('2d', { alpha: false }); // Optimize for opaque content
-    const img = imagesRef.current[safeIndex];
-    
-    const canvas = canvasRef.current;
-    
-    const hRatio = canvas.width / img.width;
-    const vRatio = canvas.height / img.height;
-    const ratio = Math.max(hRatio, vRatio);
-    const centerShift_x = (canvas.width - img.width * ratio) / 2;
-    const centerShift_y = (canvas.height - img.height * ratio) / 2;  
-    
-    ctx.drawImage(img, 0, 0, img.width, img.height,
-                  centerShift_x, centerShift_y, img.width * ratio, img.height * ratio);
-  };
+  }, [sequencePath, frameCount, hasStartedLoading, renderFrame]);
 
   // Ultra-Performant Render Loop (Direct Canvas Update)
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function CanvasScrubber({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [activeIndex, currentIndex, loaded, loop, frameCount]);
+  }, [activeIndex, currentIndex, loaded, loop, frameCount, renderFrame]);
 
   return (
     <div ref={containerRef} className="absolute inset-0 w-full h-full" style={style}>

@@ -4,11 +4,9 @@ import dynamic from 'next/dynamic';
 
 const SectionMedia = dynamic(() => import('../ui/SectionMedia'), { ssr: false });
 
-import TextReveal from '../ui/TextReveal';
-
 export default function HeritageSection() {
   return (
-    <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage" data-section="Heritage and Path">
+    <section className="relative min-h-screen bg-black flex items-center justify-center py-32" id="heritage">
       {/* Cinematic Background (Atelier Mode Only) - Nature/Origin Aesthetic */}
       <SectionMedia theme="origin" opacity={0.15} />
 
@@ -33,6 +31,8 @@ export default function HeritageSection() {
                  <h4 className="text-xl font-light text-white italic tracking-tighter">SMP Harapan 1</h4>
             </div>
             
+            {/* Subtle Texture/Grain Overlay */}
+            {/* Subtle Texture/Grain Overlay - Using CSS only to prevent external broken links */}
             <div className="absolute inset-0 opacity-10 pointer-events-none bg-white/5 blend-overlay" />
           </motion.div>
           
@@ -60,16 +60,10 @@ export default function HeritageSection() {
             transition={{ duration: 1 }}
           >
             <span className="text-[10px] tracking-[1em] text-white/40 uppercase mb-8 block">Origin & Legacy</span>
-            <div className="mb-12">
-              <TextReveal 
-                text="A HERITAGE" 
-                className="text-5xl md:text-8xl font-light text-white tracking-tighter leading-tight" 
-              />
-              <TextReveal 
-                text="OF INTELLECT." 
-                className="text-5xl md:text-8xl font-light text-white tracking-tighter leading-tight italic opacity-40" 
-              />
-            </div>
+            <h2 className="text-5xl md:text-8xl font-light text-white tracking-tighter leading-[0.9] mb-12">
+               A HERITAGE <br />
+               OF INTELLECT<span className="text-white/20">.</span>
+            </h2>
             
             <div className="flex flex-col gap-8 text-white/60 font-light leading-relaxed max-w-xl">
                <p className="text-lg text-white">
@@ -105,4 +99,3 @@ export default function HeritageSection() {
     </section>
   );
 }
-
