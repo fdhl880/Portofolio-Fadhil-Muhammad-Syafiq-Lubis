@@ -1,11 +1,14 @@
 'use client';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import VideoBackground from '../ui/VideoBackground';
 import { getAssetUrl } from '../../utils/assetLoader';
+import { useAppMode } from '../../context/AppModeContext';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const ASPIRATIONS = [
   {
@@ -36,8 +39,6 @@ const ASPIRATIONS = [
     color: '#D4AF37'
   }
 ];
-
-import { useAppMode } from '../../context/AppModeContext';
 
 export default function CinematicAspiration() {
   const { mode } = useAppMode();
@@ -78,7 +79,7 @@ export default function CinematicAspiration() {
             <VideoBackground 
               src={ASPIRATIONS[activeIndex].videoSrc}
               overlayOpacity={0.4}
-              grayscale={activeIndex !== 2} // Captain stays in color/gold
+              grayscale={activeIndex !== 2}
               brightness={0.7}
               contrast={1.2}
             />
@@ -141,14 +142,13 @@ export default function CinematicAspiration() {
         ))}
       </div>
 
-      {/* Final Call to Action or Signature */}
+      {/* Final Signature */}
       <div className="h-[50vh] flex items-center justify-center bg-black relative z-10 overflow-hidden">
-          {/* Premium noise overlay - using a CSS-only subtle approach to avoid external breakage */}
-          <div className="absolute inset-0 bg-white/[0.01] pointer-events-none" />
-         <div className="text-center">
-            <span className="text-[10px] text-white/20 uppercase tracking-[1rem] block mb-4">Convergence_Complete</span>
-            <div className="h-12 w-[1px] bg-white/10 mx-auto" />
-         </div>
+        <div className="absolute inset-0 bg-white/[0.01] pointer-events-none" />
+        <div className="text-center">
+          <span className="text-[10px] text-white/20 uppercase tracking-[1rem] block mb-4">Convergence_Complete</span>
+          <div className="h-12 w-[1px] bg-white/10 mx-auto" />
+        </div>
       </div>
 
     </section>

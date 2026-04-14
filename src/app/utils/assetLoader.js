@@ -1,6 +1,6 @@
 /**
  * Global Asset Infrastructure Utility
- * Offloads heavy 3D models and high-res video backgrounds to Netlify Blobs/DB.
+ * Offloads heavy 3D models and high-res video backgrounds to Supabase Storage.
  * Ensures the frontend bundle remains optimized and lag-free.
  */
 
@@ -26,8 +26,8 @@ export const ASSETS = {
 
   // Heavy textures or HDRIs
   ENVMAPS: {
-    STUDIO: `${BLOB_BASE_URL}/env/studio_night.hdr`,
-    SPACE: `${BLOB_BASE_URL}/env/deep_space_cinematic.hdr`,
+    STUDIO: `${SUPABASE_STORAGE_BASE}/env/studio_night.hdr`,
+    SPACE: `${SUPABASE_STORAGE_BASE}/env/deep_space_cinematic.hdr`,
   }
 };
 
