@@ -80,7 +80,7 @@ export default function CinematicIntro({ onComplete }) {
                   animate={{ opacity: 1, y: 0 }}
                   className="mb-12 relative w-20 h-20 rounded-none overflow-hidden shadow-2xl border border-white/20 p-4 bg-black"
                 >
-                  <Image src="/brand-logo.png" alt="Atelier Boot" fill priority className="object-contain p-4 rotate-180" />
+                  <Image src="/brand-logo.png" alt="Atelier Boot" fill priority className="object-contain p-4" />
                 </motion.div>
 
                 <div className="w-64 h-20 relative flex flex-col items-center">
