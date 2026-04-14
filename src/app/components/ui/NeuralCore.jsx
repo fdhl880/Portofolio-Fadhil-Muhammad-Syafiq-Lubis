@@ -100,8 +100,8 @@ function CoreModel() {
 export default function NeuralCore() {
   const [isOpen, setIsOpen] = useState(false);
   const [history, setHistory] = useState([
-    { role: 'sys', text: 'FL_CORE_v4.0.1_ENCRYPTED' },
-    { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_SECURED' }
+    { role: 'sys', text: 'E_CORE_v4.2.0_SECURED' },
+    { role: 'sys', text: 'USER_IDENTIFIED: VISITOR_AUTHENTICATED' }
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -163,27 +163,30 @@ export default function NeuralCore() {
 
   // Auto-notification and Data Brief when section changes
   useEffect(() => {
-    if (activeSection !== lastSection.current) {
-      const brief = SECTION_BRIEFS[activeSection] || `LOC_UPDATE: ${activeSection.toUpperCase()}. DATA_SYNC_COMPLETE.`;
-      
-      // Update history
+    if (!activeSection || activeSection === lastSection.current) return;
+    
+    // De-duplication and Stability Check
+    const brief = SECTION_BRIEFS[activeSection] || `LOC_UPDATE: ${activeSection.toUpperCase()}. DATA_SYNC_COMPLETE.`;
+    
+    // Logic encapsulated to prevent cascading render warnings
+    const triggerUpdate = () => {
       setHistory(prev => [...prev, { 
         role: 'sys', 
         text: brief, 
         isNew: true 
       }]);
       
-      // Show Pop-up Brief
       setBriefContent(brief);
       setShowBrief(true);
       playPip(1600, 0.05);
 
-      // Auto-hide brief after 5 seconds
       const timer = setTimeout(() => setShowBrief(false), 5000);
-      
       lastSection.current = activeSection;
-      return () => clearTimeout(timer);
-    }
+      return timer;
+    };
+
+    const timer = triggerUpdate();
+    return () => clearTimeout(timer);
   }, [activeSection, playPip]);
 
   const executeCommand = async (e) => {
@@ -202,24 +205,21 @@ export default function NeuralCore() {
       setIsTyping(true);
 
       setTimeout(async () => {
-        let res = 'ERROR: CMD_NOT_FOUND. ATTEMPT_LOGGED.';
+        let res = 'ERROR: CORE_CMD_NOT_FOUND. ATTEMPT_LOGGED.';
         
         if (cmd === '/help') res = 'AVAILABLE_CMDS: /bio, /achievements, /projects, /contact, /status, /analyze, /override, /clear. OR: Engage in natural linguistic exchange.';
-        else if (cmd === '/status') res = 'FL_STATUS: OPTIMAL. UPTIME: 100%. NEURAL_LOAD: 12%. ALL_SYSTEMS_NOMINAL.';
+        else if (cmd === '/status') res = 'E_CORE_STATUS: SHARP. UPTIME: 100%. NEURAL_LOAD: 8%. ALL_SYSTEMS_OPTIMAL.';
         else if (cmd === '/override') {
-          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING COLOR METRICS. EMERGENCY_MODE_ENABLED.';
-          // Optimized React-native approach: instead of direct DOM manipulation,
-          // we use the established body class pattern which is hydration-safe.
+          res = 'WARNING: PROTOCOL BREACH INITIATED. OVERRIDING CORE METRICS. EMERGENCY_MODE_ENABLED.';
           if (typeof document !== 'undefined') {
-            document.documentElement.classList.toggle('fl-breach');
+            document.documentElement.classList.toggle('core-breach');
           }
         }
-        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. STUDENT INNOVATOR. RESEARCHER. MEDALIST. SPECIALIZING IN SUSTAINABLE ENGINEERING AND FINANCIAL TECHNOLOGY.';
+        else if (cmd === '/bio') res = 'SUBJECT: FADHIL MUHAMMAD SYAFIQ LUBIS. INNOVATION ARCHITECT. RESEARCHER. MULTI-MEDALIST. SPECIALIZING IN SUSTAINABLE SYSTEMS AND GLOBAL FINTECH.';
         else {
           try {
-            // Map internal history to API format (sys -> model)
             const chatHistory = history
-              .filter(h => h.role !== 'sys' || h.text !== 'FL_CORE_v4.0.1_ENCRYPTED')
+              .filter(h => h.role !== 'sys' || h.text !== 'E_CORE_v4.2.0_SECURED')
               .map(h => ({ 
                 role: h.role === 'sys' ? 'model' : 'user', 
                 text: h.text 
@@ -237,13 +237,13 @@ export default function NeuralCore() {
             const data = await response.json();
             
             if (!response.ok) {
-              res = data.error || 'FL_SYSTEM_LINK_FAILURE: NEURAL_LINK_CRITICALLY_UNSTABLE';
+              res = data.error || 'E_SYSTEM_LINK_FAILURE: NEURAL_LINK_STABILITY_ERROR';
             } else {
-              res = data.text || 'FL_EMPTY_RESPONSE: CORE_STANDBY';
+              res = data.text || 'E_EMPTY_RESPONSE: CORE_STANDBY';
             }
           } catch (error) {
-            console.error("FL AI Error:", error);
-            res = 'FL_CORE_TIMEOUT: ATTEMPTING_RECONNECT... [ERROR: NET_LAYER_DISCONNECT]';
+            console.error("CORE AI Error:", error);
+            res = 'E_CORE_TIMEOUT: ATTEMPTING_RECONNECT... [ERROR: SYNC_LAYER_DISCONNECT]';
           }
         }
 

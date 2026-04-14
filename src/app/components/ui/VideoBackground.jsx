@@ -1,5 +1,6 @@
 'use client';
 import { useRef, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 /**
@@ -31,7 +32,7 @@ export default function VideoBackground({
   };
 
   const handleError = (e) => {
-    console.error("FL_VIDEO_DRV_ERROR:", e);
+    console.error("CORE_VIDEO_ERROR:", e);
     setError(true);
   };
 
@@ -70,7 +71,12 @@ export default function VideoBackground({
         <source src={src} type="video/mp4" />
         {/* Fallback if video fails */}
         {error && fallbackImage && (
-          <img src={fallbackImage} alt="Visual Fallback" className="w-full h-full object-cover" />
+          <Image 
+            src={fallbackImage} 
+            alt="Visual Fallback" 
+            fill
+            className="object-cover" 
+          />
         )}
       </motion.video>
 

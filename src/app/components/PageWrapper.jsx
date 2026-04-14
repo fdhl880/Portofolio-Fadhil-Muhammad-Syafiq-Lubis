@@ -129,16 +129,24 @@ export default function PageWrapper() {
           <MuseumGallery />
 
           {/* Laboratory expertise - The Technical Base */}
-          <ExpertiseLaboratory />
+          <div data-section="ExpertiseLaboratory">
+            <ExpertiseLaboratory />
+          </div>
 
           {/* Discovery - The Detail */}
-          <Discovery />
+          <div data-section="DiscoverySection">
+            <Discovery />
+          </div>
 
           {/* Chronology - The Evolution */}
-          <Chronology />
+          <div data-section="RoadmapSection">
+            <Chronology />
+          </div>
 
           {/* Vision - The Future */}
-          <Vision />
+          <div data-section="VisionSection">
+            <Vision />
+          </div>
 
           <ContactSection />
         </main>
