@@ -4,18 +4,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AppModeContext = createContext();
 
 export function AppModeProvider({ children }) {
-  const [mode, setMode] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('atelier-app-mode') || null;
-    }
-    return null;
-  });
+  // Always start with null to exactly match SSR output → prevents hydration mismatch.
+  // sessionStorage is read AFTER mount in useEffect (client-only, safe).
+  const [mode, setMode] = useState(null);
   const [activeSection, setActiveSection] = useState('intro');
 
   useEffect(() => {
-    // Sync to sessionStorage on changes
-    if (mode) sessionStorage.setItem('atelier-app-mode', mode);
-  }, [mode]);
+    const saved = sessionStorage.getItem('atelier-app-mode');
+    if (saved) setMode(saved); // eslint-disable-line react-hooks/set-state-in-effect
+  }, []);
 
   const selectMode = (newMode) => {
     setMode(newMode);

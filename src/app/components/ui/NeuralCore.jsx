@@ -5,6 +5,7 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { Sphere, MeshDistortMaterial, Float, Environment } from '@react-three/drei';
 import { useSound } from '../../context/SoundContext';
 import { usePerformance } from '../../context/PerformanceContext';
+import { useAppMode } from '../../context/AppModeContext';
 
 // Typing effect for system responses
 function TypingEffect({ text, onComplete }) {
