@@ -87,66 +87,29 @@ export default function PageWrapper() {
         <LuxuryNavbar />
         
         <main>
-          <LuxuryHero />
+          <section data-section="LuxuryHero"><LuxuryHero /></section>
+          <section data-section="GoldArchive"><GoldArchive /></section>
+          <section data-section="AtelierSpec"><AtelierSpec /></section>
+          <section data-section="OriginSection"><OriginSection /></section>
+          <section data-section="GiantsSection"><GiantsSection /></section>
+          <section data-section="HeritageSection"><HeritageSection /></section>
+          <section data-section="AtelierPhilosophy"><AtelierPhilosophy /></section>
+          <section data-section="ManifestoSection"><ManifestoSection /></section>
+          <section data-section="StudioGallery"><StudioGallery /></section>
+          <section data-section="CinematicAspiration"><CinematicAspiration /></section>
           
-          {/* Elite Prestige - The Gold Archive */}
-          <GoldArchive />
-
-          {/* New Technical Spec - The Atelier Precision */}
-          <AtelierSpec />
-
-          {/* New Personal Record - The Origin */}
-          <OriginSection />
-
-          {/* New Hall of Mentors - The Giants */}
-          <GiantsSection />
-
-          {/* Foundation - The Heritage Path */}
-          <HeritageSection />
-
-          {/* New Personal Philosophy - Luxury, Tegas, Rich */}
-          <AtelierPhilosophy />
-
-          {/* New Cinematic Manifesto */}
-          <ManifestoSection />
-
-          {/* Modern Exhibitions (Integrated) */}
-
-          {/* Studio Gallery - The Personal Journey */}
-          <StudioGallery />
-
-          {/* New Cinematic Aspiration - The Future Legacy */}
-          <CinematicAspiration />
-
-          {/* Collections - The Work */}
-          <section id="collections" className="py-24 bg-[#050505] border-t border-white/5">
+          <section data-section="collections" id="collections" className="py-24 bg-[#050505] border-t border-white/5">
              <ProjectsSection />
           </section>
 
-          {/* Archives - The Medals */}
-          <MuseumGallery />
+          <section data-section="TrophyGallery"><MuseumGallery /></section>
+          <section data-section="ExpertiseLaboratory"><ExpertiseLaboratory /></section>
+          <section data-section="DiscoverySection"><Discovery /></section>
+          <section data-section="RoadmapSection"><Chronology /></section>
 
-          {/* Laboratory expertise - The Technical Base */}
-          <div data-section="ExpertiseLaboratory">
-            <ExpertiseLaboratory />
-          </div>
 
-          {/* Discovery - The Detail */}
-          <div data-section="DiscoverySection">
-            <Discovery />
-          </div>
-
-          {/* Chronology - The Evolution */}
-          <div data-section="RoadmapSection">
-            <Chronology />
-          </div>
-
-          {/* Vision - The Future */}
-          <div data-section="VisionSection">
-            <Vision />
-          </div>
-
-          <ContactSection />
+          <section data-section="VisionSection"><Vision /></section>
+          <section data-section="ContactSection"><ContactSection /></section>
         </main>
 
         <footer className="bg-black">

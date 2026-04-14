@@ -51,7 +51,7 @@ export default function LuxuryNavbar() {
           >
             <div className="relative w-12 h-12 overflow-hidden rounded-none border border-white/10 p-1 bg-black/40">
               <Image 
-                src="/brand-logo.png" 
+                src="/brand-logo.svg" 
                 alt="Atelier Logo" 
                 fill 
                 className="object-contain p-2 grayscale group-hover:grayscale-0 transition-all duration-700" 

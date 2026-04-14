@@ -100,24 +100,24 @@ function CoreModel() {
 
 // Static section brief map — defined outside component for stable reference
 const SECTION_BRIEFS = {
-  'intro': 'SYSTEM_INITIALIZATION: Calibrating biometric signature and core identity protocols. Identity: Fadhil Muhammad Syafiq Lubis.',
-  'LuxuryHero': 'PRIMARY_INTERFACE: High-fidelity subject profile. Serving as the master gateway for elite visitor navigation.',
-  'GoldArchive': 'LEGACY_VALIDATION: Tracking global competitive success. High-impact research and international accolades detected.',
-  'AtelierSpec': 'TECH_SCHEMA: Deep-dive into technical architecture and research credentials. Quantifying academic and professional depth.',
-  'OriginSection': 'FOUNDATION_LOG: Analyzing subject heritage and geographic roots. Mapping the genetic source of innovation.',
-  'GiantsSection': 'MENTOR_NETWORK: Intellectual lineage scan. Identifying the visionary pillars that shaped the current cognitive framework.',
-  'HeritageSection': "EXPERIENCE_MATRIX: Decoding formative milestones and industrial exposure. Rendering the subject's evolution through time.",
-  'AtelierPhilosophy': "VISION_QUERY: Processing the subject's underlying logic and aesthetic philosophy. Evaluating core strategic intent.",
-  'ManifestoSection': "SYST_DIRECTIVE: High-fidelity objective projection. Defining the subject's impact on the global engineering ecosystem.",
-  'StudioGallery': "VISUAL_REPOSITORY: Chronological media archive. Visualizing the subject's physical presence across global touchpoints.",
-  'CinematicAspiration': 'IDENTITY_CONVERGENCE: Multi-dimensional future projection. Mapping the path to Engineering, Academic, and Industrial mastery.',
-  'collections': 'CODEBOOK_INDEX: Digital laboratory. Housing smart systems, fintech scripts, and high-performance development assets.',
-  'TrophyGallery': 'AESTHETIC_CERTIFICATION: Verifying visual proof of achievement and international standard excellence.',
-  'ExpertiseLaboratory': 'CAPABILITY_SCAN: Real-time assessment of architectural skills, multi-stack proficiency, and problem-solving metrics.',
-  'DiscoverySection': 'DETAIL_MODULE: Investigating granular system nuances. Highlighting the intersection of research and implementation.',
-  'RoadmapSection': 'EVOLUTION_ARCH: Navigating historical and predictive milestones. Projecting the trajectory of future innovations.',
-  'VisionSection': 'STRATEGIC_PREDICTION: Forecasting high-impact contributions to the sustainable and digital global landscape.',
-  'ContactSection': 'UPLINK_STATION: Final protocols for secure communication. Facilitating elite collaboration and high-level inquiry.'
+  'intro': 'ATELIER GUIDE: Welcome to the Nexus. Initializing your VIP access to the Fadhil Lubis digital exhibition.',
+  'LuxuryHero': 'ATELIER GUIDE: You are currently viewing the Main Pavilion. Notice the precision in engineering and aesthetic design.',
+  'GoldArchive': 'ATELIER GUIDE: We have entered the Gold Archive. Here we showcase international accolades and top-tier scientific innovations.',
+  'AtelierSpec': 'ATELIER GUIDE: Examining the Technical Blueprint. This section details the subject\'s structural approach to problem-solving.',
+  'OriginSection': 'ATELIER GUIDE: The Heritage Log. Discovering the geographic and cultural roots that shaped this engineering mindset.',
+  'GiantsSection': 'ATELIER GUIDE: The Hall of Giants. Acknowledging the mentors and visionary figures who laid the foundation for current success.',
+  'HeritageSection': "ATELIER GUIDE: Time-lapse enabled. We are now reviewing pivotal milestones and industrial exposure over the years.",
+  'AtelierPhilosophy': "ATELIER GUIDE: The Core Philosophy. This is the logic engine driving the subject's aesthetic and strategic decisions.",
+  'ManifestoSection': "ATELIER GUIDE: The Manifesto. A projection of future impact on the global sustainable engineering ecosystem.",
+  'StudioGallery': "ATELIER GUIDE: The Studio Gallery. A visual chronicle of physical milestones, public features, and key moments.",
+  'CinematicAspiration': 'ATELIER GUIDE: Aspiration Matrix. Exploring the multi-dimensional facets: The Engineer, The Polymath, and The Captain.',
+  'collections': 'ATELIER GUIDE: The Code Vault. Housing advanced fintech, smart systems, and high-performance algorithms.',
+  'TrophyGallery': 'ATELIER GUIDE: Certification Wing. Visual proof of global technical standards and international excellence.',
+  'ExpertiseLaboratory': 'ATELIER GUIDE: The Expertise Lab. Displaying architectural capability, full-stack proficiency, and active tech stacks.',
+  'DiscoverySection': 'ATELIER GUIDE: Deep-Dive Module. Investigating the intersection of rigorous research and practical deployment.',
+  'RoadmapSection': 'ATELIER GUIDE: The Chronology. Charting past developments and projecting the trajectory of future innovations.',
+  'VisionSection': 'ATELIER GUIDE: Horizon Forecast. Predicting upcoming high-consequence contributions to the global digital landscape.',
+  'ContactSection': 'ATELIER GUIDE: The Communications Node. Secure channels for elite collaboration and enterprise inquiries.'
 };
 
 export default function NeuralCore() {
