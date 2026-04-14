@@ -78,8 +78,8 @@ export const metadata = {
     },
   },
   icons: {
-    icon: "/brand-logo.png",
-    apple: "/brand-logo.png",
+    icon: "/icon.svg",
+    apple: "/brand-logo.svg",
   },
 };
 
