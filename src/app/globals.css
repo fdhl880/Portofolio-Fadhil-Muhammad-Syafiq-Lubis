@@ -123,3 +123,45 @@ p { font-size: var(--fluid-p); line-height: 1.6; opacity: 0.8; }
 .gallery-item:hover img {
   transform: scale(1.05);
 }
+
+/* ====================================================
+   DYNAMIC BACKGROUND SYSTEM — Apple/Awwwards Tier
+   Strips blocking solid backgrounds from all sections
+   so DynamicBackgroundManager renders through cleanly.
+   ==================================================== */
+
+/* Noise grain texture utility */
+.noise-bg {
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Force all data-section wrappers and their children to be transparent */
+[data-section] {
+  background: transparent !important;
+}
+
+/* Override solid black radial gradients inside sections */
+[data-section] > section,
+[data-section] section {
+  background: transparent !important;
+}
+
+/* Target the absolute background ambience divs in section components */
+[data-section] .absolute.inset-0[class*="bg-"] {
+  display: none !important;
+}
+
+/* Keep the content layers readable with a subtle section depth hint */
+[data-section] > section > .relative,
+[data-section] .relative.z-10,
+[data-section] .relative.z-20 {
+  background: transparent !important;
+}
+
+/* Ensure collections section is transparent too */
+#collections {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+}

@@ -75,7 +75,7 @@ export default function PageWrapper() {
   if (!mounted) return null;
 
   return (
-    <div className={`relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90 ${mode === 'archive' ? 'archive-mode' : ''}`}>
+    <div className={`relative min-h-screen text-white selection:bg-white selection:text-black selection:bg-opacity-90 ${mode === 'archive' ? 'archive-mode' : ''}`}>
       
       {/* LAYER 0: Dynamic Cinematic Background (All Modes) */}
       <DynamicBackgroundManager />
