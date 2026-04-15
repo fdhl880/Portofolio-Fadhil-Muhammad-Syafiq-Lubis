@@ -20,6 +20,7 @@ import GiantsSection from './sections/GiantsSection';
 import AtelierPhilosophy from './sections/AtelierPhilosophy';
 import ManifestoSection from './sections/ManifestoSection';
 import AtelierLens from './ui/AtelierLens';
+import DynamicBackgroundManager from './ui/DynamicBackgroundManager';
 import { useAppMode } from '../context/AppModeContext';
 
 // Lazy-loaded museum sections
@@ -30,7 +31,6 @@ const Vision = dynamic(() => import('./sections/VisionSection'), { ssr: false })
 const Discovery = dynamic(() => import('./sections/DiscoverySection'), { ssr: false });
 const NeuralCoreBase = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 const CinematicAspiration = dynamic(() => import('./sections/CinematicAspiration'), { ssr: false });
-const NeuralCore = dynamic(() => import('./ui/NeuralCore'), { ssr: false });
 
 export default function PageWrapper() {
   const { mode, setActiveSection } = useAppMode();
@@ -76,9 +76,13 @@ export default function PageWrapper() {
 
   return (
     <div className={`relative min-h-screen bg-black text-white selection:bg-white selection:text-black selection:bg-opacity-90 ${mode === 'archive' ? 'archive-mode' : ''}`}>
-      {/* Mode-Aware 3D Environment (Atelier Only) */}
+      
+      {/* LAYER 0: Dynamic Cinematic Background (All Modes) */}
+      <DynamicBackgroundManager />
+
+      {/* LAYER -1: 3D Space Environment particles (Atelier Only, above bg image) */}
       {mode === 'atelier' && (
-        <div className="fixed inset-0 z-[-1] pointer-events-none">
+        <div className="fixed inset-0 z-[1] pointer-events-none">
           <CinematicRoom />
         </div>
       )}
@@ -139,9 +143,8 @@ export default function PageWrapper() {
         {mode === 'atelier' && <NeuralCoreBase />}
       </motion.div>
 
-      {/* Luxury Vignette & Grain Overlay (Both modes for aesthetic consistency) */}
-      <div className="fixed inset-0 pointer-events-none z-[1] shadow-[inset_0_0_200px_rgba(0,0,0,0.9)]" />
-      <div className="fixed inset-0 pointer-events-none z-[2] opacity-[0.03] noise-bg" />
+      {/* Luxury Vignette — top-level cinematic framing */}
+      <div className="fixed inset-0 pointer-events-none z-[90] shadow-[inset_0_0_200px_rgba(0,0,0,0.9)]" />
       
       <style jsx global>{`
 /* Android Native Polish & Archive Mode Optimization */
