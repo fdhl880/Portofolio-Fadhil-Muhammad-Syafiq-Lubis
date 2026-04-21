@@ -16,15 +16,18 @@ export default function CinematicIntro({ onComplete }) {
     const t1 = setTimeout(() => {
       let currentProgress = 0;
       interval = setInterval(() => {
-        currentProgress += Math.random() * 12 + 8;
+        // More subtle, rhythmic loading
+        currentProgress += Math.random() * 8 + 4;
         if (currentProgress >= 100) {
           setProgress(100);
           clearInterval(interval);
           setPhase(2);
+          // Automatic transition to phase 3 after a brief ready moment
+          setTimeout(() => handleReveal(), 800);
         } else {
           setProgress(Math.floor(currentProgress));
         }
-      }, 100);
+      }, 1200 / 10); // Controlled duration
     }, 800);
 
     return () => {
@@ -32,20 +35,27 @@ export default function CinematicIntro({ onComplete }) {
       clearTimeout(t1);
       if (interval) clearInterval(interval);
     };
-  }, []);
+  }, [handleReveal]);
 
   const handleReveal = useCallback(() => {
     setPhase(3);
     setTimeout(() => {
       onComplete();
-    }, 1200);
+    }, 2000); // Slower, more elegant exit
   }, [onComplete]);
 
   return (
     <AnimatePresence>
       {phase < 4 && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-transparent">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black">
           
+          {/* Subtle Ambient Pulse Background */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: phase === 1 ? 0.3 : 0 }}
+            className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]"
+          />
+
           {/* Bento Reveal Tiles */}
           <div className="absolute inset-0 grid grid-cols-4 grid-rows-4 pointer-events-none">
             {tiles.map((_, i) => (
@@ -56,13 +66,12 @@ export default function CinematicIntro({ onComplete }) {
                   scale: 0, 
                   opacity: 0,
                   transition: { 
-                    duration: 0.6, 
-                    delay: (i % 4) * 0.1 + Math.floor(i / 4) * 0.1,
-                    ease: [0.22, 1, 0.36, 1] 
+                    duration: 1.2, // Slower, more cinematic
+                    delay: (i % 4) * 0.15 + Math.floor(i / 4) * 0.15,
+                    ease: [0.16, 1, 0.3, 1] 
                   }
                 }}
-                className={`bg-black border-[0.5px] border-white/5 ${phase === 3 ? 'pointer-events-none' : ''}`}
-                style={{ display: phase === 3 ? 'block' : 'block' }}
+                className="bg-black border-[0.5px] border-white/[0.03]"
               />
             ))}
           </div>
@@ -71,44 +80,59 @@ export default function CinematicIntro({ onComplete }) {
           <AnimatePresence>
             {phase < 3 && (
               <motion.div 
-                exit={{ opacity: 0, scale: 0.9, filter: 'blur(10px)' }}
-                transition={{ duration: 0.5 }}
+                exit={{ 
+                  opacity: 0, 
+                  scale: 1.1, // Scale up on exit for "immersive zoom" feel
+                  filter: 'blur(20px)',
+                  transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1] } 
+                }}
                 className="relative z-10 flex flex-col items-center justify-center w-full max-w-sm px-4"
               >
+                {/* Premium Logo Container with Inner Glow */}
                 <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mb-12 relative w-20 h-20 rounded-none overflow-hidden shadow-2xl border border-white/20 p-4 bg-black"
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
+                  }}
+                  className="mb-12 relative w-24 h-24 rounded-none overflow-hidden border border-white/10 p-4 bg-black/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)]"
                 >
-                  <Image src="/brand-logo.svg" alt="Atelier Boot" fill priority className="object-contain p-4" />
+                  {/* Subtle Shimmer Effect */}
+                  <motion.div 
+                    animate={{ 
+                      x: ['-100%', '200%'],
+                    }}
+                    transition={{ 
+                      duration: 3, 
+                      repeat: Infinity, 
+                      ease: "linear",
+                      delay: 1 
+                    }}
+                    className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent skew-x-12"
+                  />
+                  <Image src="/brand-logo.svg" alt="Atelier Boot" fill priority className="object-contain p-5" />
                 </motion.div>
 
-                <div className="w-64 h-20 relative flex flex-col items-center">
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full">
-                      <div className="w-full text-[10px] font-sans text-white/40 uppercase tracking-[0.8em] mb-4 text-center">
-                        Curating Excellence
+                <div className="w-64 h-12 relative flex flex-col items-center">
+                    <motion.div 
+                      initial={{ opacity: 0 }} 
+                      animate={{ opacity: 1 }} 
+                      transition={{ delay: 0.5 }}
+                      className="w-full"
+                    >
+                      <div className="w-full text-[9px] font-sans text-white/30 uppercase tracking-[0.8em] mb-3 text-center">
+                        Initializing Atelier
                       </div>
-                      <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">
+                      <div className="w-full h-[1px] bg-white/[0.03] relative overflow-hidden">
                         <motion.div 
-                          className="absolute top-0 left-0 h-full bg-white/40" 
-                          transition={{ duration: 2, ease: "easeInOut" }}
+                          className="absolute top-0 left-0 h-full bg-white/30" 
+                          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                           animate={{ width: `${progress}%` }} 
                         />
                       </div>
                     </motion.div>
-
-                    {phase === 2 && (
-                      <motion.button
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        whileHover={{ scale: 1.05, letterSpacing: '0.6em' }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={handleReveal}
-                        className="px-10 py-3 border border-white/20 text-white font-sans text-[10px] tracking-[0.4em] uppercase bg-black backdrop-blur-md transition-all rounded-none shadow-2xl"
-                      >
-                        Enter Atelier
-                      </motion.button>
-                    )}
                 </div>
               </motion.div>
             )}
