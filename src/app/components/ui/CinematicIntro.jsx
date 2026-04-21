@@ -10,6 +10,13 @@ export default function CinematicIntro({ onComplete }) {
   // 4x4 Grid for Bento Reveal
   const tiles = Array.from({ length: 16 });
 
+  const handleReveal = useCallback(() => {
+    setPhase(3);
+    setTimeout(() => {
+      onComplete();
+    }, 2000); // Slower, more elegant exit
+  }, [onComplete]);
+
   useEffect(() => {
     let interval;
     const t0 = setTimeout(() => setPhase(1), 300);
@@ -36,13 +43,6 @@ export default function CinematicIntro({ onComplete }) {
       if (interval) clearInterval(interval);
     };
   }, [handleReveal]);
-
-  const handleReveal = useCallback(() => {
-    setPhase(3);
-    setTimeout(() => {
-      onComplete();
-    }, 2000); // Slower, more elegant exit
-  }, [onComplete]);
 
   return (
     <AnimatePresence>
