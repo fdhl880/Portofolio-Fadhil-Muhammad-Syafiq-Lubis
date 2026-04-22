@@ -111,7 +111,18 @@ export default function CinematicIntro({ onComplete }) {
                     }}
                     className="relative w-20 h-20 rounded-none overflow-hidden border border-white/10 p-4 bg-black/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] z-20"
                   >
-                    <Image src="/brand-logo.svg" alt="Atelier Logo" fill priority className="object-contain p-5" />
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                      <motion.path 
+                        d="M 35 25 L 65 25 M 35 50 L 52 50 M 35 75 L 65 75 M 35 25 L 35 75 M 35 50 L 65 25" 
+                        fill="none" 
+                        stroke="#FFFFFF" 
+                        strokeWidth="3"
+                        strokeLinejoin="miter"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
+                      />
+                    </svg>
                   </motion.div>
                   
                   {/* Shadow */}

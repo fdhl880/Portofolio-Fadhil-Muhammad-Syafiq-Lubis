@@ -7,7 +7,7 @@ const projects = [
     title: 'PyroFuel',
     category: 'Logistics & Sustainability',
     description: 'A revolutionary waste-to-fuel logistics platform for sustainable energy management.',
-    year: '2025',
+    year: '2026',
     url: 'https://pyrofuelappharsa.vercel.app/'
   },
   {
@@ -15,7 +15,7 @@ const projects = [
     title: 'Boneato',
     category: 'Health & Nutrition',
     description: 'Advanced AI-powered nutrition tracking and child health monitoring ecosystem.',
-    year: '2025',
+    year: '2026',
     url: 'https://boneato.vercel.app/'
   },
   {
@@ -23,7 +23,7 @@ const projects = [
     title: 'NusaMatika',
     category: 'Educational Gaming',
     description: 'Interactive mathematics learning suite designed for high-engagement academic growth.',
-    year: '2024',
+    year: '2026',
     url: 'https://math-games-by-9-d.vercel.app/'
   }
 ];

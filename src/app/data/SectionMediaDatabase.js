@@ -104,9 +104,9 @@ export const SECTION_MEDIA = {
 
   CinematicAspiration: {
     id: 'CinematicAspiration',
-    type: 'video',
-    url: `${SUPABASE_BASE}/videos/engineer_1080p.mp4`,
-    fallbackUrl: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=80',
+    type: 'image',
+    url: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1920&q=80',
+    // High-end precision engineering
     overlayOpacity: 0.50,
     theme: 'cyber-deep',
   },
