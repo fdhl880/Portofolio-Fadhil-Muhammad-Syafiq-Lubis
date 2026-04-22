@@ -19,8 +19,8 @@ const playfair = Playfair_Display({
 export const metadata = {
   metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/"),
   title: {
-    default: "Atelier Lubis | The Nexus of Precision",
-    template: "%s | Atelier Lubis",
+    default: "Atelier Fadhil | The Nexus of Precision",
+    template: "%s | Atelier Fadhil",
   },
   description: "Official portfolio of Fadhil Muhammad Syafiq Lubis. A high-end gallery of international gold medal innovations, scientific research, and sustainable engineering.",
   keywords: [

@@ -1,5 +1,5 @@
 /**
- * ATELIER LUBIS — Section Media Database
+ * ATELIER FADHIL — Section Media Database
  * 
  * Centralized registry for every section's visual background.
  * Each entry maps to a high-end cinematic image or video URL.

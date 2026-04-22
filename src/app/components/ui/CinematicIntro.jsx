@@ -44,7 +44,7 @@ export default function CinematicIntro({ onComplete }) {
     };
   }, [handleReveal]);
 
-  const words = "ATELIER LUBIS".split("");
+  const words = "ATELIER FADHIL".split("");
 
   return (
     <AnimatePresence>
