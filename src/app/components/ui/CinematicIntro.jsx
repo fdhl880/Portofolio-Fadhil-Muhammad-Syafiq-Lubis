@@ -44,16 +44,21 @@ export default function CinematicIntro({ onComplete }) {
     };
   }, [handleReveal]);
 
+  const words = "ATELIER LUBIS".split("");
+
   return (
     <AnimatePresence>
       {phase < 4 && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black font-sans">
           
-          {/* Subtle Ambient Pulse Background */}
+          {/* Pixar-style Spotlight */}
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: phase === 1 ? 0.3 : 0 }}
-            className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_70%)]"
+            animate={{ 
+              x: phase === 1 ? [-100, 100, -100] : 0,
+              opacity: [0.1, 0.2, 0.1]
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_60%)] pointer-events-none"
           />
 
           {/* Bento Reveal Tiles */}
@@ -66,7 +71,7 @@ export default function CinematicIntro({ onComplete }) {
                   scale: 0, 
                   opacity: 0,
                   transition: { 
-                    duration: 1.2, // Slower, more cinematic
+                    duration: 1.2,
                     delay: (i % 4) * 0.15 + Math.floor(i / 4) * 0.15,
                     ease: [0.16, 1, 0.3, 1] 
                   }
@@ -82,52 +87,78 @@ export default function CinematicIntro({ onComplete }) {
               <motion.div 
                 exit={{ 
                   opacity: 0, 
-                  scale: 1.1, // Scale up on exit for "immersive zoom" feel
+                  scale: 1.1,
                   filter: 'blur(20px)',
                   transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1] } 
                 }}
-                className="relative z-10 flex flex-col items-center justify-center w-full max-w-sm px-4"
+                className="relative z-10 flex flex-col items-center justify-center w-full max-w-lg px-4"
               >
-                {/* Premium Logo Container with Inner Glow */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0, 
-                    scale: 1,
-                    transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
-                  }}
-                  className="mb-12 relative w-24 h-24 rounded-none overflow-hidden border border-white/10 p-4 bg-black/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)]"
-                >
-                  {/* Subtle Shimmer Effect */}
+                {/* Jumping Pixar Logo */}
+                <div className="relative mb-16 h-32 flex items-end justify-center">
                   <motion.div 
+                    initial={{ opacity: 0, y: -200 }}
                     animate={{ 
-                      x: ['-100%', '200%'],
+                      opacity: 1, 
+                      y: [0, -60, 0, -30, 0],
+                      scaleY: [1, 0.8, 1.1, 0.9, 1], // Squash and stretch
+                      scaleX: [1, 1.2, 0.9, 1.1, 1],
                     }}
                     transition={{ 
-                      duration: 3, 
-                      repeat: Infinity, 
-                      ease: "linear",
-                      delay: 1 
+                      duration: 2.5, 
+                      times: [0, 0.2, 0.4, 0.6, 0.8],
+                      ease: "easeInOut",
+                      delay: 0.5
                     }}
-                    className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/[0.05] to-transparent skew-x-12"
+                    className="relative w-20 h-20 rounded-none overflow-hidden border border-white/10 p-4 bg-black/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] z-20"
+                  >
+                    <Image src="/brand-logo.svg" alt="Atelier Logo" fill priority className="object-contain p-5" />
+                  </motion.div>
+                  
+                  {/* Shadow */}
+                  <motion.div 
+                    animate={{ 
+                      scale: [1, 0.5, 1, 0.7, 1],
+                      opacity: [0.2, 0.05, 0.2, 0.1, 0.2]
+                    }}
+                    transition={{ 
+                      duration: 2.5, 
+                      times: [0, 0.2, 0.4, 0.6, 0.8],
+                      ease: "easeInOut",
+                      delay: 0.5
+                    }}
+                    className="absolute bottom-0 w-12 h-2 bg-white/10 rounded-full blur-md"
                   />
-                  <Image src="/brand-logo.svg" alt="Atelier Boot" fill priority className="object-contain p-5" />
-                </motion.div>
+                </div>
 
+                {/* Letter-by-letter reveal */}
+                <div className="flex gap-2 mb-12">
+                  {words.map((letter, i) => (
+                    <motion.span
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.5 + (i * 0.05) }}
+                      className={`text-white text-xl md:text-2xl font-light tracking-widest ${letter === " " ? "w-4" : ""}`}
+                    >
+                      {letter}
+                    </motion.span>
+                  ))}
+                </div>
+
+                {/* Loading UI */}
                 <div className="w-64 h-12 relative flex flex-col items-center">
                     <motion.div 
                       initial={{ opacity: 0 }} 
                       animate={{ opacity: 1 }} 
-                      transition={{ delay: 0.5 }}
+                      transition={{ delay: 2.5 }}
                       className="w-full"
                     >
-                      <div className="w-full text-[9px] font-sans text-white/30 uppercase tracking-[0.8em] mb-3 text-center">
-                        Initializing Atelier
+                      <div className="w-full text-[8px] font-sans text-white/20 uppercase tracking-[1em] mb-3 text-center">
+                        Initializing Nexus
                       </div>
-                      <div className="w-full h-[1px] bg-white/[0.03] relative overflow-hidden">
+                      <div className="w-full h-[1px] bg-white/[0.05] relative overflow-hidden">
                         <motion.div 
-                          className="absolute top-0 left-0 h-full bg-white/30" 
+                          className="absolute top-0 left-0 h-full bg-white/40" 
                           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                           animate={{ width: `${progress}%` }} 
                         />
