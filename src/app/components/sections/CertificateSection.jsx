@@ -74,7 +74,7 @@ export default function CertificateSection() {
 
         {/* Verification CTA */}
         <motion.a
-          href="https://simt.kemendikdasmen.go.id/resume?id=yTxuz0hc"
+          href="https://simt.kemendikdasmen.go.id/resume?id=yTxuz0hc23fPpqUgw90Aew&name=fadhil-muhammad-syafiq-lubis"
           target="_blank"
           rel="noopener noreferrer"
           initial={{ opacity: 0, y: 30 }}
