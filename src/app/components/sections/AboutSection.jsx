@@ -83,7 +83,7 @@ export default function AboutSection() {
               </p>
               
               <a 
-                href="https://docs.google.com/document/d/1-gr-w2s7oYeZljncjA7OZO2wzCyDOh-JCBDGxBKIM40/edit?usp=drivesdk" 
+                href="https://docs.google.com/document/d/1-gr-w2s7oYeZljncjA7OZO2wzCyDOh-JCBDGxBKIM40/export?format=pdf" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-3 px-6 py-3 bg-white text-black text-[10px] font-mono tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors"
