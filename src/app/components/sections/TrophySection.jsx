@@ -32,10 +32,11 @@ export default function TrophySection() {
 
         {/* 3D Scene */}
         <div className="mb-24 border border-white/10 p-2 bg-neutral-950/20">
-          <div className="relative h-[380px] bg-black overflow-hidden">
+          <div className="relative h-[450px] bg-black overflow-hidden">
             <TrophyScene />
             <div className="absolute top-4 left-4 pointer-events-none">
-              <span className="text-[8px] font-mono text-white/40 tracking-widest block">Interactive 3D — Drag to rotate</span>
+              <span className="text-[8px] font-mono text-white/40 tracking-widest block uppercase">Interactive 3D Model: Scientific Core</span>
+              <span className="text-[8px] font-mono text-white/20 tracking-widest block uppercase mt-1">Drag to rotate • Scroll to zoom</span>
             </div>
           </div>
         </div>
