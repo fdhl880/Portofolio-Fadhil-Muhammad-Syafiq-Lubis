@@ -19,16 +19,17 @@ const playfair = Playfair_Display({
 export const metadata = {
   metadataBase: new URL("https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/"),
   title: {
-    default: "Atelier Fadhil | The Nexus of Precision",
-    template: "%s | Atelier Fadhil",
+    default: "Fadhil Muhammad Syafiq Lubis | Portfolio",
+    template: "%s | Fadhil Muhammad Syafiq Lubis",
   },
-  description: "Official portfolio of Fadhil Muhammad Syafiq Lubis. A high-end gallery of international gold medal innovations, scientific research, and sustainable engineering.",
+  description: "Official portfolio of Fadhil Muhammad Syafiq Lubis. A showcase of international gold medal innovations, scientific research, web development, and sustainable engineering.",
   keywords: [
     "Fadhil Muhammad Syafiq Lubis", 
-    "Luxury Portfolio", 
+    "Portfolio", 
     "International Science Competition Winner", 
-    "Engineering Student", 
-    "Precision Design"
+    "Student Researcher", 
+    "Web Developer",
+    "Innovator"
   ],
   authors: [{ name: "Fadhil Muhammad Syafiq Lubis" }],
   creator: "Fadhil Muhammad Syafiq Lubis",
@@ -42,10 +43,10 @@ export const metadata = {
     canonical: "https://portofolio-fadhil-muhammad-syafiq-lubis.vercel.app/",
   },
   openGraph: {
-    title: "Fadhil Lubis | Luxury Innovation",
-    description: "Explore the minimalist excellence of an award-winning student innovator.",
+    title: "Fadhil Muhammad Syafiq Lubis | Portfolio",
+    description: "Explore the innovations, research, and achievements of Fadhil Muhammad Syafiq Lubis.",
     url: "/",
-    siteName: "Fadhil Lubis Atelier",
+    siteName: "Fadhil Muhammad Syafiq Lubis",
     locale: "en_US",
     type: "website",
     images: [
@@ -53,13 +54,13 @@ export const metadata = {
         url: "/images/photo1.jpg",
         width: 1200,
         height: 630,
-        alt: "Fadhil Muhammad Syafiq Lubis - Luxury Brand",
+        alt: "Fadhil Muhammad Syafiq Lubis",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fadhil Lubis | Luxury Brand",
+    title: "Fadhil Muhammad Syafiq Lubis | Portfolio",
     description: "International award-winning researcher and innovator.",
     images: ["/images/photo1.jpg"],
   },
