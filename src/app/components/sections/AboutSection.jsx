@@ -78,9 +78,21 @@ export default function AboutSection() {
             {/* Mission */}
             <div className="border-l border-white/20 pl-6 py-2">
               <p className="text-xs font-mono tracking-widest text-white/40 uppercase mb-2">WHAT DRIVES ME</p>
-              <p className="text-sm font-semibold text-white/80 leading-relaxed">
+              <p className="text-sm font-semibold text-white/80 leading-relaxed mb-8">
                 I believe that the best solutions come from combining scientific research with real hands-on engineering. My goal is to create projects that have a genuine positive impact on people and the environment.
               </p>
+              
+              <a 
+                href="/cv-fadhil.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 px-6 py-3 bg-white text-black text-[10px] font-mono tracking-[0.2em] uppercase hover:bg-neutral-200 transition-colors"
+              >
+                <span>Download Resume</span>
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </a>
             </div>
           </div>
 

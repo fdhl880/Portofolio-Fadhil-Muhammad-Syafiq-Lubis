@@ -12,6 +12,7 @@ import SkillsSection from './sections/SkillsSection';
 import EducationSection from './sections/EducationSection';
 import TrophySection from './sections/TrophySection';
 import CertificateSection from './sections/CertificateSection';
+import MediaCoverageSection from './sections/MediaCoverageSection';
 import PhilosophySection from './sections/PhilosophySection';
 import ContactSection from './sections/ContactSection';
 
@@ -112,6 +113,9 @@ export default function PageWrapper() {
           <div className="section-divider" />
 
           <CertificateSection />
+          <div className="section-divider" />
+          
+          <MediaCoverageSection />
           <div className="section-divider" />
           
           <PhilosophySection />
