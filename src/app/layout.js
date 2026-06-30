@@ -24,10 +24,13 @@ export const metadata = {
   },
   description: "Official portfolio of Fadhil Muhammad Syafiq Lubis. A showcase of international gold medal innovations, scientific research, web development, and sustainable engineering.",
   keywords: [
-    "Fadhil Muhammad Syafiq Lubis",
-    "Portfolio",
-    "International Science Competition Winner",
-    "Student Researcher",
+    "Fadhil Muhammad Syafiq Lubis", 
+    "Portfolio", 
+    "Research Consultant Murah",
+    "Jasa Konsultan Riset",
+    "Konsultan Penelitian",
+    "International Science Competition Winner", 
+    "Student Researcher", 
     "Web Developer",
     "Innovator"
   ],
