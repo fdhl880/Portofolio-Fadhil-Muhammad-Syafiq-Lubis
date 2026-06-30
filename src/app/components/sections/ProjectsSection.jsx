@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 
 const webProjects = [
   {
-    title: 'ResearchBuddy',
+    title: 'Research Buddy Consultant',
     category: 'Research & Education',
-    description: 'An AI-powered research assistant that helps students and researchers organize, analyze, and present their findings more effectively.',
+    description: 'An affordable research consultant service (research consultant murah) and AI-powered assistant that helps students and researchers organize, analyze, and present their findings more effectively.',
     year: '2026',
     url: 'https://researchbuddyweb.vercel.app',
   },
