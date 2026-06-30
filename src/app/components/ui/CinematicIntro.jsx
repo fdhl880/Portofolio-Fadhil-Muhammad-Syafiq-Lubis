@@ -112,15 +112,60 @@ export default function CinematicIntro({ onComplete }) {
                     className="relative w-20 h-20 rounded-none overflow-hidden border border-white/10 p-4 bg-black/40 backdrop-blur-3xl shadow-[0_0_50px_rgba(255,255,255,0.05)] z-20"
                   >
                     <svg viewBox="0 0 100 100" className="w-full h-full">
+                      {/* Left Vertical Line */}
                       <motion.path 
-                        d="M 35 25 L 65 25 M 35 50 L 52 50 M 35 75 L 65 75 M 35 25 L 35 75 M 35 50 L 65 25" 
+                        d="M 35 25 L 35 75" 
                         fill="none" 
                         stroke="#FFFFFF" 
-                        strokeWidth="3"
-                        strokeLinejoin="miter"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
                         initial={{ pathLength: 0, opacity: 0 }}
                         animate={{ pathLength: 1, opacity: 1 }}
-                        transition={{ duration: 1.5, delay: 0.8, ease: "easeInOut" }}
+                        transition={{ duration: 0.5, delay: 0.5, ease: "easeInOut" }}
+                      />
+                      {/* Top Horizontal Line */}
+                      <motion.path 
+                        d="M 35 25 L 65 25" 
+                        fill="none" 
+                        stroke="#FFFFFF" 
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 0.4, delay: 1.0, ease: "easeInOut" }}
+                      />
+                      {/* Middle Horizontal Line */}
+                      <motion.path 
+                        d="M 35 50 L 52 50" 
+                        fill="none" 
+                        stroke="#FFFFFF" 
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 1.4, ease: "easeInOut" }}
+                      />
+                      {/* Bottom Horizontal Line */}
+                      <motion.path 
+                        d="M 35 75 L 65 75" 
+                        fill="none" 
+                        stroke="#FFFFFF" 
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 0.4, delay: 1.7, ease: "easeInOut" }}
+                      />
+                      {/* Diagonal Line */}
+                      <motion.path 
+                        d="M 35 50 L 65 25" 
+                        fill="none" 
+                        stroke="#FFFFFF" 
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        initial={{ pathLength: 0, opacity: 0 }}
+                        animate={{ pathLength: 1, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 2.1, ease: "easeInOut" }}
                       />
                     </svg>
                   </motion.div>
@@ -148,7 +193,7 @@ export default function CinematicIntro({ onComplete }) {
                       key={i}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.5 + (i * 0.05) }}
+                      transition={{ delay: 2.5 + (i * 0.05) }}
                       className={`text-white text-xl md:text-2xl font-light tracking-widest ${letter === " " ? "w-4" : ""}`}
                     >
                       {letter}
@@ -161,7 +206,7 @@ export default function CinematicIntro({ onComplete }) {
                     <motion.div 
                       initial={{ opacity: 0 }} 
                       animate={{ opacity: 1 }} 
-                      transition={{ delay: 2.5 }}
+                      transition={{ delay: 3.2 }}
                       className="w-full"
                     >
                       <div className="w-full text-[8px] font-sans text-white/20 uppercase tracking-[1em] mb-3 text-center">

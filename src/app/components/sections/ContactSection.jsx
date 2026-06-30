@@ -1,61 +1,95 @@
 'use client';
 import { motion } from 'framer-motion';
-import ContactForm from '../ui/ContactForm';
+
+const socials = [
+  { name: 'Gmail', href: 'mailto:fadhilsyafiq90@gmail.com' },
+  { name: 'GitHub', href: 'https://github.com/fdhl880' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/fadhil-muhammad-syafiq-lubis-90a46a355' },
+];
 
 export default function ContactSection() {
-  const contactinfo = [
-    { label: 'General Inquiry', value: 'Fadhilsyafiq90@gmail.com' },
-    { label: 'Social Identity', value: 'instagram.com/fadhilm_s', link: 'https://instagram.com/fadhilm_s' },
-    { label: 'Atelier Location', value: 'Medan, Indonesia' }
-  ];
-
   return (
-    <section id="contact" className="relative py-32 px-6 px-12 bg-black overflow-hidden border-t border-white/5">
+    <section id="contact" className="bg-black py-32 px-6 md:px-10">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-24">
-          
-          {/* Left: Branding & Info */}
-          <div className="flex flex-col gap-12">
-            <div className="flex flex-col gap-6">
-              <span className="text-white/50 text-[10px] tracking-[0.8em] uppercase font-sans">Contact</span>
-              <h2 className="font-display text-5xl md:text-7xl leading-tight">
-                Submit an <br />
-                <span className="italic opacity-40">Inquiry.</span>
-              </h2>
-            </div>
-            
-            <div className="flex flex-col gap-8 pt-12">
-              {contactinfo.map((info, idx) => (
-                <div key={info.label} className="flex flex-col gap-1">
-                  <span className="text-[10px] tracking-widest uppercase text-white/50 font-sans">{info.label}</span>
-                  {info.link ? (
-                    <a href={info.link} target="_blank" rel="noopener noreferrer" className="font-display text-xl text-white/60 hover:text-white transition-colors duration-500">
-                      {info.value}
-                    </a>
-                  ) : (
-                    <p className="font-display text-xl text-white/60">{info.value}</p>
-                  )}
-                </div>
-              ))}
-            </div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-section-title mb-6"
+        >
+          Contact
+        </motion.div>
 
-            <div className="mt-auto pt-24 hidden lg:block">
-              <p className="text-white/10 text-[9px] tracking-[0.4em] uppercase font-sans">
-                Available for Global Collaborations
-              </p>
-            </div>
-          </div>
+        <motion.h2
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.1 }}
+          className="text-impact-md mb-16"
+        >
+          Let&apos;s Connect
+        </motion.h2>
 
-          {/* Right: The Form */}
-          <div className="flex flex-col justify-center">
-            <ContactForm />
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Left — Message */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="flex flex-col gap-8"
+          >
+            <p className="text-body-lg max-w-md">
+              Have a project idea, collaboration opportunity, or just want to say hi? 
+              I&apos;d love to hear from you.
+            </p>
 
+            <a
+              href="mailto:fadhilsyafiq90@gmail.com"
+              className="inline-flex items-center gap-4 group w-fit"
+            >
+              <span className="text-xl md:text-2xl font-semibold tracking-tight group-hover:opacity-60 transition-opacity">
+                fadhilsyafiq90@gmail.com
+              </span>
+              <svg className="w-5 h-5 text-white/40 group-hover:text-white group-hover:translate-x-1 transition-all duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+              </svg>
+            </a>
+          </motion.div>
+
+          {/* Right — Social Links */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="flex flex-col gap-4"
+          >
+            <span className="text-[10px] tracking-[0.3em] uppercase text-white/30 mb-4">Follow Me</span>
+            {socials.map((social, i) => (
+              <motion.a
+                key={social.name}
+                href={social.href}
+                target={social.name !== 'Gmail' ? '_blank' : undefined}
+                rel={social.name !== 'Gmail' ? 'noopener noreferrer' : undefined}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.4 + i * 0.1 }}
+                className="flex items-center justify-between py-5 border-b border-white/5 group hover:border-white/20 transition-colors"
+              >
+                <span className="text-lg md:text-xl font-semibold tracking-tight group-hover:translate-x-2 transition-transform duration-500">
+                  {social.name}
+                </span>
+                <svg className="w-4 h-4 text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
+              </motion.a>
+            ))}
+          </motion.div>
         </div>
       </div>
-
-      {/* Background Graphic (Minimal Circle) */}
-      <div className="absolute -bottom-64 -right-64 w-[600px] h-[600px] border border-white/5 rounded-full pointer-events-none" />
     </section>
   );
 }

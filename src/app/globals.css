@@ -1,32 +1,31 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-black-pure: #000000;
-  --color-black-soft: #0a0a0a;
-  --color-white-pure: #ffffff;
-  --color-white-soft: #f5f5f5;
-  --color-gold-muted: #d4af37;
-  --font-display: var(--font-playfair);
+  --color-black: #000000;
+  --color-bg: #0a0a0a;
+  --color-white: #ffffff;
+  --color-grey-1: #888888;
+  --color-grey-2: #444444;
+  --color-grey-3: #1a1a1a;
+  --font-display: var(--font-inter);
   --font-body: var(--font-inter);
 }
 
 :root {
-  --fluid-h1: clamp(2.5rem, 8vw + 1rem, 6rem);
-  --fluid-h2: clamp(1.8rem, 5vw + 1rem, 4rem);
-  --fluid-p: clamp(1rem, 1vw + 0.5rem, 1.25rem);
+  --cubic-default: cubic-bezier(0.65, 0.05, 0, 1);
+  --duration-default: 0.75s;
+  --animation-default: var(--duration-default) var(--cubic-default);
 }
 
-.font-display { font-family: var(--font-playfair), serif; }
-.font-sans { font-family: var(--font-inter), sans-serif; }
+/* ========== BASE ========== */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-.noise-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  filter: contrast(150%) brightness(150%);
+::selection {
+  background-color: #ffffff;
+  color: #000000;
 }
 
 html {
@@ -34,134 +33,241 @@ html {
   max-width: 100vw;
   overflow-x: hidden;
   background: #000000;
-  overscroll-behavior-y: none;
+  scrollbar-width: none;
 }
+
+html::-webkit-scrollbar { display: none; }
 
 body {
   background: #000000;
   color: #ffffff;
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-body), system-ui, sans-serif;
   max-width: 100vw;
   overflow-x: hidden;
-  position: relative;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Luxury Typography */
-h1 { font-size: var(--fluid-h1); line-height: 0.95; letter-spacing: -0.04em; }
-h2 { font-size: var(--fluid-h2); line-height: 1.1; letter-spacing: -0.02em; }
-p { font-size: var(--fluid-p); line-height: 1.6; opacity: 0.8; }
-
-/* Android Scrollbar Refinement */
-::-webkit-scrollbar { 
-  width: 5px; 
-}
-::-webkit-scrollbar-track { 
-  background: #000000; 
-}
-::-webkit-scrollbar-thumb {
-  background: #333333;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #ffffff;
+/* ========== TYPOGRAPHY — Lando-Inspired ========== */
+.text-impact {
+  font-size: clamp(3rem, 12vw, 12rem);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
 }
 
-/* Luxury UI Utilities */
-.glass {
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.text-impact-md {
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
-.luxury-border {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.text-section-title {
+  font-size: clamp(0.625rem, 1vw, 0.75rem);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
 }
 
-.text-balance {
-  text-wrap: balance;
+.text-body {
+  font-size: clamp(0.875rem, 1.2vw, 1.125rem);
+  line-height: 1.6;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
 }
 
-.gold-gradient {
-  background: linear-gradient(135deg, #d4af37, #f9f295, #d4af37);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.text-body-lg {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  line-height: 1.5;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-/* Transitions */
-.reveal {
+/* ========== SCROLL ANIMATIONS ========== */
+.reveal-up {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateY(60px);
+  transition: opacity 1s var(--cubic-default), transform 1s var(--cubic-default);
 }
 
-.reveal.active {
+.reveal-up.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Mobile Safety Layer */
-.mobile-safe-container {
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 1.2s var(--cubic-default);
 }
 
-/* Museum Gallery Effect */
-.gallery-item {
+.reveal-fade.visible {
+  opacity: 1;
+}
+
+/* ========== MARQUEE ========== */
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.marquee-track-left {
+  animation: marquee-left 25s linear infinite;
+}
+
+.marquee-track-right {
+  animation: marquee-right 25s linear infinite;
+}
+
+/* ========== HOVER TEXT SHIFT (Lando-style) ========== */
+.hover-shift {
   position: relative;
   overflow: hidden;
-  background: #0a0a0a;
+  display: inline-block;
 }
 
-.gallery-item img {
-  transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+.hover-shift span {
+  display: block;
+  transition: transform 0.5s var(--cubic-default);
 }
 
-.gallery-item:hover img {
-  transform: scale(1.05);
+.hover-shift:hover span {
+  transform: translateY(-100%);
 }
 
-/* ====================================================
-   DYNAMIC BACKGROUND SYSTEM — Apple/Awwwards Tier
-   Strips blocking solid backgrounds from all sections
-   so DynamicBackgroundManager renders through cleanly.
-   ==================================================== */
-
-/* Noise grain texture utility */
-.noise-bg {
-  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  background-repeat: repeat;
-  background-size: 200px 200px;
+.hover-shift::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  transition: transform 0.5s var(--cubic-default);
 }
 
-/* Force all data-section wrappers and their children to be transparent */
-[data-section] {
-  background: transparent !important;
+.hover-shift:hover::after {
+  transform: translateY(-100%);
 }
 
-/* Override solid black radial gradients inside sections */
-[data-section] > section,
-[data-section] section {
-  background: transparent !important;
+/* ========== NAV ========== */
+.nav-overlay {
+  clip-path: circle(0% at calc(100% - 2.5rem) 2.5rem);
+  transition: clip-path 0.8s var(--cubic-default);
 }
 
-/* Target the absolute background ambience divs in section components */
-[data-section] .absolute.inset-0[class*="bg-"] {
-  display: none !important;
+.nav-overlay.open {
+  clip-path: circle(150% at calc(100% - 2.5rem) 2.5rem);
 }
 
-/* Keep the content layers readable with a subtle section depth hint */
-[data-section] > section > .relative,
-[data-section] .relative.z-10,
-[data-section] .relative.z-20 {
-  background: transparent !important;
+/* ========== HAMBURGER ========== */
+.ham-line {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.4s var(--cubic-default), opacity 0.3s;
 }
 
-/* Ensure collections section is transparent too */
-#collections {
-  background: transparent !important;
-  border-color: rgba(255, 255, 255, 0.04) !important;
+.ham-open .ham-line:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.ham-open .ham-line:nth-child(2) {
+  opacity: 0;
+}
+
+.ham-open .ham-line:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ========== STAT CARD ========== */
+.stat-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2rem;
+  transition: border-color var(--animation-default), background-color var(--animation-default);
+}
+
+.stat-card:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* ========== PROJECT CARD ========== */
+.project-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: transform var(--animation-default), border-color var(--animation-default), background-color var(--animation-default);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* ========== SKILL TAG ========== */
+.skill-tag {
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: all var(--animation-default);
+}
+
+.skill-tag:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+}
+
+/* ========== SECTION DIVIDER ========== */
+.section-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  width: 100%;
+}
+
+/* ========== LINK UNDERLINE ========== */
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #ffffff;
+  transition: width 0.5s var(--cubic-default);
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+/* ========== SCROLL INDICATOR ========== */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.scroll-indicator-anim {
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+/* ========== MOBILE ========== */
+@media (max-width: 768px) {
+  .text-impact {
+    font-size: clamp(2.5rem, 15vw, 5rem);
+  }
 }

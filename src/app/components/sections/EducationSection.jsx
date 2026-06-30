@@ -1,101 +1,140 @@
 'use client';
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
-import { timeline } from './AchievementsSection';
+
+const timeline = [
+  {
+    year: '2025',
+    title: 'I2SPO — GOLD MEDAL',
+    desc: 'Won a Gold Medal at the International Science Project Olympiad for sustainable technology innovation.',
+    badge: 'GOLD',
+  },
+  {
+    year: '2025',
+    title: 'MALAYSIA TECHNOLOGY EXPO',
+    desc: 'Presented engineering and software innovations, earning a Silver Medal in Kuala Lumpur.',
+    badge: 'SILVER',
+  },
+  {
+    year: '2024',
+    title: 'IPITEX THAILAND',
+    desc: 'Earned a Silver Medal for a scientific innovation project at Thailand Inventors\' Day in Bangkok.',
+    badge: 'SILVER',
+  },
+  {
+    year: 'ONGOING',
+    title: 'CONTINUOUS LEARNING',
+    desc: 'Expanding skills in full-stack development, research methodology, and entrepreneurship.',
+    badge: 'ACTIVE',
+  },
+];
 
 export default function EducationSection() {
+  const containerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+  });
+
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-55%']);
+
   return (
-    <section id="education" className="relative py-16 md:py-32 px-4 overflow-hidden">
-      {/* Background accent */}
-      <div className="absolute top-1/2 left-0 w-72 h-72 rounded-full bg-violet/5 blur-3xl -translate-y-1/2" />
-      <div className="absolute top-1/3 right-0 w-72 h-72 rounded-full bg-neon/5 blur-3xl" />
-
-      <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-gradient">Journey & Education</span>
+    <div ref={containerRef} className="relative h-[300vh] bg-black">
+      {/* Sticky viewport wrapper */}
+      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
+        
+        {/* Section Title */}
+        <div className="absolute top-20 left-10 z-20 pointer-events-none">
+          <span className="text-[10px] tracking-[0.5em] font-mono text-white/30 block mb-3">/ TIMELINE</span>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight uppercase leading-none text-white">
+            MY JOURNEY.
           </h2>
-          <p className="text-muted max-w-2xl mx-auto">
-            A timeline of growth, learning, and international achievements.
-          </p>
-        </motion.div>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 md:gap-0 items-start">
-          {/* Photo card */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="md:pr-12 flex justify-center md:justify-end md:sticky md:top-32"
-          >
-            <div className="relative w-48 h-64 sm:w-56 sm:h-72 md:w-64 md:h-80 rounded-2xl overflow-hidden glass glow-purple animate-float">
+        <div className="absolute top-20 right-10 z-20 pointer-events-none font-mono text-[9px] text-white/30 tracking-widest text-right">
+          SCROLL DOWN TO EXPLORE
+        </div>
+
+        {/* Horizontal Moving Strip */}
+        <motion.div 
+          style={{ x }} 
+          className="flex gap-8 px-10 md:px-24 items-center w-max h-[60vh] mt-20"
+        >
+          
+          {/* Opening Panel */}
+          <div className="w-[300px] md:w-[450px] flex-shrink-0 flex flex-col justify-center pr-12">
+            <span className="text-[120px] font-extrabold leading-[0.8] tracking-tighter text-white/10 uppercase select-none font-mono">
+              TIME
+            </span>
+            <span className="text-[120px] font-extrabold leading-[0.8] tracking-tighter text-white/10 uppercase select-none font-mono">
+              LINE
+            </span>
+          </div>
+
+          {/* Photo Panel */}
+          <div className="w-[320px] md:w-[400px] h-full flex-shrink-0 relative border border-white/10 p-2 bg-neutral-950/45">
+            <div className="relative w-full h-full overflow-hidden bg-neutral-900">
               <Image
                 src="/images/photo2.jpg"
-                alt="Fadhil at Malaysia Technology Expo 2025"
+                alt="Fadhil Muhammad Syafiq Lubis at MTE 2025"
                 fill
-                sizes="(max-width: 768px) 224px, 256px"
-                className="object-cover"
+                className="object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-out scale-105 hover:scale-100"
+                sizes="400px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-dark/70 via-transparent to-transparent" />
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-sm font-semibold text-white">MTE 2025</p>
-                <p className="text-xs text-muted">Malaysia Technology Expo</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-85" />
+              <div className="absolute bottom-4 left-4">
+                <p className="text-[10px] font-mono tracking-widest text-white/80 uppercase">MTE 2025 // MALAYSIA</p>
+                <p className="text-[8px] font-mono tracking-widest text-white/40 uppercase">Expo Presentation</p>
               </div>
             </div>
-          </motion.div>
-
-          {/* Timeline line (desktop) */}
-          <div className="hidden md:flex flex-col items-center">
-            <div className="w-px bg-gradient-to-b from-neon/40 via-violet/40 to-gold/40 h-full min-h-[500px]" />
           </div>
 
-          {/* Timeline nodes */}
-          <div className="md:pl-12 space-y-8 relative">
-            {/* Mobile Timeline Line */}
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-neon/40 via-violet/40 to-gold/40 md:hidden" />
-
-            {timeline.map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: '-30px' }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative"
-              >
-                {/* Node dot (desktop) */}
-                <div
-                  className="hidden md:block absolute -left-12 top-3 w-3 h-3 rounded-full -translate-x-1/2"
-                  style={{
-                    backgroundColor: item.color,
-                    boxShadow: `0 0 12px ${item.color}60`,
-                  }}
-                />
-
-                <div className="glass rounded-xl p-5 ml-8 md:ml-0 hover:bg-white/[0.04] transition-colors">
-                  <span
-                    className="text-xs font-bold tracking-widest uppercase"
-                    style={{ color: item.color }}
-                  >
-                    {item.year}
+          {/* Timeline Cards */}
+          {timeline.map((item, index) => (
+            <div
+              key={index}
+              className="w-[300px] md:w-[380px] h-full flex-shrink-0 border border-white/10 p-8 flex flex-col justify-between bg-neutral-950/20 hover:border-white transition-all group"
+            >
+              <div>
+                <div className="flex justify-between items-start mb-8">
+                  <span className="text-sm font-mono text-white/40 tracking-widest">0{index + 1}</span>
+                  <span className="text-[9px] font-mono px-3 py-1 border border-white/15 text-white/60 tracking-widest uppercase">
+                    {item.badge}
                   </span>
-                  <h3 className="font-display text-lg font-semibold mt-1 text-white">
-                    {item.title}
-                  </h3>
-                  <p className="text-muted text-sm mt-2 leading-relaxed">{item.desc}</p>
                 </div>
-              </motion.div>
-            ))}
+                
+                <span className="text-[10px] font-mono text-white/30 tracking-widest block mb-2">{item.year}</span>
+                <h3 className="text-2xl font-bold tracking-tight text-white uppercase mb-4 group-hover:translate-x-2 transition-transform duration-500">
+                  {item.title}
+                </h3>
+              </div>
+
+              <p className="text-[12px] text-white/45 leading-relaxed tracking-wider">
+                {item.desc}
+              </p>
+            </div>
+          ))}
+
+          {/* End Panel */}
+          <div className="w-[300px] md:w-[400px] h-full flex-shrink-0 flex flex-col justify-center pl-12 border-l border-white/10">
+            <span className="text-xs font-mono tracking-widest text-white/30 block mb-4">THE JOURNEY CONTINUES</span>
+            <p className="text-xl font-semibold text-white/70 leading-relaxed">
+              &quot;Every competition, every project, every late night of coding — it all adds up to who I&apos;m becoming.&quot;
+            </p>
           </div>
+
+        </motion.div>
+
+        {/* Scroll Progress Bar */}
+        <div className="absolute bottom-16 left-10 right-10 h-px bg-white/10 z-20">
+          <motion.div 
+            style={{ scaleX: scrollYProgress }} 
+            className="h-full bg-white origin-left"
+          />
         </div>
+
       </div>
-    </section>
+    </div>
   );
 }
