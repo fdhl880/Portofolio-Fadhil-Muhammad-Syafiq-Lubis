@@ -1,30 +1,34 @@
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const publications = [
   {
     id: 1,
-    title: 'PyroFuel: Utilization of Plastic Waste into Liquid Fuel Using Pyrolysis Method and Paving Blocks Production as Value Added Products',
-    field: 'Environmental Engineering',
-    status: 'Published Research',
-    tags: ['Pyrolysis', 'Plastic Waste', 'Sustainable Energy', 'Paving Blocks'],
-    description: 'A research project that transforms plastic waste into usable liquid fuel through the pyrolysis method, with the added innovation of converting byproducts into paving blocks — turning waste into two valuable outputs.',
+    title: 'PyroFuel: Utilization of Plastic Waste into Liquid Fuel Using Pyrolysis Method',
+    date: 'February 2024',
+    organization: 'National Research Council of Thailand (NRCT)',
+    description: 'A research project that transforms plastic waste into usable liquid fuel through the pyrolysis method, with the added innovation of converting byproducts into paving blocks — turning waste into two valuable outputs. Presented at IPITEX Bangkok 2024.',
+    image: '/images/activity-pyrofuel.jpg',
+    link: '#'
   },
   {
     id: 2,
-    title: 'NusaMark: An Automatic Floating Location Marker System to Support Indonesian Search and Rescue Teams in Locating Sunken Ships',
-    field: 'Maritime Technology',
-    status: 'Published Research',
-    tags: ['SAR', 'Maritime', 'IoT', 'Location Tracking'],
-    description: 'An innovative automatic floating marker system designed to help Indonesian Search and Rescue (SAR) teams quickly locate sunken ships, improving response time and saving lives at sea.',
+    title: 'NusaMark: An Automatic Floating Location Marker System',
+    date: 'January 2025',
+    organization: 'International Science Project Olympiad',
+    description: 'An innovative automatic floating marker system designed to help Indonesian Search and Rescue (SAR) teams quickly locate sunken ships, improving response time and saving lives at sea. Won Gold Medal at I2ASPO 2025.',
+    image: '/images/activity-gold-medal.png',
+    link: '#'
   },
   {
     id: 3,
-    title: 'Optimalisasi Potensi Limbah Tulang Ikan Melalui Inovasi Makanan Pendamping Balita (FiBoBites) untuk Mendukung Pencegahan Stunting',
-    field: 'Food Science & Public Health',
-    status: 'Published Research',
-    tags: ['Stunting Prevention', 'Fish Bone', 'Nutrition', 'Food Innovation'],
+    title: 'Optimalisasi Potensi Limbah Tulang Ikan (FiBoBites) untuk Mencegah Stunting',
+    date: 'March 2025',
+    organization: 'Malaysia Technology Expo',
     description: 'A food science innovation that utilizes fish bone waste to create nutritious complementary food for toddlers (FiBoBites), supporting Indonesia\'s national effort to prevent stunting in children.',
+    image: '/images/activity-fibobites.jpg',
+    link: '#'
   },
 ];
 
@@ -32,111 +36,111 @@ export default function ResearchSection({ isDark }) {
   return (
     <section
       id="research"
-      className={`py-32 px-6 md:px-10 ${
+      className={`py-32 px-6 md:px-10 overflow-hidden ${
         isDark ? 'bg-[#0F0F11]' : 'bg-[#EAEAEA]'
       }`}
     >
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <span
-              className={`text-[10px] tracking-[0.5em] font-mono block mb-3 ${
-                isDark ? 'text-white/30' : 'text-black/30'
-              }`}
-            >
-              / RESEARCH
-            </span>
-            <h2
-              className={`text-4xl md:text-6xl font-black uppercase tracking-tight leading-none ${
-                isDark ? 'text-white' : 'text-black'
-              }`}
-            >
-              Published
-              <br />
-              Research.
-            </h2>
-          </motion.div>
-          <div
-            className={`text-[10px] font-mono tracking-widest max-w-xs md:text-right ${
-              isDark ? 'text-white/30' : 'text-black/30'
-            }`}
-          >
-            SCIENTIFIC PAPERS PRESENTED AT NATIONAL & INTERNATIONAL COMPETITIONS
-          </div>
-        </div>
-
-        {/* Research Papers */}
-        <div className="flex flex-col gap-5">
-          {publications.map((pub, index) => (
+        
+        {/* Header split layout */}
+        <div className="flex flex-col md:flex-row gap-8 justify-between items-start mb-24">
+          <div>
             <motion.div
-              key={pub.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: index * 0.1 }}
-              className={`p-8 md:p-10 rounded-2xl border group transition-all duration-300 ${
-                isDark
-                  ? 'border-white/5 bg-white/[0.02] hover:border-white/15'
-                  : 'border-black/5 bg-black/[0.02] hover:border-black/15'
-              }`}
+              transition={{ duration: 0.8 }}
+              className="mb-8"
             >
-              <div className="flex flex-wrap justify-between items-start gap-4 mb-5">
-                <span
-                  className={`text-[10px] font-mono tracking-widest uppercase ${
-                    isDark ? 'text-white/30' : 'text-black/30'
-                  }`}
-                >
-                  {pub.field}
-                </span>
-                <span
-                  className={`text-[9px] font-mono px-3 py-1 rounded-full tracking-widest uppercase ${
-                    isDark
-                      ? 'bg-white/5 text-white/40'
-                      : 'bg-black/5 text-black/40'
-                  }`}
-                >
-                  {pub.status}
-                </span>
-              </div>
-
-              <h3
-                className={`text-xl md:text-2xl font-black tracking-tight leading-snug mb-4 group-hover:translate-x-1 transition-transform duration-500 ${
-                  isDark ? 'text-white' : 'text-black'
-                }`}
-              >
-                {pub.title}
-              </h3>
-
-              <p
-                className={`text-sm leading-relaxed mb-6 max-w-3xl ${
+              <span
+                className={`text-[10px] tracking-[0.5em] font-mono uppercase block ${
                   isDark ? 'text-white/40' : 'text-black/40'
                 }`}
               >
-                {pub.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {pub.tags.map(tag => (
-                  <span
-                    key={tag}
-                    className={`text-[9px] font-mono px-3 py-1 rounded-full uppercase tracking-widest ${
-                      isDark
-                        ? 'bg-white/5 text-white/30'
-                        : 'bg-black/5 text-black/30'
-                    }`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                Growth & Experience
+              </span>
             </motion.div>
-          ))}
+
+            <motion.h2
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className={`text-5xl md:text-[5vw] font-black tracking-tighter leading-[0.9] ${
+                isDark ? 'text-white' : 'text-black'
+              }`}
+            >
+              Research &
+              <br />
+              Exhibitions
+            </motion.h2>
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className={`md:max-w-sm text-sm leading-relaxed ${isDark ? 'text-white/60' : 'text-black/60'} md:mt-auto`}
+          >
+            A collection of scientific papers, innovations, and exhibitions that shaped my technical and collaborative skills.
+          </motion.div>
+        </div>
+
+        {/* Alternating Layout List */}
+        <div className="flex flex-col gap-24">
+          {publications.map((pub, index) => {
+            const isEven = index % 2 === 0;
+            return (
+              <motion.div
+                key={pub.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}
+              >
+                {/* Text Content */}
+                <div className="flex-1 w-full">
+                  <div className="flex justify-between items-start gap-4 mb-4">
+                    <h3 className={`text-2xl font-bold tracking-tight ${isDark ? 'text-white' : 'text-black'}`}>
+                      {pub.title}
+                    </h3>
+                    <span className={`text-[10px] font-mono tracking-widest uppercase shrink-0 mt-1 ${isDark ? 'text-white/40' : 'text-black/40'}`}>
+                      {pub.date}
+                    </span>
+                  </div>
+                  
+                  <div className={`font-medium mb-6 ${isDark ? 'text-white/80' : 'text-black/80'}`}>
+                    {pub.organization}
+                  </div>
+                  
+                  <p className={`text-sm leading-relaxed mb-8 ${isDark ? 'text-white/60' : 'text-black/60'}`}>
+                    {pub.description}
+                  </p>
+                  
+                  <a href={pub.link} className={`inline-flex items-center gap-2 text-[10px] font-mono font-bold tracking-[0.2em] uppercase group ${isDark ? 'text-white hover:text-white/70' : 'text-black hover:text-black/70'}`}>
+                    VIEW RESEARCH PAPER
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+                      <path d="M7 17L17 7M17 7H7M17 7v10"/>
+                    </svg>
+                  </a>
+                </div>
+
+                {/* Image Content */}
+                <div className="flex-1 w-full">
+                  <div className={`relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl ${isDark ? 'border border-white/10' : 'border border-black/10'}`}>
+                    <Image
+                      src={pub.image}
+                      alt={pub.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

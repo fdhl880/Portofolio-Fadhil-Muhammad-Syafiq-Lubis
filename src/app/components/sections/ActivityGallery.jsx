@@ -14,19 +14,19 @@ const activities = [
     desc: 'Representing Indonesia at the international innovation expo',
   },
   {
-    src: '/images/photo2.jpg',
-    title: 'Competition Day',
-    desc: 'Presenting research innovations on the world stage',
+    src: '/images/activity-pyrofuel.jpg',
+    title: 'PyroFuel Presentation',
+    desc: 'Explaining our waste-to-energy solution to the judges',
   },
   {
-    src: '/images/photo3.jpg',
-    title: 'Award Ceremony',
-    desc: 'Celebrating achievements with fellow innovators',
+    src: '/images/activity-gold-medal.png',
+    title: 'I2ASPO Gold Medal',
+    desc: 'Celebrating our Gold Medal victory at the International Olympiad',
   },
   {
-    src: '/images/photo4.jpg',
-    title: 'Team Collaboration',
-    desc: 'Working together to solve real-world problems',
+    src: '/images/activity-fibobites.jpg',
+    title: 'FiBoBites Exhibition',
+    desc: 'Showcasing our stunting prevention innovation',
   },
 ];
 
@@ -92,8 +92,8 @@ export default function ActivityGallery({ isDark }) {
                 <div
                   className={`absolute inset-0 flex flex-col justify-end p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${
                     isDark
-                      ? 'bg-gradient-to-t from-black/80 via-black/30 to-transparent'
-                      : 'bg-gradient-to-t from-white/80 via-white/30 to-transparent'
+                      ? 'bg-gradient-to-t from-black/90 via-black/40 to-transparent'
+                      : 'bg-gradient-to-t from-white/90 via-white/40 to-transparent'
                   }`}
                 >
                   <h3
@@ -105,7 +105,7 @@ export default function ActivityGallery({ isDark }) {
                   </h3>
                   <p
                     className={`text-xs mt-1 ${
-                      isDark ? 'text-white/60' : 'text-black/60'
+                      isDark ? 'text-white/70' : 'text-black/70'
                     }`}
                   >
                     {item.desc}

@@ -1,6 +1,6 @@
 'use client';
 import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
@@ -16,6 +16,31 @@ export default function HeroSection({ isDark }) {
   const imageY = useTransform(scrollYProgress, [0, 1], ['0%', '-10%']);
   // Fade out on scroll
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+
+  // 3D Tilt Effect State (Option B)
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [25, -25]), { damping: 30, stiffness: 200 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-25, 25]), { damping: 30, stiffness: 200 });
+  
+  // Dynamic glare effect based on mouse position
+  const glareX = useTransform(mouseX, [0, 1], [-100, 100]);
+  const glareY = useTransform(mouseY, [0, 1], [-100, 100]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const xPct = (e.clientX - rect.left) / rect.width;
+    const yPct = (e.clientY - rect.top) / rect.height;
+    mouseX.set(xPct);
+    mouseY.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    // Reset to center
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  };
 
   return (
     <section
@@ -46,22 +71,22 @@ export default function HeroSection({ isDark }) {
       {/* Center Content */}
       <motion.div
         style={{ opacity }}
-        className="relative z-10 flex flex-col items-center text-center px-6"
+        className="relative z-10 flex flex-col items-center text-center px-6 w-full max-w-4xl"
       >
         {/* Tags */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-2 mb-8"
+          className="flex flex-wrap justify-center gap-2 mb-12"
         >
           {['Innovator', 'Researcher', 'Developer'].map((tag) => (
             <span
               key={tag}
               className={`px-4 py-1.5 rounded-full text-[10px] font-medium tracking-[0.15em] uppercase border ${
                 isDark
-                  ? 'border-white/10 text-white/50'
-                  : 'border-black/10 text-black/50'
+                  ? 'border-white/10 text-white/50 bg-white/5'
+                  : 'border-black/10 text-black/50 bg-black/5'
               }`}
             >
               {tag}
@@ -69,38 +94,69 @@ export default function HeroSection({ isDark }) {
           ))}
         </motion.div>
 
-        {/* Portrait Cutout */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          style={{ y: imageY }}
-          className="relative w-64 h-80 md:w-80 md:h-[420px] mb-8"
+        {/* 3D Portrait Cutout with enhanced effect */}
+        <div 
+          className="perspective-[1200px] cursor-pointer mb-12"
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         >
-          <Image
-            src="/images/hero-cutout.jpg"
-            alt="Fadhil Muhammad Syafiq Lubis"
-            fill
-            className="object-cover object-top rounded-3xl"
-            sizes="(max-width: 768px) 256px, 320px"
-            priority
-          />
-          {/* Gradient overlay at bottom */}
-          <div
-            className={`absolute inset-0 rounded-3xl ${
-              isDark
-                ? 'bg-gradient-to-t from-[#0F0F11] via-transparent to-transparent'
-                : 'bg-gradient-to-t from-[#EAEAEA] via-transparent to-transparent'
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            style={{ 
+              y: imageY,
+              rotateX,
+              rotateY,
+              transformStyle: "preserve-3d" 
+            }}
+            className={`relative w-[280px] h-[360px] md:w-[340px] md:h-[460px] rounded-[2rem] border ${
+              isDark ? 'border-white/10 bg-white/5' : 'border-black/10 bg-white shadow-2xl'
             }`}
-          />
-        </motion.div>
+          >
+            {/* Inner frame for the photo */}
+            <motion.div 
+              style={{ transform: "translateZ(80px)" }}
+              className="absolute inset-4 rounded-[1.5rem] overflow-hidden"
+            >
+              <Image
+                src="/images/hero-cutout.jpg"
+                alt="Fadhil Muhammad Syafiq Lubis"
+                fill
+                className="object-cover object-top"
+                sizes="(max-width: 768px) 256px, 320px"
+                priority
+              />
+              
+              {/* Dynamic glare effect */}
+              <motion.div
+                className="absolute inset-0 z-20 opacity-50 mix-blend-overlay pointer-events-none"
+                style={{
+                  background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 60%)',
+                  x: glareX,
+                  y: glareY,
+                }}
+              />
+            </motion.div>
+            
+            {/* Foreground elements */}
+            <div style={{ transform: "translateZ(120px)" }} className="absolute bottom-10 left-10 right-10 flex justify-between items-end pointer-events-none">
+              <span className={`text-[10px] font-mono tracking-widest uppercase font-bold ${isDark ? 'text-white' : 'text-white'}`}>
+                FADHIL<br/>LUBIS
+              </span>
+              <span className={`text-[10px] font-mono tracking-widest uppercase px-3 py-1 rounded-full border ${isDark ? 'border-white/20 text-white bg-black/50 backdrop-blur-md' : 'border-black/20 text-black bg-white/50 backdrop-blur-md'}`}>
+                2026
+              </span>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Name */}
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
-          className={`text-3xl md:text-5xl font-black uppercase tracking-tight leading-none mb-4 ${
+          className={`text-4xl md:text-6xl lg:text-[5vw] font-black uppercase tracking-tighter leading-none mb-6 ${
             isDark ? 'text-white' : 'text-black'
           }`}
         >
@@ -108,18 +164,6 @@ export default function HeroSection({ isDark }) {
           <br />
           Syafiq Lubis
         </motion.h2>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className={`text-sm md:text-base max-w-md leading-relaxed ${
-            isDark ? 'text-white/50' : 'text-black/50'
-          }`}
-        >
-          Building real solutions through science, technology, and creative engineering.
-        </motion.p>
       </motion.div>
 
       {/* Scroll Indicator */}
