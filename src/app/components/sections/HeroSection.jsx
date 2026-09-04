@@ -1,6 +1,8 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import DepthMapImage from '../three/DepthMapImage';
 import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
@@ -17,12 +19,12 @@ export default function HeroSection({ isDark }) {
   // Fade out on scroll
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
-  // 3D Tilt Effect State (Option B)
+  // 3D Tilt Effect State (Frame tilt)
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const rotateX = useSpring(useTransform(mouseY, [0, 1], [25, -25]), { damping: 30, stiffness: 200 });
-  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-25, 25]), { damping: 30, stiffness: 200 });
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [15, -15]), { damping: 30, stiffness: 200 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-15, 15]), { damping: 30, stiffness: 200 });
   
   // Dynamic glare effect based on mouse position
   const glareX = useTransform(mouseX, [0, 1], [-100, 100]);
@@ -114,23 +116,24 @@ export default function HeroSection({ isDark }) {
               isDark ? 'border-white/10 bg-white/5' : 'border-black/10 bg-white shadow-2xl'
             }`}
           >
-            {/* Inner frame for the photo */}
+            {/* Inner frame for the photo (WebGL Canvas) */}
             <motion.div 
               style={{ transform: "translateZ(80px)" }}
-              className="absolute inset-4 rounded-[1.5rem] overflow-hidden"
+              className="absolute inset-4 rounded-[1.5rem] overflow-hidden bg-black"
             >
-              <Image
-                src="/images/formal-red.jpg"
-                alt="Fadhil Muhammad Syafiq Lubis"
-                fill
-                className="object-cover object-center"
-                sizes="(max-width: 768px) 256px, 320px"
-                priority
-              />
+              <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+                <Suspense fallback={null}>
+                  <DepthMapImage 
+                    imagePath="/images/formal-red.jpg" 
+                    depthMapPath="/images/formal-red.jpg" /* Replace with actual depth map later */
+                    intensity={0.15} 
+                  />
+                </Suspense>
+              </Canvas>
               
               {/* Dynamic glare effect */}
               <motion.div
-                className="absolute inset-0 z-20 opacity-50 mix-blend-overlay pointer-events-none"
+                className="absolute inset-0 z-20 opacity-40 mix-blend-overlay pointer-events-none"
                 style={{
                   background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 60%)',
                   x: glareX,
