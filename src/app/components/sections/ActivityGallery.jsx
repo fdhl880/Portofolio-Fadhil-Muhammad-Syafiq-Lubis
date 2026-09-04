@@ -4,6 +4,26 @@ import Image from 'next/image';
 
 const activities = [
   {
+    src: '/images/photo1.jpg',
+    title: 'Gold Medal Award',
+    desc: 'Receiving the gold medal certificate',
+  },
+  {
+    src: '/images/photo2.jpg',
+    title: 'Exhibition Setup',
+    desc: 'Preparing our innovation booth',
+  },
+  {
+    src: '/images/photo3.jpg',
+    title: 'Team Presentation',
+    desc: 'Presenting our project to the judges',
+  },
+  {
+    src: '/images/photo4.jpg',
+    title: 'Project Demonstration',
+    desc: 'Explaining how our system works in real-time',
+  },
+  {
     src: '/images/activity-soldering.jpg',
     title: 'Prototyping & Engineering',
     desc: 'Hands-on circuit and hardware development in the lab',

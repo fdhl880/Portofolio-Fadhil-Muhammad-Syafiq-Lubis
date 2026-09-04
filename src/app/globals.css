@@ -118,12 +118,24 @@ body {
   to { transform: translateX(0); }
 }
 
-.marquee-track-left {
-  animation: marquee-left 25s linear infinite;
+.marquee-row {
+  overflow: hidden;
+  width: 100%;
 }
 
-.marquee-track-right {
-  animation: marquee-right 25s linear infinite;
+.marquee-track {
+  display: flex;
+  width: max-content;
+}
+
+.marquee-track-left,
+.animate-marquee-left {
+  animation: marquee-left 20s linear infinite;
+}
+
+.marquee-track-right,
+.animate-marquee-right {
+  animation: marquee-right 20s linear infinite;
 }
 
 /* ========== HOVER TEXT SHIFT (Lando-style) ========== */
