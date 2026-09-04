@@ -92,14 +92,16 @@ export default function HeroSection({ isDark }) {
           transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           style={{ y: imageY }}
           className={`relative w-[260px] h-[340px] md:w-[320px] md:h-[420px] rounded-[2rem] overflow-hidden border mb-12 ${
-            isDark ? 'border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6)]' : 'border-black/10 shadow-[0_20px_60px_rgba(0,0,0,0.1)]'
+            isDark 
+              ? 'border-white/10 bg-gradient-to-b from-white/10 via-white/[0.03] to-transparent shadow-[0_20px_60px_rgba(0,0,0,0.6)]' 
+              : 'border-black/10 bg-gradient-to-b from-black/5 via-black/[0.02] to-transparent shadow-[0_20px_60px_rgba(0,0,0,0.1)]'
           }`}
         >
           <Image
-            src="/images/hero-cutout.jpg"
+            src="/images/hero-transparent.png"
             alt="Fadhil Muhammad Syafiq Lubis"
             fill
-            className="object-cover object-top"
+            className="object-cover object-bottom"
             sizes="(max-width: 768px) 260px, 320px"
             priority
           />
