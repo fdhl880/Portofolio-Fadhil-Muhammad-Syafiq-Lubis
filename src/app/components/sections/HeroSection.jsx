@@ -120,10 +120,10 @@ export default function HeroSection({ isDark }) {
               className="absolute inset-4 rounded-[1.5rem] overflow-hidden"
             >
               <Image
-                src="/images/hero-cutout.jpg"
+                src="/images/formal-red.jpg"
                 alt="Fadhil Muhammad Syafiq Lubis"
                 fill
-                className="object-cover object-top"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 256px, 320px"
                 priority
               />

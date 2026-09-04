@@ -16,12 +16,7 @@ const achievements = [
     title: "Silver Medal",
     issuer: "IPITEX 2024",
     link: "#"
-  },
-  {
-    title: "Best Presenter",
-    issuer: "Science Expo 2023",
-    link: "#"
-  },
+  }
 ];
 
 export default function AchievementsSection({ isDark }) {

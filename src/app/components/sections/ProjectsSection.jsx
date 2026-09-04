@@ -5,27 +5,35 @@ import Image from 'next/image';
 const projects = [
   {
     id: '01',
-    title: 'ResearchBuddy',
-    category: 'WEB DEVELOPMENT & AI',
-    description: 'An AI-powered academic assistant for researchers to instantly analyze PDFs, find citations, and summarize papers.',
-    tech: ['Next.js', 'React', 'Gemini AI', 'Tailwind CSS'],
-    link: '#',
+    title: 'Research Buddy Consultant',
+    category: 'RESEARCH & EDUCATION',
+    description: 'An affordable research consultant service and AI-powered assistant that helps students and researchers organize, analyze, and present their findings more effectively.',
+    tech: ['Next.js', 'AI', 'Tailwind'],
+    link: 'https://researchbuddyweb.vercel.app',
   },
   {
     id: '02',
-    title: 'NusaMark SAR',
-    category: 'IOT & HARDWARE',
-    description: 'An automatic floating location marker system to support Indonesian Search and Rescue teams in locating sunken ships quickly.',
-    tech: ['Arduino', 'IoT', 'GPS', 'Sensors'],
-    link: '#',
+    title: 'PyroFuel App',
+    category: 'LOGISTICS & SUSTAINABILITY',
+    description: 'A waste-to-fuel logistics platform for sustainable energy management. Track pickups, manage drop-offs, and learn about pyrolysis technology.',
+    tech: ['React', 'Logistics', 'IoT'],
+    link: 'https://pyrofuelappharsa.vercel.app/',
   },
   {
     id: '03',
-    title: 'Harmoni',
-    category: 'WEB DEVELOPMENT & DESIGN',
-    description: 'A beautiful digital wedding invitation platform with custom themes, RSVP tracking, and smooth animations.',
-    tech: ['React', 'Framer Motion', 'Tailwind CSS'],
-    link: '#',
+    title: 'Boneato',
+    category: 'HEALTH & NUTRITION',
+    description: 'AI-powered nutrition tracking and child health monitoring app. Scan food, chat with AI, and track daily nutritional intake.',
+    tech: ['AI', 'Health', 'React'],
+    link: 'https://boneato.vercel.app/',
+  },
+  {
+    id: '04',
+    title: 'NusaMatika',
+    category: 'EDUCATIONAL GAMING',
+    description: 'Interactive mathematics learning suite with multiplayer arena, solo challenges, and 3D physics-based games.',
+    tech: ['Gaming', '3D', 'Education'],
+    link: 'https://math-games-by-9-d.vercel.app/',
   },
 ];
 
@@ -71,16 +79,19 @@ export default function ProjectsSection({ isDark }) {
         {/* Brutalist Grid of Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project, i) => (
-            <motion.div
+            <motion.a
               key={project.id}
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.15 }}
-              className={`p-10 rounded-[2rem] flex flex-col justify-between h-full min-h-[400px] ${
+              className={`p-10 rounded-[2rem] flex flex-col justify-between h-full min-h-[400px] hover:-translate-y-2 transition-transform duration-500 cursor-pointer ${
                 isDark 
                   ? 'bg-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]' 
-                  : 'bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]'
+                  : 'bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)]'
               }`}
             >
               {/* Header: Index & Category */}
@@ -124,7 +135,7 @@ export default function ProjectsSection({ isDark }) {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
       </div>
