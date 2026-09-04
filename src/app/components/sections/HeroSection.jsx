@@ -125,8 +125,8 @@ export default function HeroSection({ isDark }) {
                 <Suspense fallback={null}>
                   <DepthMapImage 
                     imagePath="/images/formal-red.jpg" 
-                    depthMapPath="/images/formal-red.jpg" /* Replace with actual depth map later */
-                    intensity={0.15} 
+                    depthMapPath="/images/formal-red-depth.jpg"
+                    intensity={0.08} 
                   />
                 </Suspense>
               </Canvas>
