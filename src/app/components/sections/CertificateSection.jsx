@@ -2,144 +2,106 @@
 import { motion } from 'framer-motion';
 
 const certificates = [
-  {
-    title: 'I2SPO 2025 — Gold Medal',
-    issuer: 'International Science Project Olympiad',
-    type: 'International',
-  },
-  {
-    title: 'MTE 2025 — Silver Medal',
-    issuer: 'Malaysia Technology Expo',
-    type: 'International',
-  },
-  {
-    title: 'IPITEX 2024 — Silver Medal',
-    issuer: 'Thailand Inventors\' Day / International',
-    type: 'International',
-  },
-  {
-    title: 'Olimpiade Siswa Jenius — Gold Medal',
-    issuer: 'National Science Olympiad',
-    type: 'National',
-  },
-  {
-    title: 'Olimpiade Prestasi Gemilang — Gold Medal',
-    issuer: 'National Achievement Olympiad',
-    type: 'National',
-  },
-  {
-    title: 'Kompetisi Pelajar Berprestasi Indonesia — Gold Medal',
-    issuer: 'Indonesian Outstanding Student Competition',
-    type: 'National',
-  },
-  {
-    title: 'Olimpiade Siswa Pintar — Gold Medal',
-    issuer: 'Smart Student Olympiad',
-    type: 'National',
-  },
-  {
-    title: 'Best National Student Olympiad — Gold Medal',
-    issuer: 'National Level',
-    type: 'National',
-  },
-  {
-    title: 'OSN (Olimpiade Sains Nasional) — 10th Place Regional',
-    issuer: 'Kemendikdasmen / National Science Olympiad',
-    type: 'National',
-  },
-  {
-    title: 'OPSI (Olimpiade Penelitian Siswa Indonesia)',
-    issuer: 'Student Research Olympiad by Kemendikdasmen',
-    type: 'National',
-  },
+  { name: 'IPITEX 2024 Silver Medal', issuer: 'National Research Council of Thailand', year: '2024' },
+  { name: 'I2ASPO 2025 Gold Medal', issuer: 'International Science Project Olympiad', year: '2025' },
+  { name: 'MTE 2025 Silver Medal', issuer: 'Malaysia Technology Expo', year: '2025' },
+  { name: 'SIMT Kemendikdasmen', issuer: 'Kementerian Pendidikan Dasar dan Menengah', year: '2024-2025' },
+  { name: 'Olimpiade Siswa Jenius', issuer: 'National Olympiad', year: '2024' },
+  { name: 'Olimpiade Prestasi Gemilang', issuer: 'National Olympiad', year: '2024' },
 ];
 
-export default function CertificateSection() {
+export default function CertificateSection({ isDark }) {
   return (
-    <section id="certificates" className="bg-black py-40 px-6 md:px-10 border-t border-white/5 relative">
+    <section
+      id="certificates"
+      className={`py-32 px-6 md:px-10 ${
+        isDark ? 'bg-[#0F0F11]' : 'bg-[#EAEAEA]'
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-6">
-          <div>
-            <span className="text-[10px] tracking-[0.5em] font-mono text-white/30 block mb-3">/ CERTIFICATES</span>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none">
-              VERIFIED<br />CERTIFICATES.
-            </h2>
-          </div>
-          <div className="text-[10px] font-mono tracking-widest text-white/40 max-w-xs md:text-right">
-            ALL CERTIFICATES ARE OFFICIALLY REGISTERED AND CAN BE VERIFIED
-          </div>
-        </div>
-
-        {/* Verification CTA */}
-        <motion.a
-          href="https://simt.kemendikdasmen.go.id/resume?id=yTxuz0hc23fPpqUgw90Aew&name=fadhil-muhammad-syafiq-lubis"
-          target="_blank"
-          rel="noopener noreferrer"
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="flex items-center justify-between border border-white/20 p-6 md:p-8 mb-16 hover:border-white hover:bg-white/[0.02] transition-all group"
+          className="mb-16"
         >
-          <div className="flex flex-col gap-2">
-            <span className="text-[10px] font-mono tracking-widest text-white/40 uppercase">Official Verification</span>
-            <span className="text-lg md:text-xl font-bold tracking-tight text-white group-hover:translate-x-1 transition-transform duration-500">
-              Verify My Certificates on SIMT Kemendikdasmen →
-            </span>
-            <span className="text-xs text-white/40 font-mono">simt.kemendikdasmen.go.id</span>
-          </div>
-          <div className="hidden md:flex items-center gap-3">
-            <span className="text-[9px] font-mono tracking-widest text-white/30 uppercase group-hover:text-white transition-colors duration-500">
-              Open Portal
-            </span>
-            <svg className="w-5 h-5 text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all duration-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
-            </svg>
-          </div>
-        </motion.a>
+          <span
+            className={`text-[10px] tracking-[0.5em] font-mono block mb-3 ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+          >
+            / CERTIFICATES
+          </span>
+          <h2
+            className={`text-4xl md:text-6xl font-black uppercase tracking-tight leading-none ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
+          >
+            Verified
+            <br />
+            Credentials.
+          </h2>
+        </motion.div>
 
-        {/* Certificates Table */}
-        <div className="border border-white/10 bg-neutral-950/20">
-          {/* Table Header */}
-          <div className="grid grid-cols-12 p-4 border-b border-white/15 text-[9px] font-mono tracking-widest text-white/30 uppercase">
-            <div className="col-span-6 md:col-span-5">Certificate / Award</div>
-            <div className="col-span-4 md:col-span-5 hidden md:block">Issued By</div>
-            <div className="col-span-6 md:col-span-2 text-right">Level</div>
-          </div>
-
-          {/* Table Rows */}
-          <div className="divide-y divide-white/5">
-            {certificates.map((cert, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.04 }}
-                className="grid grid-cols-12 p-5 items-center hover:bg-white/[0.02] transition-colors"
+        <div className="space-y-3">
+          {certificates.map((cert, i) => (
+            <motion.div
+              key={cert.name}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className={`p-6 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 group transition-all duration-300 ${
+                isDark
+                  ? 'border-white/5 bg-white/[0.02] hover:border-white/15'
+                  : 'border-black/5 bg-black/[0.02] hover:border-black/15'
+              }`}
+            >
+              <div>
+                <h4
+                  className={`text-sm font-bold tracking-wide mb-1 ${
+                    isDark ? 'text-white/80' : 'text-black/80'
+                  }`}
+                >
+                  {cert.name}
+                </h4>
+                <span
+                  className={`text-[10px] font-mono tracking-widest ${
+                    isDark ? 'text-white/30' : 'text-black/30'
+                  }`}
+                >
+                  {cert.issuer}
+                </span>
+              </div>
+              <span
+                className={`text-[10px] font-mono tracking-widest shrink-0 ${
+                  isDark ? 'text-white/20' : 'text-black/20'
+                }`}
               >
-                <div className="col-span-6 md:col-span-5">
-                  <span className="text-sm font-semibold tracking-wide text-white">{cert.title}</span>
-                </div>
-                <div className="col-span-4 md:col-span-5 hidden md:block">
-                  <span className="text-xs text-white/40">{cert.issuer}</span>
-                </div>
-                <div className="col-span-6 md:col-span-2 text-right">
-                  <span className={`text-[10px] font-mono tracking-widest uppercase px-3 py-1 border ${
-                    cert.type === 'International' 
-                      ? 'border-white/25 text-white font-bold bg-white/5' 
-                      : 'border-white/10 text-white/50'
-                  }`}>
-                    {cert.type}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                {cert.year}
+              </span>
+            </motion.div>
+          ))}
         </div>
 
+        {/* SIMT Verification Link */}
+        <motion.a
+          href="https://simt.kemendikdasmen.go.id/resume?id=yTxuz0hc23fPpqUgw90Aew&name=fadhil-muhammad-syafiq-lubis"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className={`mt-8 inline-flex items-center gap-3 px-6 py-3 rounded-full text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-300 ${
+            isDark
+              ? 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10 hover:text-white'
+              : 'bg-black/5 text-black/60 border border-black/10 hover:bg-black/10 hover:text-black'
+          }`}
+        >
+          Verify on SIMT Kemendikdasmen →
+        </motion.a>
       </div>
     </section>
   );

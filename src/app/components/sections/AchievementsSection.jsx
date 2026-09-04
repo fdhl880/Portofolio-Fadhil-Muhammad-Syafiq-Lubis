@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 
 const international = [
-  { event: 'I2SPO 2025', medal: 'GOLD MEDAL', loc: 'International', detail: 'Won a Gold Medal at the International Science Project Olympiad for a sustainable technology innovation project.' },
+  { event: 'I2ASPO 2025', medal: 'GOLD MEDAL', loc: 'International', detail: 'Won a Gold Medal at the International Science Project Olympiad for a sustainable technology innovation project.' },
   { event: 'MTE 2025', medal: 'SILVER MEDAL', loc: 'Malaysia', detail: 'Earned a Silver Medal at Malaysia Technology Expo, presenting engineering and software solutions in Kuala Lumpur.' },
   { event: 'IPITEX 2024', medal: 'SILVER MEDAL', loc: 'Thailand', detail: 'Received a Silver Medal at Thailand Inventors\' Day, representing Indonesia with a scientific innovation project in Bangkok.' },
 ];
@@ -17,92 +17,156 @@ const national = [
   { event: 'OPSI (Olimpiade Penelitian Siswa Indonesia)', medal: 'PARTICIPANT' },
 ];
 
-export default function AchievementsSection() {
+export default function AchievementsSection({ isDark }) {
   return (
-    <section id="achievements" className="bg-black py-40 px-6 md:px-10 border-t border-white/5 relative">
+    <section
+      id="achievements"
+      className={`py-32 px-6 md:px-10 ${
+        isDark ? 'bg-[#0F0F11]' : 'bg-[#EAEAEA]'
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
-        
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-6">
-          <div>
-            <span className="text-[10px] tracking-[0.5em] font-mono text-white/30 block mb-3">/ ACHIEVEMENTS</span>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none">
-              AWARDS &<br />MEDALS.
-            </h2>
-          </div>
-          <div className="text-[10px] font-mono tracking-widest text-white/40 max-w-xs md:text-right">
-            MEDALS AND AWARDS FROM INTERNATIONAL & NATIONAL COMPETITIONS
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-20"
+        >
+          <span
+            className={`text-[10px] tracking-[0.5em] font-mono block mb-3 ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+          >
+            / ACHIEVEMENTS
+          </span>
+          <h2
+            className={`text-4xl md:text-6xl font-black uppercase tracking-tight leading-none ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
+          >
+            Awards &
+            <br />
+            Medals.
+          </h2>
+        </motion.div>
 
-        {/* International Awards */}
-        <div className="mb-24">
-          <span className="text-[11px] font-mono tracking-[0.4em] text-white/30 block mb-8 uppercase">International Awards</span>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {international.map((item, index) => (
+        {/* International */}
+        <div className="mb-16">
+          <h3
+            className={`text-[10px] font-mono tracking-[0.4em] uppercase mb-8 ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+          >
+            International Competitions
+          </h3>
+          <div className="space-y-4">
+            {international.map((item, i) => (
               <motion.div
                 key={item.event}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="border border-white/10 p-8 flex flex-col justify-between min-h-[300px] hover:border-white/30 transition-all bg-neutral-950/45 group"
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className={`p-6 md:p-8 rounded-2xl border group transition-all duration-300 ${
+                  isDark
+                    ? 'border-white/5 bg-white/[0.02] hover:border-white/15'
+                    : 'border-black/5 bg-black/[0.02] hover:border-black/15'
+                }`}
               >
-                <div>
-                  <div className="flex justify-between items-center mb-8">
-                    <span className="text-xs font-mono tracking-widest text-white/40">{item.loc}</span>
-                    <span className="text-[9px] font-mono px-3 py-1 border border-white/10 group-hover:bg-white group-hover:text-black transition-colors duration-500 uppercase tracking-widest">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <h4
+                      className={`text-xl md:text-2xl font-black tracking-tight uppercase mb-2 ${
+                        isDark ? 'text-white' : 'text-black'
+                      }`}
+                    >
+                      {item.event}
+                    </h4>
+                    <p
+                      className={`text-xs leading-relaxed max-w-lg ${
+                        isDark ? 'text-white/40' : 'text-black/40'
+                      }`}
+                    >
+                      {item.detail}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span
+                      className={`px-4 py-1.5 rounded-full text-[9px] font-bold tracking-[0.15em] ${
+                        item.medal.includes('GOLD')
+                          ? isDark
+                            ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                            : 'bg-amber-500/10 text-amber-700 border border-amber-500/20'
+                          : isDark
+                            ? 'bg-neutral-500/10 text-neutral-300 border border-neutral-500/20'
+                            : 'bg-neutral-500/10 text-neutral-600 border border-neutral-500/20'
+                      }`}
+                    >
                       {item.medal}
                     </span>
+                    <span
+                      className={`text-[9px] font-mono tracking-widest ${
+                        isDark ? 'text-white/20' : 'text-black/20'
+                      }`}
+                    >
+                      {item.loc}
+                    </span>
                   </div>
-                  <h3 className="text-3xl font-extrabold tracking-tight uppercase mb-4">
-                    {item.event}
-                  </h3>
-                  <p className="text-[12px] text-white/40 leading-relaxed tracking-wider">
-                    {item.detail}
-                  </p>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
 
-        {/* National Awards Table */}
+        {/* National */}
         <div>
-          <span className="text-[11px] font-mono tracking-[0.4em] text-white/30 block mb-8 uppercase">National Awards</span>
-          
-          <div className="border border-white/10 bg-neutral-950/20">
-            {/* Table Header */}
-            <div className="grid grid-cols-12 p-4 border-b border-white/15 text-[9px] font-mono tracking-widest text-white/30 uppercase">
-              <div className="col-span-8 md:col-span-9">Competition</div>
-              <div className="col-span-4 md:col-span-3 text-right">Result</div>
-            </div>
-
-            {/* Table Rows */}
-            <div className="divide-y divide-white/5">
-              {national.map((item, idx) => (
-                <div 
-                  key={idx}
-                  className="grid grid-cols-12 p-5 items-center hover:bg-white/[0.02] transition-colors"
+          <h3
+            className={`text-[10px] font-mono tracking-[0.4em] uppercase mb-8 ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+          >
+            National Competitions
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {national.map((item, i) => (
+              <motion.div
+                key={item.event}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                className={`p-5 rounded-xl border flex items-center justify-between gap-4 ${
+                  isDark
+                    ? 'border-white/5 bg-white/[0.01]'
+                    : 'border-black/5 bg-black/[0.01]'
+                }`}
+              >
+                <span
+                  className={`text-sm font-semibold tracking-wide ${
+                    isDark ? 'text-white/70' : 'text-black/70'
+                  }`}
                 >
-                  <div className="col-span-8 md:col-span-9">
-                    <div className="text-sm font-semibold tracking-wide text-white">{item.event}</div>
-                  </div>
-                  <div className="col-span-4 md:col-span-3 text-right">
-                    <span className={`text-[10px] font-mono tracking-widest uppercase px-3 py-1 border ${
-                      item.medal === 'GOLD MEDAL' 
-                        ? 'border-white/20 text-white font-bold bg-white/5' 
-                        : 'border-white/5 text-white/40'
-                    }`}>
-                      {item.medal}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                  {item.event}
+                </span>
+                <span
+                  className={`text-[8px] font-mono tracking-widest shrink-0 px-3 py-1 rounded-full ${
+                    item.medal.includes('GOLD')
+                      ? isDark
+                        ? 'bg-amber-500/10 text-amber-400'
+                        : 'bg-amber-500/10 text-amber-700'
+                      : isDark
+                        ? 'bg-white/5 text-white/30'
+                        : 'bg-black/5 text-black/30'
+                  }`}
+                >
+                  {item.medal}
+                </span>
+              </motion.div>
+            ))}
           </div>
         </div>
-
       </div>
     </section>
   );

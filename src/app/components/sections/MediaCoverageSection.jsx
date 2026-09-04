@@ -1,89 +1,104 @@
 'use client';
 import { motion } from 'framer-motion';
 
-const pressArticles = [
+const articles = [
   {
-    source: 'Waspada.id',
     title: 'Siswa SMP Harapan 1 Raih Medali Perak di Bangkok IPITEX 2024',
+    source: 'Waspada Online',
     url: 'https://www.waspada.id/pendidikan/siswa-smp-harapan-1-raih-medali-perak-di-bangkok-ipitex-2024/',
-    date: '2024',
-    category: 'International Achievement'
+    year: '2024',
   },
   {
-    source: 'Waspada.id',
     title: 'Tiga Tim Riset Delegasi SMP Harapan 1 Medan Raih Medali Emas pada Kompetisi Internasional I2ASPO 2025',
+    source: 'Waspada Online',
     url: 'https://www.waspada.id/pendidikan/tiga-tim-riset-delegasi-smpharapan-1-medan-raih-medaliemas-pada-kompetisiinternasional-i2aspo-2025/',
-    date: '2025',
-    category: 'International Achievement'
-  }
+    year: '2025',
+  },
 ];
 
-export default function MediaCoverageSection() {
+export default function MediaCoverageSection({ isDark }) {
   return (
-    <section id="media" className="bg-black py-40 px-6 md:px-10 border-t border-white/5 relative">
+    <section
+      id="media"
+      className={`py-32 px-6 md:px-10 ${
+        isDark ? 'bg-[#0F0F11]' : 'bg-[#EAEAEA]'
+      }`}
+    >
       <div className="max-w-7xl mx-auto">
-        
-        {/* Section Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 gap-6">
-          <div>
-            <span className="text-[10px] tracking-[0.5em] font-mono text-white/30 block mb-3">/ PRESS & MEDIA</span>
-            <h2 className="text-5xl md:text-7xl font-bold tracking-tight uppercase leading-none">
-              MEDIA<br />COVERAGE.
-            </h2>
-          </div>
-          <div className="text-[10px] font-mono tracking-widest text-white/40 max-w-xs md:text-right">
-            OFFICIAL NEWS AND PUBLICATIONS HIGHLIGHTING ACHIEVEMENTS
-          </div>
-        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
+          <span
+            className={`text-[10px] tracking-[0.5em] font-mono block mb-3 ${
+              isDark ? 'text-white/30' : 'text-black/30'
+            }`}
+          >
+            / MEDIA
+          </span>
+          <h2
+            className={`text-4xl md:text-6xl font-black uppercase tracking-tight leading-none ${
+              isDark ? 'text-white' : 'text-black'
+            }`}
+          >
+            Press
+            <br />
+            Coverage.
+          </h2>
+        </motion.div>
 
-        {/* Articles List */}
-        <div className="flex flex-col border-t border-white/10">
-          {pressArticles.map((article, index) => (
+        <div className="space-y-4">
+          {articles.map((article, i) => (
             <motion.a
-              key={index}
+              key={article.title}
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group flex flex-col md:flex-row md:items-center justify-between gap-6 py-10 border-b border-white/10 hover:bg-white/[0.02] transition-colors px-4 -mx-4"
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className={`block p-6 md:p-8 rounded-2xl border group transition-all duration-300 cursor-pointer ${
+                isDark
+                  ? 'border-white/5 bg-white/[0.02] hover:border-white/20'
+                  : 'border-black/5 bg-black/[0.02] hover:border-black/20'
+              }`}
             >
-              <div className="flex-1">
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase">
-                    {article.source}
-                  </span>
-                  <div className="w-1 h-1 rounded-full bg-white/20" />
-                  <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase">
-                    {article.date}
-                  </span>
-                  <div className="w-1 h-1 rounded-full bg-white/20" />
-                  <span className="text-[9px] font-mono tracking-widest text-white/40 uppercase">
-                    {article.category}
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex-1">
+                  <h4
+                    className={`text-lg md:text-xl font-bold tracking-tight mb-2 group-hover:translate-x-1 transition-transform duration-500 ${
+                      isDark ? 'text-white/80' : 'text-black/80'
+                    }`}
+                  >
+                    {article.title}
+                  </h4>
+                  <span
+                    className={`text-[10px] font-mono tracking-widest uppercase ${
+                      isDark ? 'text-white/30' : 'text-black/30'
+                    }`}
+                  >
+                    {article.source} • {article.year}
                   </span>
                 </div>
-                
-                <h3 className="text-xl md:text-3xl font-bold tracking-tight text-white group-hover:text-white/70 transition-colors leading-snug">
-                  {article.title}
-                </h3>
-              </div>
-
-              <div className="flex items-center gap-4 shrink-0 mt-4 md:mt-0">
-                <span className="text-[10px] font-mono tracking-widest text-white/30 uppercase group-hover:text-white transition-colors duration-500">
-                  Read Article
-                </span>
-                <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:border-white transition-all duration-500">
-                  <svg className="w-4 h-4 text-white group-hover:text-black transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                  </svg>
-                </div>
+                <svg
+                  className={`w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform duration-500 ${
+                    isDark ? 'text-white/20 group-hover:text-white/60' : 'text-black/20 group-hover:text-black/60'
+                  }`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 17L17 7M17 7H7M17 7v10" />
+                </svg>
               </div>
             </motion.a>
           ))}
         </div>
-
       </div>
     </section>
   );
