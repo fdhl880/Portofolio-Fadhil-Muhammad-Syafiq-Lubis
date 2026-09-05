@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
@@ -16,7 +16,33 @@ export default function HeroSection({ isDark }) {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-8%']);
   const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  // LiquidReveal subtle cursor spotlight on canvas
+  // Interactive 3D micro-tilt for multi-layered portrait card
+  const cardX = useMotionValue(0);
+  const cardY = useMotionValue(0);
+  const mouseSpringConfig = { stiffness: 240, damping: 20 };
+  const smoothCardX = useSpring(cardX, mouseSpringConfig);
+  const smoothCardY = useSpring(cardY, mouseSpringConfig);
+
+  const rotateX = useTransform(smoothCardY, [-150, 150], [8, -8]);
+  const rotateY = useTransform(smoothCardX, [-150, 150], [-8, 8]);
+  const backLayerRotate = useTransform(smoothCardX, [-150, 150], [-5, -1]);
+  const backLayerX = useTransform(smoothCardX, [-150, 150], [-14, 14]);
+  const backLayerY = useTransform(smoothCardY, [-150, 150], [-10, 10]);
+
+  const handleCardMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - (rect.left + rect.width / 2);
+    const y = e.clientY - (rect.top + rect.height / 2);
+    cardX.set(x);
+    cardY.set(y);
+  };
+
+  const handleCardMouseLeave = () => {
+    cardX.set(0);
+    cardY.set(0);
+  };
+
+  // Subtle canvas background spotlight following pointer
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -63,7 +89,6 @@ export default function HeroSection({ isDark }) {
 
     let animId;
     function draw() {
-      // Smooth lerp mouse
       mouseX += (targetX - mouseX) * 0.12;
       mouseY += (targetY - mouseY) * 0.12;
 
@@ -120,7 +145,7 @@ export default function HeroSection({ isDark }) {
 
       {/* 2) Ambient Running Marquee Behind Center Photo */}
       <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none overflow-hidden z-[1]">
-        <div className="marquee-row mb-4 opacity-40">
+        <div className="marquee-row mb-4 opacity-35">
           <div className="marquee-track animate-marquee-left">
             {[...Array(4)].map((_, i) => (
               <span
@@ -136,7 +161,7 @@ export default function HeroSection({ isDark }) {
             ))}
           </div>
         </div>
-        <div className="marquee-row opacity-30">
+        <div className="marquee-row opacity-25">
           <div className="marquee-track animate-marquee-right">
             {[...Array(4)].map((_, i) => (
               <span
@@ -158,8 +183,8 @@ export default function HeroSection({ isDark }) {
       <div
         className={`absolute inset-0 z-[2] pointer-events-none ${
           isDark
-            ? 'bg-gradient-to-b from-[#0F0F11]/80 via-transparent to-[#0F0F11]'
-            : 'bg-gradient-to-b from-[#EAEAEA]/80 via-transparent to-[#EAEAEA]'
+            ? 'bg-gradient-to-b from-[#0F0F11]/85 via-transparent to-[#0F0F11]'
+            : 'bg-gradient-to-b from-[#EAEAEA]/85 via-transparent to-[#EAEAEA]'
         }`}
       />
 
@@ -200,7 +225,7 @@ export default function HeroSection({ isDark }) {
         </motion.div>
 
         {/* Center Name Headline (PURE BLACK & WHITE ONLY) */}
-        <motion.div style={{ y: textY }} className="mb-4">
+        <motion.div style={{ y: textY }} className="mb-3">
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5vw] font-black uppercase tracking-tighter leading-[0.9] text-center">
             <span className="block overflow-hidden">
               <motion.span
@@ -225,30 +250,75 @@ export default function HeroSection({ isDark }) {
           </h1>
         </motion.div>
 
-        {/* Center Portrait Photo in High-End Frame */}
+        {/* MULTI-LAYER PORTRAIT CARD (Layer di belakang foto) */}
         <motion.div
           style={{ y: photoY }}
           initial={{ opacity: 0, scale: 0.92, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="relative my-6"
+          className="relative my-7 flex justify-center items-center cursor-pointer"
+          onMouseMove={handleCardMouseMove}
+          onMouseLeave={handleCardMouseLeave}
         >
-          <div
-            className={`relative w-[240px] h-[320px] sm:w-[290px] sm:h-[390px] md:w-[340px] md:h-[450px] rounded-[2.5rem] overflow-hidden border transition-all duration-700 hover:scale-[1.02] ${
+          {/* Layer 1 (Paling Belakang): Offset Dashed Blueprint Layer */}
+          <motion.div
+            style={{ x: backLayerX, y: backLayerY }}
+            className={`absolute w-[240px] h-[320px] sm:w-[290px] sm:h-[390px] md:w-[340px] md:h-[450px] rounded-[2.5rem] border border-dashed pointer-events-none translate-x-4 translate-y-4 transition-colors duration-500 ${
+              isDark ? 'border-white/20 bg-white/[0.01]' : 'border-black/20 bg-black/[0.01]'
+            }`}
+          />
+
+          {/* Layer 2 (Tengah): Tilted Editorial Card dengan Border & Metadata */}
+          <motion.div
+            style={{ rotate: backLayerRotate, x: backLayerX, y: backLayerY }}
+            className={`absolute w-[240px] h-[320px] sm:w-[290px] sm:h-[390px] md:w-[340px] md:h-[450px] rounded-[2.5rem] border p-5 flex flex-col justify-between pointer-events-none backdrop-blur-sm transition-all duration-500 ${
               isDark
-                ? 'border-white/20 bg-gradient-to-b from-white/10 via-white/[0.02] to-black/80 shadow-[0_30px_70px_rgba(0,0,0,0.85)]'
-                : 'border-black/20 bg-gradient-to-b from-black/5 via-black/[0.02] to-white/80 shadow-[0_30px_70px_rgba(0,0,0,0.15)]'
+                ? 'border-white/20 bg-[#141416]/90 text-white/50 shadow-2xl'
+                : 'border-black/20 bg-[#E0E0E0]/90 text-black/50 shadow-xl'
+            }`}
+          >
+            <div className="flex justify-between items-center text-[9px] md:text-[10px] font-mono tracking-widest uppercase">
+              <span>01 // PORTRAIT</span>
+              <span>EST. 2021</span>
+            </div>
+
+            <div className="my-auto flex flex-col items-center justify-center opacity-30">
+              <span className="text-3xl font-light tracking-widest">FMSL</span>
+              <span className="text-[8px] font-mono tracking-widest">SERIES // 01</span>
+            </div>
+
+            <div className="flex justify-between items-center text-[9px] md:text-[10px] font-mono tracking-widest uppercase border-t border-current/15 pt-2">
+              <span>MEDAN &bull; ID</span>
+              <span>GOLD MEDALIST</span>
+            </div>
+          </motion.div>
+
+          {/* Layer 3 (Depan): Kartu Utama dengan Foto Transparan & 3D Tilt */}
+          <motion.div
+            style={{ rotateX, rotateY }}
+            className={`relative w-[240px] h-[320px] sm:w-[290px] sm:h-[390px] md:w-[340px] md:h-[450px] rounded-[2.5rem] overflow-hidden border z-10 transition-shadow duration-500 ${
+              isDark
+                ? 'border-white/25 bg-gradient-to-b from-white/15 via-white/[0.03] to-black/90 shadow-[0_30px_70px_rgba(0,0,0,0.9)]'
+                : 'border-black/25 bg-gradient-to-b from-black/5 via-black/[0.02] to-white/90 shadow-[0_30px_70px_rgba(0,0,0,0.15)]'
             }`}
           >
             <Image
               src="/images/hero-transparent.png"
               alt="Fadhil Muhammad Syafiq Lubis"
               fill
-              className="object-cover object-bottom"
+              className="object-cover object-bottom transition-transform duration-700 hover:scale-105"
               sizes="(max-width: 768px) 290px, 340px"
               priority
             />
-          </div>
+            {/* Subtle Gradient Shadow on Lower Body */}
+            <div
+              className={`absolute inset-x-0 bottom-0 h-24 pointer-events-none ${
+                isDark
+                  ? 'bg-gradient-to-t from-black/80 to-transparent'
+                  : 'bg-gradient-to-t from-white/80 to-transparent'
+              }`}
+            />
+          </motion.div>
         </motion.div>
 
         {/* Real Achievements / Recognition Pills (Only Fadhil's actual awards) */}
@@ -261,8 +331,8 @@ export default function HeroSection({ isDark }) {
           <span
             className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
               isDark
-                ? 'border-white/20 bg-white/10 text-white'
-                : 'border-black/20 bg-black/10 text-black'
+                ? 'border-white/25 bg-white/10 text-white'
+                : 'border-black/25 bg-black/10 text-black'
             }`}
           >
             Gold Medal &bull; I2ASPO 2025
