@@ -1,31 +1,22 @@
 'use client';
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { useRef, useEffect } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
 
-  // Hero Card Carousel State
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [carouselAnim, setCarouselAnim] = useState({ opacity: 1, y: 0 });
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
 
-  const carouselItems = [
-    { caption: 'Hardware & IoT', title: 'PyroFuel & Embedded Robotics.' },
-    { caption: 'AI & Research', title: 'Research Buddy & Systems.' },
-    { caption: 'Biotech Innovation', title: 'FiBoBites & Child Nutrition.' }
-  ];
+  const photoY = useTransform(scrollYProgress, [0, 1], ['0%', '12%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '-8%']);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
-  const changeSlide = useCallback((newIdx, dir = 1) => {
-    setCarouselAnim({ opacity: 0, y: dir * 14 });
-    setTimeout(() => {
-      setCarouselIndex((newIdx + carouselItems.length) % carouselItems.length);
-      setCarouselAnim({ opacity: 1, y: 0 });
-    }, 150);
-  }, [carouselItems.length]);
-
-  // LiquidReveal Canvas Setup
+  // LiquidReveal subtle cursor spotlight on canvas
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
@@ -37,283 +28,216 @@ export default function HeroSection({ isDark }) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const brushRadius = 143;
-    const decay = 0.016;
     let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
     let width = 0;
     let height = 0;
-    let radius = brushRadius * dpr;
-    let diameter = Math.ceil(radius * 2);
 
-    const coverCanvas = document.createElement('canvas');
-    const coverCtx = coverCanvas.getContext('2d');
-    const brushCanvas = document.createElement('canvas');
-    const brushCtx = brushCanvas.getContext('2d');
-
-    let afterLoaded = false;
-    const afterImg = new window.Image();
-    afterImg.crossOrigin = 'anonymous';
-    afterImg.src = '/images/hero_user_accent.jpg';
-    afterImg.onload = () => {
-      afterLoaded = true;
-      renderCover();
-    };
-
-    function renderCover() {
-      if (!afterLoaded || !width || !height || !coverCtx) return;
-      coverCanvas.width = width;
-      coverCanvas.height = height;
-
-      const imgW = afterImg.naturalWidth || 1920;
-      const imgH = afterImg.naturalHeight || 1080;
-      const scale = Math.max(width / imgW, height / imgH);
-      const drawW = imgW * scale;
-      const drawH = imgH * scale;
-      const drawX = (width - drawW) / 2;
-      const drawY = (height - drawH) / 2;
-
-      coverCtx.clearRect(0, 0, width, height);
-      coverCtx.drawImage(afterImg, drawX, drawY, drawW, drawH);
-    }
-
-    function resizeCanvas() {
+    function resize() {
       if (!container || !canvas) return;
       const rect = container.getBoundingClientRect();
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       width = Math.round(rect.width * dpr);
       height = Math.round(rect.height * dpr);
-
       canvas.width = width;
       canvas.height = height;
       canvas.style.width = rect.width + 'px';
       canvas.style.height = rect.height + 'px';
-
-      radius = brushRadius * dpr;
-      diameter = Math.ceil(radius * 2);
-
-      brushCanvas.width = diameter;
-      brushCanvas.height = diameter;
-
-      renderCover();
     }
 
-    const ro = new ResizeObserver(() => resizeCanvas());
+    const ro = new ResizeObserver(resize);
     ro.observe(container);
-    resizeCanvas();
+    resize();
 
-    let points = [];
-    let lastPoint = null;
-    let idle = 0;
-    let animId;
+    let mouseX = -1000;
+    let mouseY = -1000;
+    let targetX = -1000;
+    let targetY = -1000;
 
     function onPointerMove(e) {
-      if (!container) return;
       const rect = container.getBoundingClientRect();
-      const clientX = e.clientX;
-      const clientY = e.clientY;
-
-      const x = (clientX - rect.left) * dpr;
-      const y = (clientY - rect.top) * dpr;
-
-      if (x < -radius || y < -radius || x > width + radius || y > height + radius) {
-        lastPoint = null;
-        return;
-      }
-
-      if (!lastPoint) {
-        points.push({ x, y });
-      } else {
-        const dx = x - lastPoint.x;
-        const dy = y - lastPoint.y;
-        const dist = Math.hypot(dx, dy);
-        const step = Math.max(radius * 0.3, 1);
-        const n = Math.min(Math.ceil(dist / step), 60);
-
-        for (let i = 1; i <= n; i++) {
-          points.push({
-            x: lastPoint.x + (dx * i) / n,
-            y: lastPoint.y + (dy * i) / n,
-          });
-        }
-      }
-      lastPoint = { x, y };
+      targetX = (e.clientX - rect.left) * dpr;
+      targetY = (e.clientY - rect.top) * dpr;
     }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
 
-    function stamp(x, y) {
-      if (!afterLoaded || !brushCtx || !ctx) return;
-      const half = diameter / 2;
-      const drawX = Math.round(x - half);
-      const drawY = Math.round(y - half);
+    let animId;
+    function draw() {
+      // Smooth lerp mouse
+      mouseX += (targetX - mouseX) * 0.12;
+      mouseY += (targetY - mouseY) * 0.12;
 
-      brushCtx.clearRect(0, 0, diameter, diameter);
+      ctx.clearRect(0, 0, width, height);
 
-      brushCtx.globalCompositeOperation = 'source-over';
-      const grad = brushCtx.createRadialGradient(half, half, 0, half, half, half);
-      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
-      grad.addColorStop(0.55, 'rgba(255, 255, 255, 0.82)');
-      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-      brushCtx.fillStyle = grad;
-      brushCtx.fillRect(0, 0, diameter, diameter);
+      if (mouseX > -500 && mouseY > -500) {
+        const radius = Math.max(width, height) * 0.35;
+        const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, radius);
 
-      brushCtx.globalCompositeOperation = 'source-in';
-      brushCtx.drawImage(coverCanvas, drawX, drawY, diameter, diameter, 0, 0, diameter, diameter);
+        if (isDark) {
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0.07)');
+          grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.02)');
+          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        } else {
+          grad.addColorStop(0, 'rgba(0, 0, 0, 0.05)');
+          grad.addColorStop(0.5, 'rgba(0, 0, 0, 0.015)');
+          grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        }
 
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.drawImage(brushCanvas, drawX, drawY);
-    }
-
-    function renderLoop() {
-      const drawing = points.length > 0;
-      if (drawing) {
-        idle = 0;
-      } else {
-        idle++;
-      }
-
-      if (idle <= 120) {
-        const fade = drawing ? decay : Math.min(decay + idle * 0.004, 0.5);
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.fillStyle = `rgba(0, 0, 0, ${fade})`;
+        ctx.fillStyle = grad;
         ctx.fillRect(0, 0, width, height);
-
-        if (drawing) {
-          for (let i = 0; i < points.length; i++) {
-            stamp(points[i].x, points[i].y);
-          }
-          points = [];
-        }
-
-        if (idle >= 120) {
-          ctx.clearRect(0, 0, width, height);
-        }
       }
 
-      animId = requestAnimationFrame(renderLoop);
+      animId = requestAnimationFrame(draw);
     }
-
-    animId = requestAnimationFrame(renderLoop);
+    animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('pointermove', onPointerMove);
       ro.disconnect();
     };
-  }, []);
+  }, [isDark]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
     <section
       id="hero"
       ref={containerRef}
-      className={`relative min-h-screen flex flex-col justify-between overflow-hidden select-none isolation-isolate rounded-b-[2rem] transition-colors duration-500 ${
-        isDark ? 'bg-[#0a0a0a] text-white' : 'bg-[#f4f4f5] text-black'
+      className={`relative min-h-screen flex flex-col justify-between items-center overflow-hidden select-none isolation-isolate transition-colors duration-500 ${
+        isDark ? 'bg-[#0F0F11] text-white' : 'bg-[#EAEAEA] text-black'
       }`}
     >
-      {/* 1) LiquidReveal Centered Background */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="/images/hero_user_neutral.jpg"
-          alt="Fadhil Muhammad Syafiq Lubis"
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
-        />
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          aria-hidden="true"
-        />
+      {/* 1) Interactive Canvas Background Spotlight */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        aria-hidden="true"
+      />
+
+      {/* 2) Ambient Running Marquee Behind Center Photo */}
+      <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none overflow-hidden z-[1]">
+        <div className="marquee-row mb-4 opacity-40">
+          <div className="marquee-track animate-marquee-left">
+            {[...Array(4)].map((_, i) => (
+              <span
+                key={`m1-${i}`}
+                className={`text-[13vw] md:text-[11vw] font-black uppercase tracking-tighter leading-none whitespace-nowrap mx-8`}
+                style={{
+                  WebkitTextStroke: isDark ? '1.5px rgba(255,255,255,0.12)' : '1.5px rgba(0,0,0,0.1)',
+                  color: 'transparent',
+                }}
+              >
+                FADHIL MUHAMMAD SYAFIQ LUBIS
+              </span>
+            ))}
+          </div>
+        </div>
+        <div className="marquee-row opacity-30">
+          <div className="marquee-track animate-marquee-right">
+            {[...Array(4)].map((_, i) => (
+              <span
+                key={`m2-${i}`}
+                className={`text-[13vw] md:text-[11vw] font-black uppercase tracking-tighter leading-none whitespace-nowrap mx-8`}
+                style={{
+                  WebkitTextStroke: isDark ? '1.5px rgba(255,255,255,0.08)' : '1.5px rgba(0,0,0,0.07)',
+                  color: 'transparent',
+                }}
+              >
+                INNOVATOR • RESEARCHER • DEVELOPER
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* 2) Monochrome Vignette Overlay */}
+      {/* 3) Vignette Overlay */}
       <div
-        className={`absolute inset-0 z-[1] pointer-events-none ${
+        className={`absolute inset-0 z-[2] pointer-events-none ${
           isDark
-            ? 'bg-gradient-to-b from-black/70 via-black/40 to-black/90'
-            : 'bg-gradient-to-b from-white/70 via-white/40 to-white/90'
+            ? 'bg-gradient-to-b from-[#0F0F11]/80 via-transparent to-[#0F0F11]'
+            : 'bg-gradient-to-b from-[#EAEAEA]/80 via-transparent to-[#EAEAEA]'
         }`}
       />
 
-      {/* 3) Giant Watermark (Pure Black & White) */}
-      <div
-        className={`absolute inset-x-0 bottom-20 z-[1] text-center pointer-events-none select-none font-black leading-none text-[16vw] md:text-[14rem] tracking-tighter ${
-          isDark ? 'text-white/[0.04]' : 'text-black/[0.04]'
-        }`}
+      {/* 4) Main Content: Centered Editorial Cover */}
+      <motion.div
+        style={{ opacity }}
+        className="relative z-10 max-w-6xl mx-auto w-full px-6 md:px-10 pt-28 md:pt-36 pb-12 flex-1 flex flex-col items-center justify-center text-center"
       >
-        FADHIL
-      </div>
-
-      {/* 4) Hero Content — Centered Editorial Layout */}
-      <div className="relative z-10 max-w-5xl mx-auto w-full px-6 md:px-10 pt-28 pb-12 flex-1 flex flex-col items-center text-center justify-center">
-        
-        {/* Eyebrow in pure B&W */}
+        {/* Top Status & Role Badges */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[11px] md:text-xs font-mono tracking-widest uppercase mb-6 ${
-            isDark
-              ? 'border-white/10 bg-white/5 text-white/70'
-              : 'border-black/10 bg-black/5 text-black/70'
-          }`}
+          className="flex flex-wrap items-center justify-center gap-2 mb-6"
         >
-          <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white' : 'bg-black'}`} />
-          <span>INDEPENDENT INNOVATOR &bull; RESEARCHER &bull; DEVELOPER</span>
+          {['Innovator', 'Researcher', 'Developer'].map((tag) => (
+            <span
+              key={tag}
+              className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border transition-all ${
+                isDark
+                  ? 'border-white/15 bg-white/[0.04] text-white/80'
+                  : 'border-black/15 bg-black/[0.04] text-black/80'
+              }`}
+            >
+              {tag}
+            </span>
+          ))}
+          <span
+            className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border flex items-center gap-1.5 ${
+              isDark
+                ? 'border-white/25 bg-white/[0.08] text-white'
+                : 'border-black/25 bg-black/[0.08] text-black'
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white' : 'bg-black'} animate-pulse`} />
+            <span>Medan, Indonesia</span>
+          </span>
         </motion.div>
 
-        {/* Main Headline (Pure Black & White) */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.95] mb-8">
-          <span className="block overflow-hidden">
-            <motion.span
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: '0%', opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.25, ease: [0.215, 0.61, 0.355, 1] }}
-              className={`block ${isDark ? 'text-white' : 'text-black'}`}
-            >
-              Bold ideas,
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden">
-            <motion.span
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: '0%', opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.37, ease: [0.215, 0.61, 0.355, 1] }}
-              className={`block ${isDark ? 'text-white' : 'text-black'}`}
-            >
-              shipped with
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden">
-            <motion.span
-              initial={{ y: '100%', opacity: 0 }}
-              animate={{ y: '0%', opacity: 1 }}
-              transition={{ duration: 0.9, delay: 0.49, ease: [0.215, 0.61, 0.355, 1] }}
-              className={`block ${isDark ? 'text-white/80' : 'text-black/80'}`}
-            >
-              quiet precision
-            </motion.span>
-          </span>
-        </h1>
+        {/* Center Name Headline (PURE BLACK & WHITE ONLY) */}
+        <motion.div style={{ y: textY }} className="mb-4">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5vw] font-black uppercase tracking-tighter leading-[0.9] text-center">
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.25, ease: [0.215, 0.61, 0.355, 1] }}
+                className={`block ${isDark ? 'text-white' : 'text-black'}`}
+              >
+                Fadhil Muhammad
+              </motion.span>
+            </span>
+            <span className="block overflow-hidden">
+              <motion.span
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: '0%', opacity: 1 }}
+                transition={{ duration: 0.9, delay: 0.38, ease: [0.215, 0.61, 0.355, 1] }}
+                className={`block ${isDark ? 'text-white/80' : 'text-black/80'}`}
+              >
+                Syafiq Lubis
+              </motion.span>
+            </span>
+          </h1>
+        </motion.div>
 
-        {/* Centered Photo of Fadhil */}
+        {/* Center Portrait Photo in High-End Frame */}
         <motion.div
+          style={{ y: photoY }}
           initial={{ opacity: 0, scale: 0.92, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="relative my-4 flex justify-center items-center"
+          transition={{ duration: 1.1, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="relative my-6"
         >
           <div
-            className={`relative w-[230px] h-[300px] sm:w-[270px] sm:h-[350px] md:w-[310px] md:h-[400px] rounded-[2rem] overflow-hidden border transition-all duration-700 hover:scale-[1.02] ${
+            className={`relative w-[240px] h-[320px] sm:w-[290px] sm:h-[390px] md:w-[340px] md:h-[450px] rounded-[2.5rem] overflow-hidden border transition-all duration-700 hover:scale-[1.02] ${
               isDark
-                ? 'border-white/15 bg-gradient-to-b from-white/10 via-white/[0.02] to-transparent shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
-                : 'border-black/15 bg-gradient-to-b from-black/5 via-black/[0.01] to-transparent shadow-[0_20px_50px_rgba(0,0,0,0.1)]'
+                ? 'border-white/20 bg-gradient-to-b from-white/10 via-white/[0.02] to-black/80 shadow-[0_30px_70px_rgba(0,0,0,0.85)]'
+                : 'border-black/20 bg-gradient-to-b from-black/5 via-black/[0.02] to-white/80 shadow-[0_30px_70px_rgba(0,0,0,0.15)]'
             }`}
           >
             <Image
@@ -321,37 +245,54 @@ export default function HeroSection({ isDark }) {
               alt="Fadhil Muhammad Syafiq Lubis"
               fill
               className="object-cover object-bottom"
-              sizes="(max-width: 768px) 270px, 310px"
+              sizes="(max-width: 768px) 290px, 340px"
               priority
             />
           </div>
         </motion.div>
 
-        {/* Rating & Accomplishments (Pure Black & White) */}
+        {/* Real Achievements / Recognition Pills (Only Fadhil's actual awards) */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.65 }}
-          className="flex items-center justify-center gap-3 my-4"
+          className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-xl"
         >
-          <div className={`flex text-sm ${isDark ? 'text-white' : 'text-black'}`}>
-            {[...Array(5)].map((_, i) => (
-              <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-              </svg>
-            ))}
-          </div>
-          <span className={`text-xs md:text-sm font-medium ${isDark ? 'text-white/70' : 'text-black/70'}`}>
-            International Gold Medalist &bull; 4+ Flagship Products
+          <span
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+              isDark
+                ? 'border-white/20 bg-white/10 text-white'
+                : 'border-black/20 bg-black/10 text-black'
+            }`}
+          >
+            Gold Medal &bull; I2ASPO 2025
+          </span>
+          <span
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+              isDark
+                ? 'border-white/15 bg-white/[0.04] text-white/80'
+                : 'border-black/15 bg-black/[0.04] text-black/80'
+            }`}
+          >
+            Silver Medal &bull; MTE 2025
+          </span>
+          <span
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+              isDark
+                ? 'border-white/15 bg-white/[0.04] text-white/80'
+                : 'border-black/15 bg-black/[0.04] text-black/80'
+            }`}
+          >
+            Silver Medal &bull; IPITEX 2024
           </span>
         </motion.div>
 
-        {/* CTA Buttons (Pure Black & White) */}
+        {/* CTA Buttons in Pure Black & White */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.75 }}
-          className="flex flex-wrap items-center justify-center gap-4 mt-2"
+          className="flex flex-wrap items-center justify-center gap-4"
         >
           {/* Let's Talk Button */}
           <button
@@ -377,82 +318,16 @@ export default function HeroSection({ isDark }) {
             onClick={() => scrollToSection('projects')}
             className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium border transition-all hover:scale-105 ${
               isDark
-                ? 'border-white/20 text-white hover:bg-white/10'
-                : 'border-black/20 text-black hover:bg-black/5'
+                ? 'border-white/25 text-white hover:bg-white/10'
+                : 'border-black/25 text-black hover:bg-black/5'
             }`}
           >
             View Work
           </button>
         </motion.div>
+      </motion.div>
 
-        {/* Carousel & Badges in Pure B&W */}
-        <div className="w-full max-w-2xl mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 items-center text-left">
-          {/* Card Carousel */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className={`rounded-[1.25rem] p-3 border backdrop-blur-md cursor-pointer transition-shadow hover:shadow-lg ${
-              isDark
-                ? 'bg-white/[0.04] border-white/10'
-                : 'bg-black/[0.03] border-black/10'
-            }`}
-            onClick={() => changeSlide(carouselIndex + 1, 1)}
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className={`text-[10px] font-mono uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-black/50'}`}>
-                {carouselItems[carouselIndex].caption}
-              </span>
-              <div className="flex items-center gap-1">
-                {carouselItems.map((_, idx) => (
-                  <span
-                    key={idx}
-                    className={`h-1 rounded-full transition-all duration-300 ${
-                      idx === carouselIndex
-                        ? `w-4 ${isDark ? 'bg-white' : 'bg-black'}`
-                        : `w-1.5 ${isDark ? 'bg-white/20' : 'bg-black/20'}`
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-            <div
-              style={{
-                opacity: carouselAnim.opacity,
-                transform: `translateY(${carouselAnim.y}px)`,
-                transition: 'all 0.25s ease'
-              }}
-              className={`text-xs font-semibold ${isDark ? 'text-white' : 'text-black'}`}
-            >
-              {carouselItems[carouselIndex].title}
-            </div>
-          </motion.div>
-
-          {/* Recognition Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.85 }}
-            className="flex flex-wrap justify-center md:justify-start gap-1.5"
-          >
-            {['I2ASPO', 'IPITEX', 'AISEEF', 'OSSEI', 'BRIN', 'KEMENDIKBUD'].map((name) => (
-              <span
-                key={name}
-                className={`inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1.5 rounded-lg border transition-colors ${
-                  isDark
-                    ? 'border-white/10 bg-white/[0.02] text-white/70 hover:text-white hover:border-white/30'
-                    : 'border-black/10 bg-black/[0.02] text-black/70 hover:text-black hover:border-black/30'
-                }`}
-              >
-                <span className={`w-1 h-1 rounded-full ${isDark ? 'bg-white/60' : 'bg-black/60'}`} />
-                {name}
-              </span>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-
-      {/* 5) Bottom Status Bar (Pure Black & White) */}
+      {/* 5) Bottom Status Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -462,7 +337,7 @@ export default function HeroSection({ isDark }) {
         }`}
       >
         <div>Innovating since 2021</div>
-        <div className="hidden sm:block">Medan &bull; Jakarta &bull; Worldwide</div>
+        <div className="hidden sm:block">Quiet Precision &bull; Built to Scale</div>
         <div
           onClick={() => scrollToSection('about')}
           className={`inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
