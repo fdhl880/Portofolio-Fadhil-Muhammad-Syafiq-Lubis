@@ -1,11 +1,16 @@
 'use client';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
   const containerRef = useRef(null);
-  const canvasRef = useRef(null);
+  const spotlightCanvasRef = useRef(null);
+
+  // Liquid Reveal refs
+  const liquidContainerRef = useRef(null);
+  const liquidCanvasRef = useRef(null);
+  const liquidBaseImgRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -42,10 +47,194 @@ export default function HeroSection({ isDark }) {
     cardY.set(0);
   };
 
-  // Subtle canvas background spotlight following pointer
+  // ========== LIQUID REVEAL BACKGROUND (CANVAS BRUSH) ==========
+  useEffect(() => {
+    const liquidContainer = liquidContainerRef.current;
+    const mainCanvas = liquidCanvasRef.current;
+    if (!liquidContainer || !mainCanvas) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const mainCtx = mainCanvas.getContext('2d');
+    if (!mainCtx) return;
+
+    const brushRadius = 143;
+    const decay = 0.016;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let width = 0;
+    let height = 0;
+    let radius = brushRadius * dpr;
+    let diameter = Math.ceil(radius * 2);
+
+    // Offscreen cover canvas (holds the "after" image to reveal)
+    const coverCanvas = document.createElement('canvas');
+    const coverCtx = coverCanvas.getContext('2d');
+
+    // Offscreen brush stamp canvas
+    const brushCanvas = document.createElement('canvas');
+    const brushCtx = brushCanvas.getContext('2d');
+
+    // Load the "accent" (after) image for reveal
+    let afterImageLoaded = false;
+    const afterImg = new window.Image();
+    afterImg.crossOrigin = 'anonymous';
+    afterImg.src = '/images/hero_user_accent.jpg';
+    afterImg.onload = () => {
+      afterImageLoaded = true;
+      renderCover();
+    };
+
+    function renderCover() {
+      if (!afterImageLoaded || !width || !height) return;
+      coverCanvas.width = width;
+      coverCanvas.height = height;
+
+      // object-fit: cover math
+      const imgW = afterImg.naturalWidth || 1920;
+      const imgH = afterImg.naturalHeight || 1080;
+      const scale = Math.max(width / imgW, height / imgH);
+      const drawW = imgW * scale;
+      const drawH = imgH * scale;
+      const drawX = (width - drawW) / 2;
+      const drawY = (height - drawH) / 2;
+
+      coverCtx.clearRect(0, 0, width, height);
+      coverCtx.drawImage(afterImg, drawX, drawY, drawW, drawH);
+    }
+
+    function resizeCanvas() {
+      const rect = liquidContainer.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.round(rect.width * dpr);
+      height = Math.round(rect.height * dpr);
+
+      mainCanvas.width = width;
+      mainCanvas.height = height;
+      mainCanvas.style.width = rect.width + 'px';
+      mainCanvas.style.height = rect.height + 'px';
+
+      radius = brushRadius * dpr;
+      diameter = Math.ceil(radius * 2);
+
+      brushCanvas.width = diameter;
+      brushCanvas.height = diameter;
+
+      renderCover();
+    }
+
+    const ro = new ResizeObserver(() => resizeCanvas());
+    ro.observe(liquidContainer);
+    resizeCanvas();
+
+    // Pointer trail coordinates
+    let points = [];
+    let lastPoint = null;
+    let idle = 0;
+
+    function onPointerMove(e) {
+      const rect = liquidContainer.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * dpr;
+      const y = (e.clientY - rect.top) * dpr;
+
+      // Ignore points way outside canvas
+      if (x < -radius || y < -radius || x > width + radius || y > height + radius) {
+        lastPoint = null;
+        return;
+      }
+
+      if (!lastPoint) {
+        points.push({ x, y });
+      } else {
+        const dx = x - lastPoint.x;
+        const dy = y - lastPoint.y;
+        const dist = Math.hypot(dx, dy);
+        const step = Math.max(radius * 0.3, 1);
+        const n = Math.min(Math.ceil(dist / step), 60);
+
+        for (let i = 1; i <= n; i++) {
+          points.push({
+            x: lastPoint.x + (dx * i) / n,
+            y: lastPoint.y + (dy * i) / n,
+          });
+        }
+      }
+      lastPoint = { x, y };
+    }
+
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+
+    // Stamp soft radial mask
+    function stamp(x, y) {
+      if (!afterImageLoaded) return;
+      const half = diameter / 2;
+      const drawX = Math.round(x - half);
+      const drawY = Math.round(y - half);
+
+      brushCtx.clearRect(0, 0, diameter, diameter);
+
+      // Step 1: Draw radial gradient mask
+      brushCtx.globalCompositeOperation = 'source-over';
+      const grad = brushCtx.createRadialGradient(half, half, 0, half, half, half);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+      grad.addColorStop(0.55, 'rgba(255, 255, 255, 0.82)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      brushCtx.fillStyle = grad;
+      brushCtx.fillRect(0, 0, diameter, diameter);
+
+      // Step 2: Mask matching region from cover canvas
+      brushCtx.globalCompositeOperation = 'source-in';
+      brushCtx.drawImage(coverCanvas, drawX, drawY, diameter, diameter, 0, 0, diameter, diameter);
+
+      // Step 3: Composite onto main canvas
+      mainCtx.globalCompositeOperation = 'source-over';
+      mainCtx.drawImage(brushCanvas, drawX, drawY);
+    }
+
+    let animId;
+    function renderLoop() {
+      const drawing = points.length > 0;
+      if (drawing) {
+        idle = 0;
+      } else {
+        idle++;
+      }
+
+      if (idle <= 120) {
+        // Fade existing trail
+        const fade = drawing ? decay : Math.min(decay + idle * 0.004, 0.5);
+        mainCtx.globalCompositeOperation = 'destination-out';
+        mainCtx.fillStyle = `rgba(0, 0, 0, ${fade})`;
+        mainCtx.fillRect(0, 0, width, height);
+
+        // Stamp queued points
+        if (drawing) {
+          for (let i = 0; i < points.length; i++) {
+            stamp(points[i].x, points[i].y);
+          }
+          points = [];
+        }
+
+        if (idle >= 120) {
+          mainCtx.clearRect(0, 0, width, height);
+        }
+      }
+
+      animId = requestAnimationFrame(renderLoop);
+    }
+    animId = requestAnimationFrame(renderLoop);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('pointermove', onPointerMove);
+      ro.disconnect();
+    };
+  }, []);
+
+  // ========== SUBTLE SPOTLIGHT CANVAS (follows pointer) ==========
   useEffect(() => {
     const container = containerRef.current;
-    const canvas = canvasRef.current;
+    const canvas = spotlightCanvasRef.current;
     if (!container || !canvas) return;
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -136,15 +325,46 @@ export default function HeroSection({ isDark }) {
         isDark ? 'bg-[#0F0F11] text-white' : 'bg-[#EAEAEA] text-black'
       }`}
     >
-      {/* 1) Interactive Canvas Background Spotlight */}
+      {/* 0) LIQUID REVEAL BACKGROUND — Full-Screen Canvas Brush Effect */}
+      <div
+        ref={liquidContainerRef}
+        className="absolute inset-0 w-full h-full z-0 overflow-hidden"
+      >
+        {/* Base Image (always visible, neutral version) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          ref={liquidBaseImgRef}
+          src="/images/hero_user_neutral.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-[center_25%] pointer-events-none"
+          aria-hidden="true"
+        />
+        {/* Canvas for liquid brush trail painting (accent version revealed on hover) */}
+        <canvas
+          ref={liquidCanvasRef}
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* 1) Vignette overlay for text readability on top of liquid reveal bg */}
+      <div
+        className={`absolute inset-0 z-[1] pointer-events-none ${
+          isDark
+            ? 'bg-gradient-to-b from-[#0F0F11]/80 via-[#0F0F11]/40 to-[#0F0F11]/90'
+            : 'bg-gradient-to-b from-[#EAEAEA]/80 via-[#EAEAEA]/40 to-[#EAEAEA]/90'
+        }`}
+      />
+
+      {/* 2) Interactive Spotlight Canvas */}
       <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        ref={spotlightCanvasRef}
+        className="absolute inset-0 w-full h-full pointer-events-none z-[2]"
         aria-hidden="true"
       />
 
-      {/* 2) Ambient Running Marquee Behind Center Photo */}
-      <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none overflow-hidden z-[1]">
+      {/* 3) Ambient Running Marquee Behind Center Photo */}
+      <div className="absolute inset-0 flex flex-col justify-center pointer-events-none select-none overflow-hidden z-[3]">
         <div className="marquee-row mb-4 opacity-35">
           <div className="marquee-track animate-marquee-left">
             {[...Array(4)].map((_, i) => (
@@ -179,15 +399,6 @@ export default function HeroSection({ isDark }) {
         </div>
       </div>
 
-      {/* 3) Vignette Overlay */}
-      <div
-        className={`absolute inset-0 z-[2] pointer-events-none ${
-          isDark
-            ? 'bg-gradient-to-b from-[#0F0F11]/85 via-transparent to-[#0F0F11]'
-            : 'bg-gradient-to-b from-[#EAEAEA]/85 via-transparent to-[#EAEAEA]'
-        }`}
-      />
-
       {/* 4) Main Content: Centered Editorial Cover */}
       <motion.div
         style={{ opacity }}
@@ -203,20 +414,20 @@ export default function HeroSection({ isDark }) {
           {['Innovator', 'Researcher', 'Developer'].map((tag) => (
             <span
               key={tag}
-              className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border transition-all ${
+              className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border transition-all backdrop-blur-sm ${
                 isDark
-                  ? 'border-white/15 bg-white/[0.04] text-white/80'
-                  : 'border-black/15 bg-black/[0.04] text-black/80'
+                  ? 'border-white/15 bg-white/[0.06] text-white/80'
+                  : 'border-black/15 bg-black/[0.06] text-black/80'
               }`}
             >
               {tag}
             </span>
           ))}
           <span
-            className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border flex items-center gap-1.5 ${
+            className={`px-3.5 py-1 rounded-full text-[10px] md:text-[11px] font-mono uppercase tracking-widest border flex items-center gap-1.5 backdrop-blur-sm ${
               isDark
-                ? 'border-white/25 bg-white/[0.08] text-white'
-                : 'border-black/25 bg-black/[0.08] text-black'
+                ? 'border-white/25 bg-white/[0.1] text-white'
+                : 'border-black/25 bg-black/[0.1] text-black'
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white' : 'bg-black'} animate-pulse`} />
@@ -224,7 +435,7 @@ export default function HeroSection({ isDark }) {
           </span>
         </motion.div>
 
-        {/* Center Name Headline (PURE BLACK & WHITE ONLY) */}
+        {/* Center Name Headline */}
         <motion.div style={{ y: textY }} className="mb-3">
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[5.5vw] font-black uppercase tracking-tighter leading-[0.9] text-center">
             <span className="block overflow-hidden">
@@ -329,7 +540,7 @@ export default function HeroSection({ isDark }) {
           className="flex flex-wrap items-center justify-center gap-2 mb-8 max-w-xl"
         >
           <span
-            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium backdrop-blur-sm ${
               isDark
                 ? 'border-white/25 bg-white/10 text-white'
                 : 'border-black/25 bg-black/10 text-black'
@@ -338,26 +549,26 @@ export default function HeroSection({ isDark }) {
             Gold Medal &bull; I2ASPO 2025
           </span>
           <span
-            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium backdrop-blur-sm ${
               isDark
-                ? 'border-white/15 bg-white/[0.04] text-white/80'
-                : 'border-black/15 bg-black/[0.04] text-black/80'
+                ? 'border-white/15 bg-white/[0.06] text-white/80'
+                : 'border-black/15 bg-black/[0.06] text-black/80'
             }`}
           >
             Silver Medal &bull; MTE 2025
           </span>
           <span
-            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium ${
+            className={`px-3 py-1 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-wider border font-medium backdrop-blur-sm ${
               isDark
-                ? 'border-white/15 bg-white/[0.04] text-white/80'
-                : 'border-black/15 bg-black/[0.04] text-black/80'
+                ? 'border-white/15 bg-white/[0.06] text-white/80'
+                : 'border-black/15 bg-black/[0.06] text-black/80'
             }`}
           >
             Silver Medal &bull; IPITEX 2024
           </span>
         </motion.div>
 
-        {/* CTA Buttons in Pure Black & White */}
+        {/* CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -367,7 +578,7 @@ export default function HeroSection({ isDark }) {
           {/* Let's Talk Button */}
           <button
             onClick={() => scrollToSection('contact')}
-            className={`group inline-flex items-center gap-3 rounded-full pl-6 pr-1.5 py-1.5 text-sm font-medium transition-transform hover:scale-105 ${
+            className={`group inline-flex items-center gap-3 rounded-full pl-6 pr-1.5 py-1.5 text-sm font-medium transition-transform hover:scale-105 backdrop-blur-sm ${
               isDark ? 'bg-white text-black' : 'bg-black text-white'
             }`}
           >
@@ -386,7 +597,7 @@ export default function HeroSection({ isDark }) {
           {/* View Work Button */}
           <button
             onClick={() => scrollToSection('projects')}
-            className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium border transition-all hover:scale-105 ${
+            className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium border transition-all hover:scale-105 backdrop-blur-sm ${
               isDark
                 ? 'border-white/25 text-white hover:bg-white/10'
                 : 'border-black/25 text-black hover:bg-black/5'
