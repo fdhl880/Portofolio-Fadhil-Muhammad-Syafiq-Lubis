@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function HeroSection({ isDark }) {
   const containerRef = useRef(null);
@@ -12,7 +13,7 @@ export default function HeroSection({ isDark }) {
 
   const carouselItems = [
     { caption: 'Hardware & IoT', title: 'PyroFuel & Embedded Robotics.' },
-    { caption: 'AI & Research', title: 'Research Buddy & Analysis.' },
+    { caption: 'AI & Research', title: 'Research Buddy & Systems.' },
     { caption: 'Biotech Innovation', title: 'FiBoBites & Child Nutrition.' }
   ];
 
@@ -54,9 +55,6 @@ export default function HeroSection({ isDark }) {
     const afterImg = new window.Image();
     afterImg.crossOrigin = 'anonymous';
     afterImg.src = '/images/hero_user_accent.jpg';
-    afterImg.onerror = () => {
-      afterImg.src = 'https://api.getlayers.ai/storage/v1/object/public/public/assets/lumora-e8b711fc68/hero/before.jpg';
-    };
     afterImg.onload = () => {
       afterLoaded = true;
       renderCover();
@@ -217,18 +215,15 @@ export default function HeroSection({ isDark }) {
       id="hero"
       ref={containerRef}
       className={`relative min-h-screen flex flex-col justify-between overflow-hidden select-none isolation-isolate rounded-b-[2rem] transition-colors duration-500 ${
-        isDark ? 'bg-[#0F0F11]' : 'bg-[#c9c9c9]'
+        isDark ? 'bg-[#0a0a0a] text-white' : 'bg-[#f4f4f5] text-black'
       }`}
     >
-      {/* 1) LiquidReveal Full-bleed Background */}
+      {/* 1) LiquidReveal Centered Background */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <img
           src="/images/hero_user_neutral.jpg"
           alt="Fadhil Muhammad Syafiq Lubis"
-          className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
-          onError={(e) => {
-            e.currentTarget.src = 'https://api.getlayers.ai/storage/v1/object/public/public/assets/lumora-e8b711fc68/hero/after.jpg';
-          }}
+          className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
         />
         <canvas
           ref={canvasRef}
@@ -237,264 +232,227 @@ export default function HeroSection({ isDark }) {
         />
       </div>
 
-      {/* 2) Vignette Overlay */}
+      {/* 2) Monochrome Vignette Overlay */}
       <div
         className={`absolute inset-0 z-[1] pointer-events-none ${
           isDark
-            ? 'bg-gradient-to-b from-black/60 via-black/20 to-black/80'
-            : 'bg-gradient-to-b from-white/40 via-transparent to-white/40'
+            ? 'bg-gradient-to-b from-black/70 via-black/40 to-black/90'
+            : 'bg-gradient-to-b from-white/70 via-white/40 to-white/90'
         }`}
       />
 
-      {/* 3) Giant Watermark */}
+      {/* 3) Giant Watermark (Pure Black & White) */}
       <div
-        className={`absolute inset-x-0 bottom-24 z-[1] text-center pointer-events-none select-none font-black leading-none text-[15vw] md:text-[13rem] tracking-tighter ${
+        className={`absolute inset-x-0 bottom-20 z-[1] text-center pointer-events-none select-none font-black leading-none text-[16vw] md:text-[14rem] tracking-tighter ${
           isDark ? 'text-white/[0.04]' : 'text-black/[0.04]'
         }`}
       >
         FADHIL
       </div>
 
-      {/* 4) Hero Content Grid */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 md:px-10 pt-32 pb-16 flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-          {/* Left Column (span 7) */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            {/* Eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="inline-flex items-center gap-2 text-xs md:text-sm font-mono tracking-widest uppercase"
+      {/* 4) Hero Content — Centered Editorial Layout */}
+      <div className="relative z-10 max-w-5xl mx-auto w-full px-6 md:px-10 pt-28 pb-12 flex-1 flex flex-col items-center text-center justify-center">
+        
+        {/* Eyebrow in pure B&W */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-[11px] md:text-xs font-mono tracking-widest uppercase mb-6 ${
+            isDark
+              ? 'border-white/10 bg-white/5 text-white/70'
+              : 'border-black/10 bg-black/5 text-black/70'
+          }`}
+        >
+          <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-white' : 'bg-black'}`} />
+          <span>INDEPENDENT INNOVATOR &bull; RESEARCHER &bull; DEVELOPER</span>
+        </motion.div>
+
+        {/* Main Headline (Pure Black & White) */}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-[0.95] mb-8">
+          <span className="block overflow-hidden">
+            <motion.span
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.25, ease: [0.215, 0.61, 0.355, 1] }}
+              className={`block ${isDark ? 'text-white' : 'text-black'}`}
             >
-              <span className="w-2 h-2 rounded-full bg-[#b15f2c] animate-pulse" />
-              <span className={isDark ? 'text-white/70' : 'text-black/70'}>
-                INDEPENDENT INNOVATOR &amp; RESEARCHER
-              </span>
-            </motion.div>
-
-            {/* Headline H1 with Line Stagger */}
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tighter leading-[0.92]">
-              <span className="block overflow-hidden">
-                <motion.span
-                  initial={{ y: '100%', opacity: 0 }}
-                  animate={{ y: '0%', opacity: 1 }}
-                  transition={{ duration: 0.9, delay: 0.25, ease: [0.215, 0.61, 0.355, 1] }}
-                  className={`block ${isDark ? 'text-white' : 'text-black'}`}
-                >
-                  Bold ideas,
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden">
-                <motion.span
-                  initial={{ y: '100%', opacity: 0 }}
-                  animate={{ y: '0%', opacity: 1 }}
-                  transition={{ duration: 0.9, delay: 0.37, ease: [0.215, 0.61, 0.355, 1] }}
-                  className={`block ${isDark ? 'text-white' : 'text-black'}`}
-                >
-                  shipped with
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden">
-                <motion.span
-                  initial={{ y: '100%', opacity: 0 }}
-                  animate={{ y: '0%', opacity: 1 }}
-                  transition={{ duration: 0.9, delay: 0.49, ease: [0.215, 0.61, 0.355, 1] }}
-                  className="block text-[#b15f2c]"
-                >
-                  quiet precision
-                </motion.span>
-              </span>
-            </h1>
-
-            {/* Rating / Accomplishments */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.65 }}
-              className="flex items-center gap-3"
+              Bold ideas,
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden">
+            <motion.span
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.37, ease: [0.215, 0.61, 0.355, 1] }}
+              className={`block ${isDark ? 'text-white' : 'text-black'}`}
             >
-              <div className="flex text-[#b15f2c] text-sm">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
-                  </svg>
-                ))}
-              </div>
-              <span className={`text-xs md:text-sm font-medium ${isDark ? 'text-white/70' : 'text-black/70'}`}>
-                International Gold Medalist &bull; 4+ Flagship Products
-              </span>
-            </motion.div>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.75 }}
-              className="flex flex-wrap gap-3 pt-2"
+              shipped with
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden">
+            <motion.span
+              initial={{ y: '100%', opacity: 0 }}
+              animate={{ y: '0%', opacity: 1 }}
+              transition={{ duration: 0.9, delay: 0.49, ease: [0.215, 0.61, 0.355, 1] }}
+              className={`block ${isDark ? 'text-white/80' : 'text-black/80'}`}
             >
-              {/* Let's Talk Button */}
-              <button
-                onClick={() => scrollToSection('contact')}
-                className={`group inline-flex items-center gap-3 rounded-full pl-6 pr-1.5 py-1.5 text-sm font-medium transition-transform hover:scale-105 ${
-                  isDark ? 'bg-white text-black' : 'bg-[#0a0a0a] text-white'
-                }`}
-              >
-                <span>Let&apos;s Talk</span>
-                <span
-                  className={`w-9 h-9 rounded-full grid place-items-center transition-transform group-hover:translate-x-1 ${
-                    isDark ? 'bg-black text-white' : 'bg-white text-black'
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                  </svg>
-                </span>
-              </button>
+              quiet precision
+            </motion.span>
+          </span>
+        </h1>
 
-              {/* View Work Button */}
-              <button
-                onClick={() => scrollToSection('projects')}
-                className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium border transition-all hover:scale-105 ${
-                  isDark
-                    ? 'border-white/20 text-white hover:bg-white/10'
-                    : 'border-black/20 text-black hover:bg-black/5'
-                }`}
-              >
-                View Work
-              </button>
-            </motion.div>
+        {/* Centered Photo of Fadhil */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="relative my-4 flex justify-center items-center"
+        >
+          <div
+            className={`relative w-[230px] h-[300px] sm:w-[270px] sm:h-[350px] md:w-[310px] md:h-[400px] rounded-[2rem] overflow-hidden border transition-all duration-700 hover:scale-[1.02] ${
+              isDark
+                ? 'border-white/15 bg-gradient-to-b from-white/10 via-white/[0.02] to-transparent shadow-[0_20px_50px_rgba(0,0,0,0.8)]'
+                : 'border-black/15 bg-gradient-to-b from-black/5 via-black/[0.01] to-transparent shadow-[0_20px_50px_rgba(0,0,0,0.1)]'
+            }`}
+          >
+            <Image
+              src="/images/hero-transparent.png"
+              alt="Fadhil Muhammad Syafiq Lubis"
+              fill
+              className="object-cover object-bottom"
+              sizes="(max-width: 768px) 270px, 310px"
+              priority
+            />
           </div>
+        </motion.div>
 
-          {/* Right Column (span 5) */}
-          <div className="lg:col-span-5 flex flex-col items-start lg:items-end gap-6">
-            {/* Lumora-style HeroCard Carousel */}
-            <motion.div
-              initial={{ opacity: 0, y: 16, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className={`w-full max-w-sm rounded-[1.25rem] p-2 border backdrop-blur-md cursor-pointer transition-shadow hover:shadow-xl ${
-                isDark
-                  ? 'bg-white/[0.07] border-white/10 shadow-2xl'
-                  : 'bg-white/80 border-black/10 shadow-md'
+        {/* Rating & Accomplishments (Pure Black & White) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.65 }}
+          className="flex items-center justify-center gap-3 my-4"
+        >
+          <div className={`flex text-sm ${isDark ? 'text-white' : 'text-black'}`}>
+            {[...Array(5)].map((_, i) => (
+              <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z" />
+              </svg>
+            ))}
+          </div>
+          <span className={`text-xs md:text-sm font-medium ${isDark ? 'text-white/70' : 'text-black/70'}`}>
+            International Gold Medalist &bull; 4+ Flagship Products
+          </span>
+        </motion.div>
+
+        {/* CTA Buttons (Pure Black & White) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.75 }}
+          className="flex flex-wrap items-center justify-center gap-4 mt-2"
+        >
+          {/* Let's Talk Button */}
+          <button
+            onClick={() => scrollToSection('contact')}
+            className={`group inline-flex items-center gap-3 rounded-full pl-6 pr-1.5 py-1.5 text-sm font-medium transition-transform hover:scale-105 ${
+              isDark ? 'bg-white text-black' : 'bg-black text-white'
+            }`}
+          >
+            <span>Let&apos;s Talk</span>
+            <span
+              className={`w-9 h-9 rounded-full grid place-items-center transition-transform group-hover:translate-x-1 ${
+                isDark ? 'bg-black text-white' : 'bg-white text-black'
               }`}
-              onClick={() => changeSlide(carouselIndex + 1, 1)}
             >
-              <div className="flex gap-2">
-                {/* Left Brand Tile */}
-                <div className="w-24 h-24 rounded-[0.875rem] bg-[#0a0a0a] flex items-center justify-center text-[#cf8047] flex-shrink-0">
-                  <svg className="w-10 h-10" fill="currentColor" viewBox="0 0 48 48">
-                    <path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" />
-                  </svg>
-                </div>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+              </svg>
+            </span>
+          </button>
 
-                {/* Right Info Panel */}
-                <div
-                  className={`flex-1 rounded-[0.875rem] p-3 flex flex-col justify-between overflow-hidden ${
-                    isDark ? 'bg-white/[0.04]' : 'bg-black/[0.03]'
-                  }`}
-                >
-                  <div
-                    style={{
-                      opacity: carouselAnim.opacity,
-                      transform: `translateY(${carouselAnim.y}px)`,
-                      transition: 'all 0.25s ease'
-                    }}
-                    className="flex flex-col gap-1 min-h-[3rem]"
-                  >
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#cf8047]">
-                      {carouselItems[carouselIndex].caption}
-                    </span>
-                    <span className={`text-xs font-semibold leading-snug ${isDark ? 'text-white' : 'text-black'}`}>
-                      {carouselItems[carouselIndex].title}
-                    </span>
-                  </div>
+          {/* View Work Button */}
+          <button
+            onClick={() => scrollToSection('projects')}
+            className={`inline-flex items-center rounded-full px-7 py-3.5 text-sm font-medium border transition-all hover:scale-105 ${
+              isDark
+                ? 'border-white/20 text-white hover:bg-white/10'
+                : 'border-black/20 text-black hover:bg-black/5'
+            }`}
+          >
+            View Work
+          </button>
+        </motion.div>
 
-                  {/* Carousel Controls */}
-                  <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/5">
-                    <div className="flex items-center gap-1">
-                      {carouselItems.map((_, idx) => (
-                        <span
-                          key={idx}
-                          className={`h-1 rounded-full transition-all duration-300 ${
-                            idx === carouselIndex
-                              ? 'w-4 bg-[#cf8047]'
-                              : `w-1.5 ${isDark ? 'bg-white/20' : 'bg-black/20'}`
-                          }`}
-                        />
-                      ))}
-                    </div>
-
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          changeSlide(carouselIndex - 1, -1);
-                        }}
-                        className={`w-6 h-6 rounded-full grid place-items-center text-xs border transition-colors ${
-                          isDark
-                            ? 'bg-white/10 border-white/10 text-white/70 hover:text-white'
-                            : 'bg-black/5 border-black/10 text-black/70 hover:text-black'
-                        }`}
-                        aria-label="Previous slide"
-                      >
-                        <svg className="w-3 h-3 rotate-180" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          changeSlide(carouselIndex + 1, 1);
-                        }}
-                        className={`w-6 h-6 rounded-full grid place-items-center text-xs border transition-colors ${
-                          isDark
-                            ? 'bg-white/10 border-white/10 text-white/70 hover:text-white'
-                            : 'bg-black/5 border-black/10 text-black/70 hover:text-black'
-                        }`}
-                        aria-label="Next slide"
-                      >
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Recognition & Partners Grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.55 }}
-              className="w-full max-w-sm"
-            >
-              <div className={`text-[11px] font-mono tracking-widest uppercase mb-2.5 lg:text-right ${isDark ? 'text-white/40' : 'text-black/40'}`}>
-                Recognized &bull; Awarded by
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {['I2ASPO', 'IPITEX', 'AISEEF', 'OSSEI', 'BRIN', 'KEMENDIKBUD'].map((name) => (
+        {/* Carousel & Badges in Pure B&W */}
+        <div className="w-full max-w-2xl mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 items-center text-left">
+          {/* Card Carousel */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className={`rounded-[1.25rem] p-3 border backdrop-blur-md cursor-pointer transition-shadow hover:shadow-lg ${
+              isDark
+                ? 'bg-white/[0.04] border-white/10'
+                : 'bg-black/[0.03] border-black/10'
+            }`}
+            onClick={() => changeSlide(carouselIndex + 1, 1)}
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className={`text-[10px] font-mono uppercase tracking-widest ${isDark ? 'text-white/50' : 'text-black/50'}`}>
+                {carouselItems[carouselIndex].caption}
+              </span>
+              <div className="flex items-center gap-1">
+                {carouselItems.map((_, idx) => (
                   <span
-                    key={name}
-                    className={`inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1.5 rounded-lg border transition-colors ${
-                      isDark
-                        ? 'border-white/5 bg-white/[0.02] text-white/60 hover:text-white hover:border-white/20'
-                        : 'border-black/5 bg-black/[0.02] text-black/60 hover:text-black hover:border-black/20'
+                    key={idx}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      idx === carouselIndex
+                        ? `w-4 ${isDark ? 'bg-white' : 'bg-black'}`
+                        : `w-1.5 ${isDark ? 'bg-white/20' : 'bg-black/20'}`
                     }`}
-                  >
-                    <span className="w-1 h-1 rounded-full bg-[#b15f2c]" />
-                    {name}
-                  </span>
+                  />
                 ))}
               </div>
-            </motion.div>
-          </div>
+            </div>
+            <div
+              style={{
+                opacity: carouselAnim.opacity,
+                transform: `translateY(${carouselAnim.y}px)`,
+                transition: 'all 0.25s ease'
+              }}
+              className={`text-xs font-semibold ${isDark ? 'text-white' : 'text-black'}`}
+            >
+              {carouselItems[carouselIndex].title}
+            </div>
+          </motion.div>
+
+          {/* Recognition Grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.85 }}
+            className="flex flex-wrap justify-center md:justify-start gap-1.5"
+          >
+            {['I2ASPO', 'IPITEX', 'AISEEF', 'OSSEI', 'BRIN', 'KEMENDIKBUD'].map((name) => (
+              <span
+                key={name}
+                className={`inline-flex items-center gap-1 text-[10px] font-mono px-2.5 py-1.5 rounded-lg border transition-colors ${
+                  isDark
+                    ? 'border-white/10 bg-white/[0.02] text-white/70 hover:text-white hover:border-white/30'
+                    : 'border-black/10 bg-black/[0.02] text-black/70 hover:text-black hover:border-black/30'
+                }`}
+              >
+                <span className={`w-1 h-1 rounded-full ${isDark ? 'bg-white/60' : 'bg-black/60'}`} />
+                {name}
+              </span>
+            ))}
+          </motion.div>
         </div>
       </div>
 
-      {/* 5) Bottom Status Bar */}
+      {/* 5) Bottom Status Bar (Pure Black & White) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -507,7 +465,9 @@ export default function HeroSection({ isDark }) {
         <div className="hidden sm:block">Medan &bull; Jakarta &bull; Worldwide</div>
         <div
           onClick={() => scrollToSection('about')}
-          className="inline-flex items-center gap-1.5 cursor-pointer hover:text-[#b15f2c] transition-colors"
+          className={`inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+            isDark ? 'hover:text-white' : 'hover:text-black'
+          }`}
         >
           <span>Scroll to explore</span>
           <span className="animate-bounce">↓</span>
